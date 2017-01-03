@@ -3,6 +3,12 @@ webpack2-vue2-vuex-Amap
 
 # 如何运行项目
 
+安装:
+
+```
+sudo yarn install
+```
+
 1.webpack打包
 
 ```bash
