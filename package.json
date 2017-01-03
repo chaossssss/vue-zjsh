@@ -1,0 +1,33 @@
+{
+	"name": "wx-vue2-webpack2",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"build": "webpack  --profile --progress --colors --display-error-details",
+		"dev": "webpack  --display-modules --profile --progress --colors --display-error-details",
+		"dev-hmr": "webpack-dev-server --inline --hot"
+	},
+	"author": "zhouxiaohao",
+	"license": "MIT",
+	"dependencies": {
+		"animation": "^0.1.3",
+		"cross-env": "^3.1.3",
+		"css-loader": "^0.26.1",
+		"extract-text-webpack-plugin": "2.0.0-beta.4",
+		"file-loader": "^0.9.0",
+		"html-webpack-plugin": "^2.24.1",
+		"jquery": "^3.1.1",
+		"sass-loader": "^4.1.1",
+		"style-loader": "^0.13.1",
+		"url-loader": "^0.5.7",
+		"vue": "^2.1.4",
+		"vue-loader": "^10.0.2",
+		"vue-router": "^2.1.1",
+		"vue-style-loader": "^1.0.0",
+		"vue-template-compiler": "^2.1.4",
+		"vuex": "^2.0.0",
+		"webpack": "2.1.0-beta.27",
+		"webpack-dev-server": "^1.16.2",
+		"weui": "^1.1.0"
+	}
+}
