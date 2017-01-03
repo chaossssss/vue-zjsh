@@ -12,6 +12,11 @@ webpack2-vue2-vuex-Amap
 安装:
 
 ```
+sudo npm install 
+```
+
+
+```
 sudo yarn install
 ```
 

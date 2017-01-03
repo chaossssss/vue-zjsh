@@ -12,9 +12,9 @@
                         <router-link to="/menu/service" class="weui-tabbar__item" 
                         active-class="weui-bar__item_on">
                             <span style="display: inline-block;position: relative;">
-                                <img src="../../static/images/icon_tabbar.png" alt="" class="weui-tabbar__icon">  
+                                <img src="../../static/images/menu-service-off.png" alt="" class="weui-tabbar__icon">   
                             </span>
-                            <p class="weui-tabbar__label">找服务</p>
+                            <p class="weui-tabbar__label">找服1务</p>
                         </router-link>
                         <router-link to="/menu/activity" class="weui-tabbar__item" 
                         active-class="weui-bar__item_on">
