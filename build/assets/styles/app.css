@@ -1,0 +1,87 @@
+
+.bounce-enter-active {
+    animation: bounce-in .3s;
+}
+.bounce-leave-active {
+    /* animation: bounce-out 60ms; */
+}
+@keyframes bounce-in {
+0% {
+      -webkit-transform: translate3d(100%,0,0);
+      transform: translate3d(100%,0,0);
+}
+100% {
+      -webkit-transform: translate3d(0,0,0);
+      transform: translate3d(0,0,0);
+}
+}
+@keyframes bounce-out {
+0% {
+      -webkit-transform: translate3d(0,0,0);
+      transform: translate3d(0,0,0);
+}
+100% {
+      -webkit-transform: translate3d(100%,0,0);
+      transform: translate3d(-100%,0,0);
+}
+}
+
+.container {
+    position:absolute;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+}
+.page {
+    position:absolute;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+    background-color: #f8f8f8;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.mt10 {
+	margin-top:10px;
+}
+.mt15 {
+	margin-top:15px;
+}
+
+.mt10 {
+	margin-top:10px;
+}
+.mt15 {
+	margin-top:15px;
+}
