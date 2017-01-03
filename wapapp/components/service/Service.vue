@@ -1,6 +1,6 @@
 <template>
 <div class="page tabbar">
-	<search></search>
+	<search-all></search-all>
 	<div class="weui-panel weui-panel_access" style="margin-top:0;">
 		<div class="weui-panel__bd">
             <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
@@ -18,9 +18,9 @@
 </template>
 
 <script>
-import search from '../search/Search.vue';
+import searchAll from '../search/Search_all.vue';
 export default {
 	name:"service",
-	components:{search}
+	components:{searchAll}
 }
 </script>

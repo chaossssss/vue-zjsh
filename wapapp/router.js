@@ -4,10 +4,14 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 import Menu from './components/menu/Menu.vue';
-import Service from './components/service/Service.vue';
 import Activity from './components/activity/activity.vue';
 import Order from './components/order/Order.vue';
 import QuickOrder from './components/quick_order/Quick_order.vue';
+import Service from './components/service/Service.vue';
+
+// 搜索
+import ServiceAll from './components/search/Search_all.vue';
+import ServiceFast from './components/search/Search_fast.vue';
 
 // 我的
 import User from './components/user/User.vue';
@@ -35,7 +39,7 @@ export default new VueRouter({
 		path: '/menu',
 		component: Menu,
 		children: [{
-			//服务
+			// 找服务
 			path: 'service',
 			component: Service
 		}, {
