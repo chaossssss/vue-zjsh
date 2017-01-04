@@ -3,7 +3,7 @@
     <div class="weui-cells">
       <a class="weui-cell weui-cell_access" href="javascript:;">
         <div class="weui-cell__bd">
-          <p>头像</p>
+          <p style="font-size:14px;color:#333639;">头像</p>
         </div>
         <div class="weui-cell__ft" style="padding-right:22px;">
           <div class="avatar"></div>
@@ -11,13 +11,13 @@
       </a>
       <a class="weui-cell weui-cell_access" href="javascript:;">
         <div class="weui-cell__bd">
-          <p>昵称</p>
+          <p style="font-size:14px;color:#333639;">昵称</p>
         </div>
-        <div class="weui-cell__ft" style="padding-right:22px;">我是条咸鱼</div>
+        <div class="weui-cell__ft" style="padding-right:22px;font-size:14px;color:#999;">我是条咸鱼</div>
       </a>
       <a class="weui-cell weui-cell_access" href="javascript:;">
         <div class="weui-cell__bd">
-          <p>我的二维码</p>
+          <p style="font-size:14px;color:#333639;">我的二维码</p>
         </div>
         <div class="weui-cell__ft" style="padding-right:22px;">
           <div class="QR_code"></div>
@@ -25,7 +25,7 @@
       </a>
       <a class="weui-cell weui-cell_access" href="javascript:;">
         <div class="weui-cell__bd">
-          <p>修改密码</p>
+          <p style="font-size:14px;color:#333639;">修改密码</p>
         </div>
         <div class="weui-cell__ft"></div>
       </a>
