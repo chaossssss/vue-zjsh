@@ -15,6 +15,13 @@ export default {
 </script>
 
 <style>
+  html,body {
+    height: 100%;
+  }
+  #app {
+    height: 100%;
+  }
+
 	.bounce-enter-active {
     animation: bounce-in .3s;
   }

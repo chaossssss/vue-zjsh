@@ -38,14 +38,14 @@ const baseConfig = {
 				 *  limit=10000 ： 10kb
 				 *  图片大小小于10kb 采用内联的形式，否则输出图片
 				 * */
-				limit: 10000,
+				limit: 1000000,
 				name: '/img/[name]-[hash:8].[ext]'
 			}
 		}, {
 			test: /\.(eot|woff|woff2|ttf|svg)$/,
 			loader: 'url-loader',
 			query: {
-				limit: 5000,
+				limit: 500000,
 				name: '/font/[name]-[hash:8].[ext]'
 			}
 		}, {
