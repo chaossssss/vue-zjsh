@@ -90,7 +90,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .mt10 {
 	margin-top:10px;
 }
