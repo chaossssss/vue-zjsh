@@ -10,7 +10,7 @@ const baseConfig = {
 	_output: {
 		filename: 'scripts/[name].js',
 		path: config.buildDir + '/assets',
-		publicPath: '/build'
+		publicPath: '/assets'
 	},
 	_module: {
 		rules: [{

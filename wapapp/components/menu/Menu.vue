@@ -1,19 +1,32 @@
 <template>
   <div class="container">
+
+    <router-view></router-view>
     <div id="menu">
-        <a href="">12354376232312313</a>
+        <a href="">12354</a>
     </div>
     <div class="post">
-            <a href="">4573412374617286</a>
+            <a href="">4573123</a>
         </div>
+    
+    <nav> 
+      <div class="vue-tabbar">
+        <router-link to="/service" class="vue-tabber__item vue-tabbar__item_on">
+           <span>
+             
+           </span>
+           <p class="vue-tabbar__label">找服务</p>
+        </a>
+      </router-link>
+    </nav>   
     <div class="weui-tabbar">
-        <a href="javascript:;" class="weui-tabbar__item weui-bar__item_on">
+        <router-link to="/menu/user" class="weui-tabbar__item weui-bar__item_on">
             <span style="display: inline-block;position: relative;">
                 <img src="../../static/images/logo.png" alt="" class="weui-tabbar__icon">
-                <span class="weui-badge" style="position: absolute;top: -2px;right: -13px;">101</span>
+                <span class="weui-badge" style="position: absolute;top: -2px;right: -13px;">0</span>
             </span>
             <p class="weui-tabbar__label">微信</p>
-        </a>
+        </router-link>
         <a href="javascript:;" class="weui-tabbar__item">
             <img src="../../static/images/logo.png" alt="" class="weui-tabbar__icon">
             <p class="weui-tabbar__label">通讯录</p>
@@ -39,22 +52,9 @@ export default {
 }
 </script>
 
-<style lang="less" >
-/*一定要加lang不然无法编译*/
-    /*测试一下对sass的编译*/
-   .bordered {
-  border-top: dotted 1px black;
-  border-bottom: solid 2px black;
-}
-
-#menu a {
-  color: green;
-  .bordered;
-}
-
-.post a {
-  color: red;
-  .bordered;
+<style lang="less" scoped>
+.vue-tabbar {
+  display:flex;
 }
 
 </style>

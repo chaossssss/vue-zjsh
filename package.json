@@ -5,7 +5,7 @@
 	"scripts": {
 		"build": "webpack  --profile --progress --colors --display-error-details",
 		"dev": "webpack  --display-modules --profile --progress --colors --display-error-details",
-		"dev-hmr": "webpack-dev-server --inline"
+		"dev-hmr": "webpack-dev-server --inline --hot"
 	},
 	"author": "zhouxiaohao",
 	"license": "MIT",
@@ -19,6 +19,8 @@
 		"jquery": "^3.1.1",
 		"less": "^2.7.2",
 		"less-loader": "^2.2.3",
+		"node-sass": "^4.1.1",
+		"sass": "^0.5.0",
 		"sass-loader": "^4.1.1",
 		"style-loader": "^0.13.1",
 		"url-loader": "^0.5.7",
