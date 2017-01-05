@@ -5,7 +5,7 @@
 	"scripts": {
 		"build": "webpack  --profile --progress --colors --display-error-details",
 		"dev": "webpack  --display-modules --profile --progress --colors --display-error-details",
-		"dev-hmr": "webpack-dev-server --inline --hot"
+		"dev-hmr": "webpack-dev-server --inline"
 	},
 	"author": "zhouxiaohao",
 	"license": "MIT",
@@ -17,6 +17,8 @@
 		"file-loader": "^0.9.0",
 		"html-webpack-plugin": "^2.24.1",
 		"jquery": "^3.1.1",
+		"less": "^2.7.2",
+		"less-loader": "^2.2.3",
 		"sass-loader": "^4.1.1",
 		"style-loader": "^0.13.1",
 		"url-loader": "^0.5.7",
@@ -27,6 +29,7 @@
 		"vue-template-compiler": "^2.1.4",
 		"vuex": "^2.0.0",
 		"webpack": "2.1.0-beta.27",
+		"webpack-dev-middleware": "^1.9.0",
 		"webpack-dev-server": "2.2.0-rc.0",
 		"weui": "^1.1.0"
 	}

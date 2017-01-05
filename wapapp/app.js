@@ -4,7 +4,7 @@ import store from './store';
 import router from './router';
 
 import Weui from 'weui';
-import $ from 'jquery';
+// import $ from 'jquery';
 // console.log("jquery", $);
 
 // 注册插件

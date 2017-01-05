@@ -9,7 +9,8 @@ const baseConfig = {
 	},
 	_output: {
 		filename: 'scripts/[name].js',
-		path: config.buildDir + '/assets'
+		path: config.buildDir + '/assets',
+		publicPath: '/build'
 	},
 	_module: {
 		rules: [{
@@ -47,12 +48,16 @@ const baseConfig = {
 				limit: 5000,
 				name: '/font/[name]-[hash:8].[ext]'
 			}
-		},{
+		}, {
 			test: /\.css$/,
-	        loader: 'style-loader!css-loader'
-		},{
+			loader: 'style-loader!css-loader'
+		}, {
 			test: /\.sass$/,
 			loader: 'sass-loader',
+			exclude: '/node_modules/'
+		}, {
+			test: /\.less$/,
+			loader: 'less-loader',
 			exclude: '/node_modules/'
 		}]
 	},

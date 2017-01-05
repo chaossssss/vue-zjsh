@@ -40,19 +40,21 @@ const devConfig = {
 			filename: config.buildDir + '/index.html'
 		}),
 		new webpack.HotModuleReplacementPlugin(),
-		// enable HMR globally
+		new webpack.NoErrorsPlugin()
+		// new webpack.BannerPlugin('This file is created by laoqiren')
+		// // enable HMR globally
 		// new webpack.NamedModulesPlugin()
 		// prints more readable module names in the browser console on HMR updates
 	],
 	externals: {
-		AMap: 'window.AMap'
+		AMap: 'AMap'
 	},
-	watch: true,
-	watchOptions: {
-		ignored: "node_modules",
-		aggregateTimeout: 1000,
-		poll: true,
-		poll: 500
-	}
+	// watch: true,
+	// watchOptions: {
+	// 	ignored: "node_modules",
+	// 	aggregateTimeout: 1000,
+	// 	poll: true,
+	// 	poll: 500
+	// }
 };
 module.exports = devConfig;
