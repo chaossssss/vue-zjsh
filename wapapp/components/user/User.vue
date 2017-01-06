@@ -1,5 +1,5 @@
 <template>
-<div>
+<div style="position:absolute;background: #eef2f5;width:100%;height:100%">
     
 	<div class="weui-cells" style="margin-top:10px;padding: 15px 0px;">
         <router-link to="/user_info">

@@ -217,7 +217,7 @@ header:before {
 	color: #8c8a9f;
 }
 .right_gray{
-    width: 2.5%;
+    width: 0.5rem;
     margin-top: 4px;
 }
 
