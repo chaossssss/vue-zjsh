@@ -6,32 +6,32 @@
       
       </div>
       <div class="vue-tabbar">
-          <router-link to="/menu/service" class="vue-tabbar__item vue-bar__item_on">
+          <router-link to="/menu/service" class="vue-tabbar__item " active-class="vue-bar__item_on">
               <span style="display: inline-block;position: relative;">
                   <img src="../../static/images/logo.png" alt="" class="vue-tabbar__icon">
                   
               </span>
               <p class="vue-tabbar__label">找服务</p>
           </router-link>
-          <router-link to="/menu/user" class="vue-tabbar__item">
+          <router-link to="/menu/activity" class="vue-tabbar__item" active-class="vue-bar__item_on">
               <img src="../../static/images/logo.png" alt="" class="vue-tabbar__icon">
               <p class="vue-tabbar__label">活动</p>
           </router-link>
-          <router-link to="/menu/user" class="vue-tabbar__item">
+          <router-link to="/quick_order" class="vue-tabbar__item" active-class="vue-bar__item_on">
               <span class="vue-bar__circle" >
                 <img src="../../static/images/logo.png" alt="" class="vue-tabbar__icon">     
 
               </span>
               <p class="vue-tabbar__label vue-tabbar__circle_label">一键下单</p>
           </router-link>
-          <router-link to="/menu/user" class="vue-tabbar__item">
+          <router-link to="/menu/order_list" class="vue-tabbar__item" active-class="vue-bar__item_on">
               <span style="display: inline-block;position: relative;">
                   <img src="../../static/images/logo.png" alt="" class="vue-tabbar__icon">
                 
               </span>
               <p class="vue-tabbar__label">订单</p>
           </router-link>
-          <router-link to="/menu/user" class="vue-tabbar__item">
+          <router-link to="/menu/user" class="vue-tabbar__item" active-class="vue-bar__item_on">
               <img src="../../static/images/logo.png" alt="" class="vue-tabbar__icon">
               <p class="vue-tabbar__label">我的</p>
           </router-link>
@@ -85,7 +85,7 @@ export default {
   bottom:0;
   width:100%;
   background-color:#fff;
-  box-shadow:0 0 10px 1px rgba(34,48,59,0.33);
+  box-shadow:0 0 10px 0px rgba(34,48,59,0.33);
 
   &:before {
     content: " ";
@@ -128,7 +128,7 @@ export default {
     top:-17px;
     left: 50%;
     transform:translateX(-50%);
-    box-shadow:0 -10px 9px -9px rgba(34,48,59,0.33);
+    box-shadow:0 -10px 10px -8px rgba(34,48,59,0.33);
 
     img {
       position:absolute;

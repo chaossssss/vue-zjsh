@@ -4,7 +4,7 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 import Menu from './components/menu/Menu.vue';
-import Order from './components/order/Order.vue';
+import OrderList from './components/order/Order_list.vue';
 import QuickOrder from './components/quick_order/Quick_order.vue';
 import Service from './components/service/Service.vue';
 
@@ -49,9 +49,9 @@ export default new VueRouter({
 			path: 'activity',
 			component: Activity
 		}, {
-			//订单
-			path: 'order',
-			component: Order
+			// 订单列表
+			path: 'order_list',
+			component: OrderList
 		}, {
 			// 我的 
 			path: 'user',
@@ -105,5 +105,9 @@ export default new VueRouter({
 		// 修改密码
 		path: '/eidt_password',
 		component: EidtPassword
+	}, {
+		// 一键下单
+		path: 'quick_order',
+		component: QuickOrder
 	}]
 });
