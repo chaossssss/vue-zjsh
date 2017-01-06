@@ -3,36 +3,42 @@
       <div class="vue-tab__panel">
     
       <router-view></router-view>
-      
+
       </div>
       <div class="vue-tabbar">
           <router-link to="/menu/service" class="vue-tabbar__item " active-class="vue-bar__item_on">
               <span style="display: inline-block;position: relative;">
-                  <img src="../../static/images/logo.png" alt="" class="vue-tabbar__icon">
-                  
+                  <span class="vue-tabbar__icon vue-tabbar__service"></span>
+
               </span>
               <p class="vue-tabbar__label">找服务</p>
           </router-link>
           <router-link to="/menu/activity" class="vue-tabbar__item" active-class="vue-bar__item_on">
-              <img src="../../static/images/logo.png" alt="" class="vue-tabbar__icon">
+              <span style="display: inline-block;position: relative;">
+                  <span class="vue-tabbar__icon vue-tabbar__activity"></span>
+
+              </span>      
               <p class="vue-tabbar__label">活动</p>
           </router-link>
           <router-link to="/quick_order" class="vue-tabbar__item" active-class="vue-bar__item_on">
               <span class="vue-bar__circle" >
-                <img src="../../static/images/logo.png" alt="" class="vue-tabbar__icon">     
+                <span class="vue-tabbar__icon vue-tabbar__quickorder"></span>     
 
               </span>
               <p class="vue-tabbar__label vue-tabbar__circle_label">一键下单</p>
           </router-link>
           <router-link to="/menu/order_list" class="vue-tabbar__item" active-class="vue-bar__item_on">
               <span style="display: inline-block;position: relative;">
-                  <img src="../../static/images/logo.png" alt="" class="vue-tabbar__icon">
+                  <span class="vue-tabbar__icon vue-tabbar__orderlist"></span>
                 
               </span>
               <p class="vue-tabbar__label">订单</p>
           </router-link>
           <router-link to="/menu/user" class="vue-tabbar__item" active-class="vue-bar__item_on">
-              <img src="../../static/images/logo.png" alt="" class="vue-tabbar__icon">
+              <span style="display: inline-block;position: relative;">
+                <span class="vue-tabbar__icon vue-tabbar__user"></span>
+              </span>
+              
               <p class="vue-tabbar__label">我的</p>
           </router-link>
       </div>
@@ -41,8 +47,17 @@
 </template>
 
 <script>
+import menuServiceOff from "../../static/images/menu-service-off.png";
+import menuServiceOn from "../../static/images/menu-service-on.png";
+
 export default {
 	name:"menu",
+  data(){
+    return {
+      menuSoff:menuServiceOff,
+      menuSon: menuServiceOn
+    }
+  }
 }
 </script>
 
@@ -111,11 +126,35 @@ export default {
   .setTapColor();
 
   &.vue-bar__item_on {
+    .vue-tabbar__service {   
+      background:url('../../static/images/menu-service-on.png') no-repeat;
+      background-size:100%;
+    }
+    .vue-tabbar__activity {
+      background:url('../../static/images/menu-activity-on.png') no-repeat;
+      background-size:100%;
+    }
+    .vue-tabbar__orderlist {
+      background:url('../../static/images/menu-order-on.png') no-repeat;
+      background-size:100%;
+    }
+    .vue-tabbar__user {
+      background:url('../../static/images/menu-user-on.png') no-repeat;
+      background-size:100%;
+    }
+    .vue-tabbar__quickorder {
+      position:absolute;
+      top:43%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      background:url('../../static/images/menu-quickorder-on.png') no-repeat;
+      background-size:100%;
+    }
     .vue-tabbar__icon,
     .vue-tabbar__icon > i,
     .vue-tabbar__label {
         color: rgb(38,184,243);
-    } 
+    }
   }
 
   .vue-bar__circle {
@@ -139,7 +178,30 @@ export default {
   }
 }
 
-
+.vue-tabbar__service {
+  background:url('../../static/images/menu-service-off.png') no-repeat;
+  background-size:100%;
+}
+.vue-tabbar__activity {
+  background:url('../../static/images/menu-activity-off.png') no-repeat;
+  background-size:100%;
+}
+.vue-tabbar__quickorder {
+  position:absolute;
+  top:43%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:url('../../static/images/menu-quickorder-off.png') no-repeat;
+  background-size:100%;
+}
+.vue-tabbar__orderlist {
+  background:url('../../static/images/menu-order-off.png') no-repeat;
+  background-size:100%;
+}
+.vue-tabbar__user {
+  background:url('../../static/images/menu-user-off.png') no-repeat;
+  background-size:100%;
+}
 
 .vue-tabbar__icon {
     display: inline-block;

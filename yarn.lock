@@ -3342,6 +3342,10 @@ vue-hot-reload-api@^2.0.1:
   version "2.0.7"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.0.7.tgz#45bd46cfeee7fd22550b467a76fa0c4a0ceae51b"
 
+vue-infinite-loading@next:
+  version "2.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/vue-infinite-loading/-/vue-infinite-loading-2.0.0-rc.5.tgz#11e543a2ede33a11144a41325c9e1a36db2d06ab"
+
 vue-loader@^10.0.2:
   version "10.0.2"
   resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-10.0.2.tgz#6fe7bcefb32c5439bd0338464aa22673ad62299c"
@@ -3358,6 +3362,10 @@ vue-loader@^10.0.2:
     vue-hot-reload-api "^2.0.1"
     vue-style-loader "^1.0.0"
     vue-template-es2015-compiler "^1.2.2"
+
+vue-resource:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/vue-resource/-/vue-resource-1.0.3.tgz#8d52d0d8a9ed5f2ae704c68d530c84ceaf97be14"
 
 vue-router@^2.1.1:
   version "2.1.1"
