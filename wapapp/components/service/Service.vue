@@ -1,9 +1,7 @@
 <template>
 <div class="page tabbar">
   
-  <div style="position:absolute;top:0px;z-index:1000;background-color:rgba(255,255,255,0.7);width:100%;">
-    123
-  </div>
+  <search-all></search-all>
 
 	<div id="map-container"></div> 
     
@@ -11,18 +9,21 @@
 </template>
 
 <script>
+import searchAll from "../search/Search_all.vue";
+
 export default {
 	name:"service",
 	mounted:function(){
-        let map = new AMap.Map('map-container', {
-          zoom: 15,
-          center: [116.39, 39.9]
-        });
-        let marker = new AMap.Marker({
-            position: [116.39, 39.9],
-            map:map
-        });
-    }
+      let map = new AMap.Map('map-container', {
+        zoom: 15,
+        center: [116.39, 39.9]
+      });
+      let marker = new AMap.Marker({
+          position: [116.39, 39.9],
+          map:map
+      });
+  },
+  components:{searchAll}
 }
 </script>
 

@@ -1,7 +1,7 @@
 <template>
 	<div class="page__bd">
         <!--<a href="javascript:;" class="weui-btn weui-btn_primary">点击展现searchBar</a>-->
-        <div class="weui-search-bar" id="searchBar">
+        <router-link to="/search" class="weui-search-bar" id="searchBar">
             <form class="weui-search-bar__form">
                 <div class="weui-search-bar__box">
                     <i class="weui-icon-search"></i>
@@ -14,7 +14,7 @@
                 </label>
             </form>
             <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
-        </div>
+        </router-link>
     </div>
 </template>
 

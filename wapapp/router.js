@@ -12,8 +12,9 @@ import Service from './components/service/Service.vue';
 import Activity from './components/activity/activity.vue';
 
 // 搜索
-import ServiceAll from './components/search/Search_all.vue';
-import ServiceFast from './components/search/Search_fast.vue';
+import SearchAll from './components/search/Search_all.vue';
+import SearchFast from './components/search/Search_fast.vue';
+import Search from './components/search/Search.vue';
 
 // 我的
 import User from './components/user/User.vue';
@@ -31,6 +32,8 @@ import EidtPetName from './components/user/Eidt_petname.vue';
 import UserQRcode from './components/user/User_QRcode.vue';
 import EidtPassword from './components/user/Eidt_password.vue';
 
+import UserBill from './components/user/User_bill.vue';
+import UserRecharge from './components/user/User_recharge.vue';
 
 export default new VueRouter({
 	// mode: 'history',
@@ -106,8 +109,20 @@ export default new VueRouter({
 		path: '/eidt_password',
 		component: EidtPassword
 	}, {
+		// 充值
+		path: '/user_bill',
+		component: UserBill
+	}, {
+		// 账单明细
+		path: '/user_recharge',
+		component: UserRecharge
+	}, {
 		// 一键下单
-		path: 'quick_order',
+		path: '/quick_order',
 		component: QuickOrder
+	}, {
+		// 搜索
+		path: '/search',
+		component: Search
 	}]
 });

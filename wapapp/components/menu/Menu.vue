@@ -1,7 +1,7 @@
 <template>
   <div class="vue-tab">
       <div class="vue-tab__panel">
-    
+      
       <router-view></router-view>
 
       </div>
@@ -119,7 +119,7 @@ export default {
   position:relative;
   display:block;
   flex:1;
-  padding:5px 0 0;
+  padding:7px 0 0;
   font-size:0;
   color:@weuiTextColorGray;
   text-align:center;
