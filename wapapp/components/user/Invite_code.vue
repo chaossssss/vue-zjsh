@@ -45,7 +45,7 @@
 
 </script>
 
-<style>
+<style scoped>
 .webkit_box{display: -webkit-flex;display: -moz-flex; display: flex; -webkit-box-orient: horizontal; }
 .flex1 {-webkit-flex-grow: 1;-moz-flex-grow: 1; flex-grow: 1;}
 .flex2 {-webkit-flex-grow: 2;-moz-flex-grow: 2; flex-grow: 2;}

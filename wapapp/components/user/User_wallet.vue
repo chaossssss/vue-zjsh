@@ -33,7 +33,7 @@
 
 </script>
 
-<style>
+<style scoped>
 .zj_broadcast{
   width: 100%;
   height: 25px;
