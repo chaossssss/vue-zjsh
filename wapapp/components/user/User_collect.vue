@@ -9,6 +9,11 @@
 	</header>
 	<!-- 工人收藏 -->
 	<div v-if="flag==1">
+		<!-- <div class="no-shoucang">
+			<img src="../../static/images/no-shoucang.png" alt="">
+			<p style="font-size:18px;color:#3f3e48;">没有收藏</p>
+			<p style="font-size:13px;color:#8c8a9f;margin-top:10px;">您的收藏夹空空<br>赶紧去地图找喜欢的工人收藏吧</p>
+		</div> -->
 		<router-link to="">
 			<div class="weui-cell">
 	            <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
@@ -80,6 +85,11 @@
 	</div>
 	<!-- 商户收藏 -->
 	<div v-if="flag==2">
+<!-- 		<div class="no-shoucang">
+			<img src="../../static/images/no-shoucang.png" alt="">
+			<p style="font-size:18px;color:#3f3e48;">没有收藏</p>
+			<p style="font-size:13px;color:#8c8a9f;margin-top:10px;">您的收藏夹空空<br>赶紧去地图找喜欢的商户收藏吧</p>
+		</div> -->
 		<router-link to="">
 			<div class="weui-cell">
 	            <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
@@ -220,5 +230,11 @@ header:before {
     width: 0.5rem;
     margin-top: 4px;
 }
-
+.no-shoucang{
+    text-align: center;
+    margin-top: 40%;
+}
+.no-shoucang img{
+    width: 24%;
+}
 </style>

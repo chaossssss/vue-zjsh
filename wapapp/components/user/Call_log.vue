@@ -15,7 +15,7 @@
             
           </div>
           <div class="sl-opts">
-            <span style="background-color: #F95F61; color: #fff;">删除</span>
+            <span class="del">删除</span>
           </div>
         </li>
         <li class="sl-li ui-border-b">
@@ -34,7 +34,7 @@
             
           </div>
           <div class="sl-opts">
-            <span style="background-color: #F95F61; color: #fff;">删除</span>
+            <span class="del">删除</span>
           </div>
         </li>
       </ul>
@@ -44,7 +44,6 @@
 
 <script>
 import $ from 'jquery'
-// 右滑效果
 
 export default {
     data(){
@@ -173,5 +172,9 @@ ul {list-style: none;}
   transform: scale(.5,.5);
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+}
+.del{
+  background-color: #ff0000; 
+  color: #fff;
 }
 </style>
