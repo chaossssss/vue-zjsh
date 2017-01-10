@@ -89,7 +89,7 @@ export default {
 .vue-tab__panel {
   box-sizing:border-box;
   height:100%;
-  padding-bottom:50px;
+  padding-bottom:60px;
   overflow:auto;
   -webkit-overflow-scrolling:touch;
 }

@@ -18,6 +18,11 @@ export default {
   html,body {
     height: 100%;
   }
+/*  html::-webkit-scrollbar,
+body::-webkit-scrollbar{
+  width:0;
+  height:0;
+}*/
   #app {
     height: 100%;
   }

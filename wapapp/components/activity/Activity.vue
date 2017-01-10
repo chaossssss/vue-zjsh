@@ -10,9 +10,8 @@
 </template>
 
 <script>
+import BackendApi from '../../config/backend';
 import InfiniteLoading from 'vue-infinite-loading';
-
-const api = "http://192.168.1.191:3001/api/v3/Provider/GetAds";
 import image from "../../static/images/activity-02.png";
 
 export default {
@@ -25,7 +24,7 @@ export default {
     },
     methods: {
       onInfinite() {
-        this.$http.get(api).then((res) => {
+        this.$http.get(BackendApi.GetAds).then((res) => {
           console.log(res.data.Body);
           if(res.data.Body.Ads){
             this.list = this.list.concat(res.data.Body.Ads);
@@ -39,7 +38,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 .vue-banner {
   margin:15px 0;
 

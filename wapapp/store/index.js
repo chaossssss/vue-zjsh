@@ -3,6 +3,7 @@
 
 // import * as types from './mutation-types';
 
+// // 注册插件
 // Vue.use(Vuex);
 
 
