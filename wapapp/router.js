@@ -124,5 +124,9 @@ export default new VueRouter({
 		// 搜索
 		path: '/search',
 		component: Search
+	}, {
+		//支付页充值
+		path: '/payment_recharge',
+		componenet: PaymentRecharge
 	}]
 });
