@@ -34,6 +34,7 @@ import EidtPassword from './components/user/Eidt_password.vue';
 
 import UserBill from './components/user/User_bill.vue';
 import UserRecharge from './components/user/User_recharge.vue';
+import PaymentRecharge from './components/user/Payment_recharge.vue';
 
 export default new VueRouter({
 	// mode: 'history',
