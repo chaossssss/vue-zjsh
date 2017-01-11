@@ -118,6 +118,10 @@ export default new VueRouter({
 		path: '/user_recharge',
 		component: UserRecharge
 	}, {
+		//支付页充值
+		path: '/payment_recharge',
+		component: PaymentRecharge
+	}, {
 		// 一键下单
 		path: '/quick_order',
 		component: QuickOrder
@@ -125,9 +129,5 @@ export default new VueRouter({
 		// 搜索
 		path: '/search',
 		component: Search
-	}, {
-		//支付页充值
-		path: '/payment_recharge',
-		component: PaymentRecharge
 	}]
 });
