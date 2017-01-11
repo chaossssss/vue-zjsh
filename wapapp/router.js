@@ -128,6 +128,6 @@ export default new VueRouter({
 	}, {
 		//支付页充值
 		path: '/payment_recharge',
-		componenet: PaymentRecharge
+		component: PaymentRecharge
 	}]
 });
