@@ -11,6 +11,9 @@ import Service from './components/service/Service.vue';
 // 活动
 import Activity from './components/activity/activity.vue';
 
+// 订单
+import OrderDetail from './components/order/Order_detail.vue';
+
 // 搜索
 import SearchAll from './components/search/Search_all.vue';
 import SearchFast from './components/search/Search_fast.vue';
@@ -35,6 +38,7 @@ import EidtPassword from './components/user/Eidt_password.vue';
 import UserBill from './components/user/User_bill.vue';
 import UserRecharge from './components/user/User_recharge.vue';
 import PaymentRecharge from './components/user/Payment_recharge.vue';
+import BillDetail from './components/user/Bill_detail.vue';
 
 export default new VueRouter({
 	// mode: 'history',
@@ -118,6 +122,9 @@ export default new VueRouter({
 		path: '/user_recharge',
 		component: UserRecharge
 	}, {
+		path: '/bill_detail',
+		component: BillDetail
+	}, {
 		//支付页充值
 		path: '/payment_recharge',
 		component: PaymentRecharge
@@ -129,5 +136,9 @@ export default new VueRouter({
 		// 搜索
 		path: '/search',
 		component: Search
+	}, {
+		// 订单详情
+		path: '/order_detail',
+		component: OrderDetail
 	}]
 });
