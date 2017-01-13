@@ -4890,6 +4890,10 @@ vue-router@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-2.1.1.tgz#10c31bbdcb6da92bd3e0223fa12345e73018625a"
 
+vue-slider:
+  version "1.1.1"
+  resolved "http://registry.npmjs.org/vue-slider/-/vue-slider-1.1.1.tgz#ae3735cf81656ca81afc4a87f6e5ae0f18ca47cf"
+
 vue-style-loader@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-1.0.0.tgz#abeb7bd0f46313083741244d3079d4f14449e049"

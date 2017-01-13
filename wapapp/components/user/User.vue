@@ -62,7 +62,7 @@
             <div class="weui-cell__ft"></div>
         </router-link>
     </div>
-    <div class="weui-cells mt15" style="margin-top: 0.5em;font-size:14px;color:#333639;">
+    <!-- <div class="weui-cells mt15" style="margin-top: 0.5em;font-size:14px;color:#333639;">
         <router-link class="list-item weui-cell_access" to="/user_award">
             <div class="weui-cell__bd">
                 <p>推荐有奖</p>
@@ -75,7 +75,7 @@
             </div>
             <div class="weui-cell__ft"></div>
         </router-link>
-    </div>
+    </div> -->
     <div class="footer">
         <p class="tel">客服电话：<a href="tel:4008-026-056" style="color:#26b8f3;">4008-026-056</a></p>
         <p class="ser-time">服务时间：每天9:00-21:00</p>

@@ -8,8 +8,10 @@ import Weui from 'weui';
 
 import VueResource from 'vue-resource';
 
+
 // 注册插件
 Vue.use(VueResource);
+
 // import $ from 'jquery';
 // console.log("jquery", $);
 

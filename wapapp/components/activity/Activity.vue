@@ -23,8 +23,8 @@ export default {
       };
     },
     methods: {
-      onInfinite() {
-        this.$http.get(BackendApi.GetAds).then((res) => {
+      async onInfinite() {
+        await this.$http.get(BackendApi.GetAds).then((res) => {
           console.log(res.data.Body);
           if(res.data.Body.Ads){
             this.list = this.list.concat(res.data.Body.Ads);

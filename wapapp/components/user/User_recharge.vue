@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 <div style="background: #eee;height:100%">
 	<div class="price-list">
 		<div class="weui-flex">
@@ -65,4 +65,4 @@ export default {
 	border:1px solid #27b7f3;
 	color:#27b7f3;
 }
-</style>
+</style> -->

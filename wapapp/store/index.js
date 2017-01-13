@@ -1,10 +1,35 @@
-// import Vue from 'vue';
-// import Vuex from 'vuex';
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-// import * as types from './mutation-types';
+import * as types from './mutation-types';
 
-// // 注册插件
-// Vue.use(Vuex);
+// 注册插件
+Vue.use(Vuex);
+
+export
+default new Vuex.Store({
+	state: {
+		type: "全部"
+	},
+	actions: {
+		searchMap({
+			commit
+		}, data) {
+			console.log(types.SEARCH_MAP);
+			commit(types.SEARCH_MAP, {
+				txt: data.txt
+			});
+		}
+	},
+	mutations: {
+		[types.SEARCH_MAP](state, {
+			txt
+		}) {
+			console.log(txt);
+			return state.type = txt;
+		}
+	}
+})
 
 
 // export
