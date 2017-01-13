@@ -1,8 +1,8 @@
 <template>
 	<div style="background:#fbfbfb;width:100%;height:100%;position:absolute;">
-    <div class="zj_broadcast">
+    <div v-if="showBroadcast" class="zj_broadcast">
       <div class="news_broadcast">助家生活充值全部8.5折</div>
-      <div class="close_broadcast"></div>
+      <div @click="closeBroadcast" class="close_broadcast"></div>
     </div>
     <div class="my_wallet">
       <div class="balance_title">
@@ -13,27 +13,45 @@
       </div>
     </div>
     <div class="recharge_interface">
-      <div class="recharge_btn">充值</div>
+      <router-link to="/user_recharge">
+        <div class="recharge_btn">充值</div>
+      </router-link>
     </div>
     <div class="weui-cells">
-    <a class="weui-cell weui-cell_access" href="javascript:;">
+    <router-link class="weui-cell weui-cell_access" to="/user_bill">
       <div class="weui-cell__hd">
         <img class="wallet_bill" src="../../static/images/wallet_bill.png">
       </div>
       <div class="weui-cell__bd">
+        <router-link to="/user_bill">
           <p>账单明细</p>
+        </router-link>
       </div>
       <div class="weui-cell__ft"></div>
-    </a>
+    </router-link>
 </div>
 	</div>
 </template>
 
 <script>
-
+export default{
+  data(){
+    return{
+      showBroadcast:true
+    }
+  },
+  methods:{
+    closeBroadcast:function(){
+      this.showBroadcast = false;
+    }
+  }
+}
 </script>
 
 <style scoped>
+a:active,a:hover,a:visited{
+  color: #333333;
+}
 .zj_broadcast{
   width: 100%;
   height: 25px;
