@@ -118,10 +118,11 @@ export default new VueRouter({
 		path: '/user_bill',
 		component: UserBill
 	}, {
-		// 账单明细
+
 		path: '/user_recharge',
 		component: UserRecharge
 	}, {
+		// 账单明细
 		path: '/bill_detail',
 		component: BillDetail
 	}, {

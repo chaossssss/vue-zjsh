@@ -6,11 +6,13 @@ import router from './router';
 // ui
 import Weui from 'weui';
 
-import VueResource from 'vue-resource';
-
+// import VueResource from 'vue-resource';
+// import axios from 'axios';
 
 // 注册插件
-Vue.use(VueResource);
+// Vue.use(VueResource);
+// Vue.use(axios);
+// Vue.use(VueAwesomeSwiper);
 
 // import $ from 'jquery';
 // console.log("jquery", $);

@@ -1,7 +1,7 @@
 <template>
 <div>
     <p class="vue-banner" v-for="item in list">
-      <img class="vue-banner__item vue-banner__item_off" :src="image" alt="">
+      <img class="vue-banner__item" :src="item.ImageUrl" alt="">
     </p>
     <infinite-loading :on-infinite="onInfinite" ref="infiniteLoading">
       <span class="vue-loader" slot="no-results">没有更多信息了</span>
@@ -10,21 +10,21 @@
 </template>
 
 <script>
-import BackendApi from '../../config/backend';
 import InfiniteLoading from 'vue-infinite-loading';
 import image from "../../static/images/activity-02.png";
+import API from '../../config/backend';
+import axios from 'axios';
 
 export default {
 	name:'activity',
     data() {
       return {
-        list: [],
-        image: image,
+        list: []
       };
     },
     methods: {
       async onInfinite() {
-        await this.$http.get(BackendApi.GetAds).then((res) => {
+        await axios.get(API.GetAds).then((res) => {
           console.log(res.data.Body);
           if(res.data.Body.Ads){
             this.list = this.list.concat(res.data.Body.Ads);

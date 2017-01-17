@@ -47,7 +47,8 @@ const devConfig = {
 		// prints more readable module names in the browser console on HMR updates
 	],
 	externals: {
-		AMap: 'AMap'
+		BMap: 'BMap',
+		Swiper: true
 	},
 	// watch: true,
 	// watchOptions: {

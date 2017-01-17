@@ -16,6 +16,7 @@
 
 <script>
 export default {
+		name:"recharge",
     data(){
         return{
             flag: 1,
