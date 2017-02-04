@@ -470,6 +470,7 @@ export default {
 	name:"service",
   data(){
     return {
+      home:{},
       totals:["全部","小时工","木工","保姆","三级类型","保姆","类型"],
       someList:[
           {
@@ -504,8 +505,7 @@ export default {
       }
     }
   },
-	mounted:function(){
-    console.log(this);
+	mounted:function(){ 
     let mapClassType = this.mapClassType;
     let map = new BMap.Map("map-container");          // 创建地图实例 
     let point = new BMap.Point(116.404, 39.915);  // 创建点坐标  
@@ -609,6 +609,7 @@ export default {
       }
     }
     home.init();
+    this.home = home;
     // let image = "http://image.zhujiash.com/Upload/HeadPic/1x1/thumb/Worker/2017-01-06/e5c5ed627c8fb6261b222f5e1a52c58e.png";
     // var myCompOverlay = MarkerOverlay.boss(116.404, 39.915,{
     //   image:image,
@@ -642,7 +643,7 @@ export default {
       // localStorage.setItem("Map_Lng",point_c.lng);
       // localStorage.setItem("Map_Lat",point_c.lat+0.019439); //加上百度坐标偏移
       // console.log("移动后定位点的坐标",mk.getPosition());
-    })      
+    })    
     // async function SearchData(lng,lat,queryStr,type){
     //   await axios.post(API.IndexEx2,qs.stringify({
     //     "Latitude":lat,
@@ -661,6 +662,11 @@ export default {
     // }
   },
   computed: mapState(['mapFastType','mapClassType']),
+  watch:{
+    mapFastType(e){
+      console.log(this.home.point);
+    }
+  },
   methods:{
     searchType(item){
       this.$store.dispatch('searchMap',{
