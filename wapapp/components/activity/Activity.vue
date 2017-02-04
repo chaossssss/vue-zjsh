@@ -1,7 +1,9 @@
 <template>
 <div>
     <p class="vue-banner" v-for="item in list">
-      <img class="vue-banner__item" :src="item.ImageUrl" alt="">
+      <a :href="item.ObjectApns.Url">
+        <img class="vue-banner__item" :src="item.ImageUrl" alt="">
+      </a>
     </p>
     <infinite-loading :on-infinite="onInfinite" ref="infiniteLoading">
       <span class="vue-loader" slot="no-results">没有更多信息了</span>

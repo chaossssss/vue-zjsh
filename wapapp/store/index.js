@@ -9,11 +9,19 @@ Vue.use(Vuex);
 export
 default new Vuex.Store({
 	state: {
-		mapFastType: "保姆",
+		mapFastType: "全部",
 		mapClassType: 0,
-		point: ""
+		mapPoint: {}
 	},
 	actions: {
+		changeMap({
+			commit
+		}, data) {
+			console.log(types.CHANGE_MAP_POINT);
+			commit(types.CHANGE_MAP_POINT, {
+				point: data.point
+			});
+		},
 		searchMap({
 			commit
 		}, data) {
@@ -30,6 +38,12 @@ default new Vuex.Store({
 		}
 	},
 	mutations: {
+		[types.CHANGE_MAP_POINT](state, {
+			point
+		}) {
+			console.log(point);
+			return state.mapPoint = point;
+		},
 		[types.SEARCH_MAP_FAST](state, {
 			txt
 		}) {

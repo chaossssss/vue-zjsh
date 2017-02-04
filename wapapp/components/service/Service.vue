@@ -5,7 +5,8 @@
 
   <div class="vue-topnav">
     <div class="vue-topnav__primary">
-      <span :class="{'vue-topnav__item_on': mapFastType === item}" class="vue-topnav__item" v-for="item in totals" @click="searchType(item)">{{item}}</span>
+      <span :class="{'vue-topnav__item_on': mapFastType === '全部'}" class="vue-topnav__item" @click="searchType('全部')">全部</span>
+      <span :class="{'vue-topnav__item_on': mapFastType === item.Name}" class="vue-topnav__item" v-for="item in totals" @click="searchType(item.Name)">{{item.Name}}</span>
     </div> 
     <img class="vue-topnav__swit-btn" src="../../static/images/button-swit.png" alt="">
   </div>
@@ -470,7 +471,7 @@ export default {
 	name:"service",
   data(){
     return {
-      home:{},
+      map:{},
       totals:["全部","小时工","木工","保姆","三级类型","保姆","类型"],
       someList:[
           {
@@ -506,168 +507,210 @@ export default {
     }
   },
 	mounted:function(){ 
-    let mapClassType = this.mapClassType;
     let map = new BMap.Map("map-container");          // 创建地图实例 
     let point = new BMap.Point(116.404, 39.915);  // 创建点坐标  
     map.centerAndZoom(point, 15);                 // 初始化地图，设置中心点坐标和地图级别   
-    const home = {
-      map,
-      point,
-      init(){
-        this.autoGeolocation(); // 自动定位
-        this.manualGeolocation(); // 手动定位
-      },
-      createMarker(workers,business,wholeW,wholeB){
-        let whole = [];
-        if(wholeW && wholeB){
-          whole = wholeW.concat(wholeB);
-          // console.log("whole",whole);
-        } 
-        if(workers && workers.length > 0){
-          workers.map(function(i,v,arr){
-            let worker = MarkerOverlay.worker(i.Longitude,i.Latitude,{
-              image:i.Photo,
-              text:i.DefaultService.Name,
-              bgImage:workerImg,
-              bgcolor:"#ff9d2f"
-            })
-            map.addOverlay(worker);
-          })
-        }
-        if(business && business.length > 0){
-          business.map(function(i,v,arr){
-            let boss = MarkerOverlay.boss(i.Longitude,i.Latitude,{
-              image:i.Photo,
-              text:i.DefaultService.Name,
-              bgImage:bossImg,
-              bgcolor:"#1daefa"
-            })
-            map.addOverlay(boss);
-          })
-        }
-        if(whole && whole.length > 0){
-          whole.map(function(i,v,arr){
-            let all = MarkerOverlay.whole(i.Longitude,i.Latitude,{
-              image:i.Photo,
-              text:i.DefaultService.Name,
-              bgImage:wholeImg,
-              bgcolor:"rgb(77,199,102)"
-            })
-            map.addOverlay(all);
-          })
-        }  
-      },
-      autoGeolocation(){
-        var geolocation = new BMap.Geolocation();
-        geolocation.getCurrentPosition(function(r) {
-          if (this.getStatus() == BMAP_STATUS_SUCCESS) {
-              point = r.point;
-              var mark = new BLNOverlay(r.point);
-              map.addEventListener('clearoverlays',function(){
-                map.addOverlay(mark);
-              })
-              map.addOverlay(mark); //mk放到地图中
-              map.panTo(r.point); //地图中心移动到定位点
-              console.log('您的位置：' + r.point.lng + ',' + r.point.lat);
-          } else {
-              alert('failed' + this.getStatus());
-          }
-        }, {
-            enableHighAccuracy: true
-        })
-      },
-      manualGeolocation(){
-        var geolocationControl = new BMap.GeolocationControl({
-          anchor: BMAP_ANCHOR_BOTTOM_LEFT, //控件停靠位置
-          offset: new BMap.Size(10, 60),
-          showAddressBar: false, //是否显示定位信息面板
-          // locationIcon: new BMap.Icon(LocalImg, new BMap.Size(22, 22)) //自定义定位中心点的icon
-        });
-        geolocationControl.addEventListener("locationSuccess", function(e) {
-          // 定位成功事件
-          var address = '';
-          address += e.addressComponent.province;
-          address += e.addressComponent.city;
-          address += e.addressComponent.district;
-          address += e.addressComponent.street;
-          address += e.addressComponent.streetNumber;
-          console.log("当前定位地址为：" + e);
-          var pot = e.point;
-          map.clearOverlays();
-          var mk1 = new LocalOverlay(pot,{
-            image:LocalImg
-          });
-          map.addOverlay(mk1); 
-          var mk2 = new BLNOverlay(pot);
-          map.addOverlay(mk2);      
-        });
-        geolocationControl.addEventListener("locationError", function(e) {
-          // 定位失败事件
-          alert(e.message);
-        });
-        map.addControl(geolocationControl);
-      }
-    }
-    home.init();
-    this.home = home;
-    // let image = "http://image.zhujiash.com/Upload/HeadPic/1x1/thumb/Worker/2017-01-06/e5c5ed627c8fb6261b222f5e1a52c58e.png";
-    // var myCompOverlay = MarkerOverlay.boss(116.404, 39.915,{
-    //   image:image,
-    //   text:"实木地板安装",
-    //   bgImage:bossImg,
-    //   bgcolor:"#1daefa"
-    // });
-    // // myCompOverlay.addEventListener();
-    // // var myCompOverlay = MarkerOverlay.boss(point,{
-    // //   image:image,
-    // //   text:"实木地板安装",
-    // //   bgImage:workerImg
-    // // });
-    // map.addOverlay(myCompOverlay);
 
-    let that = this;
-    //移动地图事件
-    map.addEventListener("moveend",function(){
-      // console.log("地图移动结束时触发此事件");
-      let point_c = map.getCenter();
+    // sessionStorage 做本地缓存
+    if(sessionStorage.getItem("Point")){
+      let storePoint = JSON.parse(sessionStorage.getItem("Point"));  
+      getHot(storePoint.lng,storePoint.lat).then((res)=>{
+        this.totals = res.data.Body;
+      });
+
+      let store = new BMap.Point(storePoint.lng, storePoint.lat);
+      this.changePoint(store);
+      map.panTo(store); //地图中心移动到定位点
+    }else{
+      autoGeolocation();
+    }
+
+    /**
+     * 自动定位 初始化
+     * @type {BMap}
+     */
+    function autoGeolocation(){
+      var geolocation = new BMap.Geolocation();
+      geolocation.getCurrentPosition(function(r) {
+        if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+            point = r.point;
+            var mark = new BLNOverlay(r.point);
+            map.addEventListener('clearoverlays',function(){
+              map.addOverlay(mark);
+            })
+            map.addOverlay(mark); //mk放到地图中
+            map.panTo(r.point); //地图中心移动到定位点
+            console.log('您的位置：' + r.point.lng + ',' + r.point.lat);
+        } else {
+            alert('failed' + this.getStatus());
+        }
+      }, {
+          enableHighAccuracy: true
+      }) 
+    }
+
+    /**
+     * 手动定位 初始化
+     * @type {BMap}
+     */
+    var geolocationControl = new BMap.GeolocationControl({
+      anchor: BMAP_ANCHOR_BOTTOM_LEFT, //控件停靠位置
+      offset: new BMap.Size(10, 60),
+      showAddressBar: false, //是否显示定位信息面板
+      // locationIcon: new BMap.Icon(LocalImg, new BMap.Size(22, 22)) //自定义定位中心点的icon
+    });
+    geolocationControl.addEventListener("locationSuccess", function(e) {
+      // 定位成功事件
+      var address = '';
+      address += e.addressComponent.province;
+      address += e.addressComponent.city;
+      address += e.addressComponent.district;
+      address += e.addressComponent.street;
+      address += e.addressComponent.streetNumber;
+      console.log("当前定位地址为：" + e);
+      var pot = e.point;
       map.clearOverlays();
-      let mk = new LocalOverlay(point_c,{
+      var mk1 = new LocalOverlay(pot,{
         image:LocalImg
       });
-      map.addOverlay(mk);
-      that.searchData(point_c.lng,point_c.lat).then((res)=>{
-        console.log(res.data);
-        home.createMarker(res.data.Body.Workers,res.data.Body.Business,res.data.Body.WholeWorkers,res.data.Body.WholeBusiness);
+      map.addOverlay(mk1); 
+      var mk2 = new BLNOverlay(pot);
+      map.addOverlay(mk2);      
+    });
+    geolocationControl.addEventListener("locationError", function(e) {
+      // 定位失败事件
+      alert(e.message);
+    });
+    map.addControl(geolocationControl);
+    this.map = map;
+    
+    //移动地图事件
+    map.addEventListener("moveend",()=>{
+      // console.log("地图移动结束时触发此事件");
+      let point_c = map.getCenter();   
+      this.changePoint(point_c);
+      sessionStorage.setItem("Point",JSON.stringify(point_c));
+
+      // 获取热门服务 
+      getHot(point_c.lng,point_c.lat).then((res)=>{
+        console.log("热门",res.data);
+        this.totals = res.data.Body;
       });
-      // SearchData(point_c.lng,point_c.lat,mapFastType,mapClassType);
-      // localStorage.setItem("Map_Lng",point_c.lng);
-      // localStorage.setItem("Map_Lat",point_c.lat+0.019439); //加上百度坐标偏移
-      // console.log("移动后定位点的坐标",mk.getPosition());
-    })    
-    // async function SearchData(lng,lat,queryStr,type){
-    //   await axios.post(API.IndexEx2,qs.stringify({
-    //     "Latitude":lat,
-    //     "Longitude":lng,
-    //     "Type": type,
-    //     "QueryStr":queryStr,
-    //     "QueryType":"3",
-    //     "ServiceId":"",
-    //     "Token":""
-    //   }),{
-    //     headers: {'Content-Type':'application/x-www-form-urlencoded'}
-    //   }).then((res) => {
-    //     console.log(res.data);
-    //     home.createMarker(res.data.Body.Workers,res.data.Body.Business,res.data.Body.WholeWorkers,res.data.Body.WholeBusiness);
-    //   })
-    // }
+    })   
+
+    /**
+     * 获取热门服务 
+     */
+    async function getHot(lng,lat){
+      let response = await axios.post(API.GetHotServices,qs.stringify({
+        "Latitude":lat,
+        "Longitude":lng,
+        "Token":""
+      }),{
+        headers: {'Content-Type':'application/x-www-form-urlencoded'}
+      })
+      return response;
+    }  
   },
-  computed: mapState(['mapFastType','mapClassType']),
+  computed: mapState(['mapFastType','mapClassType','mapPoint']),
   watch:{
-    mapFastType(e){
-      console.log(this.home.point);
-    }
+    mapPoint(){
+      this.drawMap();
+    },
+    mapFastType(){
+      this.drawMap();
+    },
+    mapClassType(){
+      this.drawMap();
+    }  
   },
   methods:{
+    drawMap(){
+      if(this.mapFastType === '全部'){
+        axios.post(API.IndexEx2,qs.stringify({
+          "Latitude":this.mapPoint.lat,
+          "Longitude":this.mapPoint.lng,
+          "Type": this.mapClassType,
+          "QueryStr":"",
+          "QueryType":"3",
+          "ServiceId":"",
+          "Token":""
+        }),{
+          header: {'Content-Type':'application/x-www-form-urlencoded'}
+        }).then((res) => {
+          console.log(res.data);
+          this.createMarker(res.data.Body.Workers,res.data.Body.Business,res.data.Body.WholeWorkers,res.data.Body.WholeBusiness);
+        })  
+      }else{
+        axios.post(API.IndexEx2,qs.stringify({
+          "Latitude":this.mapPoint.lat,
+          "Longitude":this.mapPoint.lng,
+          "Type": this.mapClassType,
+          "QueryStr":this.mapFastType,
+          "QueryType":"0",
+          "ServiceId":"",
+          "Token":""
+        }),{
+          header: {'Content-Type':'application/x-www-form-urlencoded'}
+        }).then((res) => {
+          console.log(res.data);
+          this.createMarker(res.data.Body.Workers,res.data.Body.Business,res.data.Body.WholeWorkers,res.data.Body.WholeBusiness);
+        })  
+      }
+    },
+    createMarker(workers,business,wholeW,wholeB){
+      // 清除地图
+      this.map.clearOverlays();
+      // 创建定位点
+      let mk = new LocalOverlay(this.mapPoint,{
+        image:LocalImg
+      });
+      this.map.addOverlay(mk);
+      // 创建标志点
+      let whole = [];
+      if(wholeW && wholeB){
+        whole = wholeW.concat(wholeB);
+        // console.log("whole",whole);
+      } 
+      if(workers && workers.length > 0){
+        workers.map((i,v,arr) => {
+          let worker = MarkerOverlay.worker(i.Longitude,i.Latitude,{
+            image:i.Photo,
+            text:i.DefaultService.Name,
+            bgImage:workerImg,
+            bgcolor:"#ff9d2f"
+          })
+          this.map.addOverlay(worker);
+        })
+      }
+      if(business && business.length > 0){
+        business.map((i,v,arr) => {
+          let boss = MarkerOverlay.boss(i.Longitude,i.Latitude,{
+            image:i.Photo,
+            text:i.Name,
+            bgImage:bossImg,
+            bgcolor:"#1daefa"
+          })
+          this.map.addOverlay(boss);
+        })
+      }
+      if(whole && whole.length > 0){
+        // whole.map((i,v,arr) => {
+        //   let all = MarkerOverlay.whole(i.Longitude,i.Latitude,{
+        //     image:i.Photo,
+        //     text:i.DefaultService.Name,
+        //     bgImage:wholeImg,
+        //     bgcolor:"rgb(77,199,102)"
+        //   })
+        //   this.map.addOverlay(all);
+        // })
+      }  
+    },
+    changePoint(point){
+      this.$store.dispatch('changeMap',{
+        point:point
+      });
+    },
     searchType(item){
       this.$store.dispatch('searchMap',{
         txt:item
@@ -675,23 +718,6 @@ export default {
     },
     switchType(){
       this.$store.dispatch('switchMap');
-    },
-    async searchData(lng,lat){
-      console.log("123",this.mapFastType);
-      let type = this.mapClassType;
-      let queryStr = this.mapFastType;
-      let response = await axios.post(API.IndexEx2,qs.stringify({
-        "Latitude":lat,
-        "Longitude":lng,
-        "Type": type,
-        "QueryStr":queryStr,
-        "QueryType":"3",
-        "ServiceId":"",
-        "Token":""
-      }),{
-        header: {'Content-Type':'application/x-www-form-urlencoded'}
-      })
-      return response;
     },
     turnTo (num) {
         // 传递事件 vue 2.0 传递事件修改了，好的写法应该直接写在空vue类中
