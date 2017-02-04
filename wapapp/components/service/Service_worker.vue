@@ -57,8 +57,7 @@ export default {
 
 <style lang="less" scoped>
 .vue-slider {
-  position:absolute;
-  bottom:30px;
+ 
   width:100%;
   height:140px;
   background-color:transparent;

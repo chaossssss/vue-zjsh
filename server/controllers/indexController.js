@@ -15,14 +15,22 @@ const indexController = {
 			await ctx.render('view.html');
 		}
 	},
-	getUrl() {
+	getAds() {
 		return async(ctx, next) => {
 			var promise = await request.get('http://192.168.1.191:3001/api/v3/Provider/GetAds');
 			ctx.body = {
 				success: promise
 			}
 		}
+	},
+	login() {
+		return async(ctx, next) => {
+			ctx.body = {
+				success: "success"
+			}
+		}
 	}
+
 };
 export
 default indexController;

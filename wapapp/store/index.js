@@ -9,24 +9,42 @@ Vue.use(Vuex);
 export
 default new Vuex.Store({
 	state: {
-		type: "全部"
+		mapFastType: "保姆",
+		mapClassType: 0,
+		point: ""
 	},
 	actions: {
 		searchMap({
 			commit
 		}, data) {
-			console.log(types.SEARCH_MAP);
-			commit(types.SEARCH_MAP, {
+			console.log(types.SEARCH_MAP_FAST);
+			commit(types.SEARCH_MAP_FAST, {
 				txt: data.txt
 			});
+		},
+		switchMap({
+			commit
+		}) {
+			console.log(types.SWITCH_MAP_CLASS);
+			commit(types.SWITCH_MAP_CLASS);
 		}
 	},
 	mutations: {
-		[types.SEARCH_MAP](state, {
+		[types.SEARCH_MAP_FAST](state, {
 			txt
 		}) {
 			console.log(txt);
-			return state.type = txt;
+			return state.mapFastType = txt;
+		},
+		[types.SWITCH_MAP_CLASS](state) {
+			let count = state.mapClassType + 1;
+			if (count === 3) {
+				state.mapClassType = 0;
+			} else {
+				state.mapClassType++;
+			}
+			console.log(state.mapClassType);
+			return state.mapClassType;
 		}
 	}
 })

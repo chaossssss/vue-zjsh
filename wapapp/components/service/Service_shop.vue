@@ -1,7 +1,49 @@
 <template>
 <div>
 	<div class="vue-slider">
-    <div class="vue-silder__box">
+    <slider :pages="someList" :sliderinit="sliderinit" @slide='slide'>
+      <template slot="item" scope="props">
+        <div class="vue-silder__box">
+        <div class="vue-slider__box_content">
+          <div class="vue-box__hd">
+            <img style="width:85px;" src="../../static/images/pic.png" alt="">  
+          </div>
+          <div class="vue-box__bd">
+            <div class="vue-box__bd_title">
+              <label class="label">红玲电动车维修店 </label>
+              <span class="service">商店</span>
+            </div> 
+            <div class="vue-box__bd_content">
+              <span class="star">🌟🌟🌟🌟🌟</span>
+              <span class="score">5.0</span>
+              <i class="discount">减</i>
+              <i class="rebate">返</i>
+              <em class="distance">1.1km</em>
+            </div>
+            <div class="vue-box__bd__location">
+              <img class="location" src="../../static/images/pic-location.png" alt="">
+              <p class="content">江干区秋涛路11号秋涛路11江干区秋涛路11号秋涛路11</p>
+            </div>
+            <p class="vue-box__bd_foot">汽车维修、电瓶车维修、汽车补胎、自行车补胎、自行车维修</p>
+          </div>
+        </div>
+        <div class="vue-slider__box_footer">
+          <div class="vue-box__btn_left">
+            <img src="../../static/images/pic-order.png" alt="">
+            <span>下单</span>
+          </div>
+          <div class="vue-box__btn_right">
+            <img src="../../static/images/pic-phone.png" alt="">
+            <span>电话</span>
+          </div>
+        </div>
+      </div>
+        <!-- <div class="slider-item" style="background:red;">
+            <span>{{props.item.title}}</span>
+        </div> -->
+      </template>
+    </slider>
+    <!-- <div class="vue-silder__box">
       <div class="vue-slider__box_content">
         <div class="vue-box__hd">
           <img style="width:85px;" src="../../static/images/pic.png" alt="">  
@@ -35,13 +77,76 @@
           <span>电话</span>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>	
 </template>
 <script>
+import slider from '../swiper/slider.vue';
 export default {
-	name:"serviceShop"
+	name:"serviceShop",
+  data(){
+    return {
+      someList:[
+          {
+              title: 'slide1',
+              style:{
+                   'background':'#1bbc9b',
+              },
+          },
+          {
+              title: 'slide2',
+              style:{
+                   'background':'#4bbfc3',
+              },
+          },
+          {
+              title: 'slide3',
+              style:{
+                   'background':'#7baabe',
+              },
+          }
+      ],
+      sliderinit: {
+          currentPage: 1,
+          // start: {},
+          // end: {},
+          // tracking: false,
+          thresholdTime: 500,//滑动时间阈值判定距离
+          thresholdDistance: 100,//滑动距离阈值
+          // direction:'vertical',//垂直滚动
+          // loop:true,//无限循环
+          // autoplay:1000,//自动播放:时间[ms]
+      }
+    }
+  },
+  methods:{
+    turnTo (num) {
+        // 传递事件 vue 2.0 传递事件修改了，好的写法应该直接写在空vue类中
+        this.$children[0].$emit('slideTo', num);
+        console.log(this);
+    },
+    slideNext () {
+        this.$children[0].$emit('slideNext');
+    },
+    slidePre () {
+        this.$children[0].$emit('slidePre');
+    },
+    appendslider(){
+        this.someList.push({
+            title: 'slidernew',
+            style:{
+                background:'#333',
+                color:'#fff'
+            }
+        });
+    },
+    // 监听事件也发生了变化,需要指向一个子组件实例
+    slide(pagenum){
+        console.log(pagenum);
+    }
+  },
+  components:{slider}
 }
 </script>
 
@@ -60,6 +165,8 @@ export default {
   background-color:#fff;
   width:330px;
   margin:0 auto;
+  margin-left:9px;
+  margin-right:5px;
   box-shadow:0 0 10px -2px rgba(34,48,59,0.33);
 
   &:before {

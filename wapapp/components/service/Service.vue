@@ -5,17 +5,29 @@
 
   <div class="vue-topnav">
     <div class="vue-topnav__primary">
-      <span :class="{'vue-topnav__item_on': type === item}" class="vue-topnav__item" v-for="item in totals" @click="searchType(item)">{{item}}</span>
+      <span :class="{'vue-topnav__item_on': mapFastType === item}" class="vue-topnav__item" v-for="item in totals" @click="searchType(item)">{{item}}</span>
     </div> 
     <img class="vue-topnav__swit-btn" src="../../static/images/button-swit.png" alt="">
   </div>
 
+  <div class="vue-slider" @click="switchType()">
+    <img v-show="mapClassType === 0" src="../../static/images/button_home_all.png" alt="">
+    <img v-show="mapClassType === 1" src="../../static/images/button_home_worker.png" alt="">
+    <img v-show="mapClassType === 2" src="../../static/images/button_home_boss.png" alt="">
+  </div>
+
 	<div id="map-container"></div> 
   
-  <!-- <search-city></search-city> -->
-  <!-- <search-worker></search-worker> -->
-  <search-shop></search-shop>
-     
+  <!-- <service-city></service-city> -->
+  <!-- <service-worker></service-worker> -->
+  <!-- <service-shop></service-shop> -->
+  <!-- <slider class="slider" :pages="someList" :sliderinit="sliderinit" @slide='slide'>
+    <template slot="item" scope="props">
+      <div class="slider-item" style="background:transparent;">
+          <service-city></service-city>
+      </div>
+    </template>
+  </slider> -->
 
 </div>
 </template>
@@ -25,143 +37,682 @@ import { mapState } from 'vuex';
 import { mapActions } from 'vuex';
 import searchAll from "../search/Search_all.vue";
 import searchFast from "../search/Search_fast.vue";
-import searchCity from "./Service_city.vue";
-import searchWorker from './Service_worker.vue';
-import searchShop from './Service_shop.vue';
+import serviceCity from "./Service_city.vue";
+import serviceWorker from './Service_worker.vue';
+import serviceShop from './Service_shop.vue';
 import API from '../../config/backend';
 import axios from 'axios';
 import qs from 'qs';
 
-import LocalImg from '../../static/images/pic-local.svg';
+import LocalImg from '../../static/images/pic-local.png';
 
-/**
- * 初始化定位(根据浏览器定位)
- * @param  {[type]} map [description]
- * @param  {[type]} mk  [description]
- * @return {[type]}     [description]
- */
-function firstGeolocation(map,mk) {
-    var point;
-    var geolocation = new BMap.Geolocation();
-    geolocation.getCurrentPosition(function(r) {
-        if (this.getStatus() == BMAP_STATUS_SUCCESS) {
-            point = r.point;
-            var myIcon = new BMap.Icon(LocalImg, new BMap.Size(22, 22));
-            var mark = new BMap.Marker(r.point, {
-                icon: myIcon
-            });
-            mark.setTop(true); // 放置到最顶层
-            mark.setZIndex(10000);
-            mark.disableMassClear(); //不能被clear掉
-            map.addOverlay(mark); //mk放到地图中
-            map.panTo(r.point); //地图中心移动到定位点
+import slider from '../swiper/slider.vue';
 
-            console.log('您的位置：' + r.point.lng + ',' + r.point.lat);
-        } else {
-            alert('failed' + this.getStatus());
-        }
-    }, {
-        enableHighAccuracy: true
+import workerImg from '../../static/images/pic-worker.png';
+import bossImg from '../../static/images/pic-boss.png';
+import wholeImg from '../../static/images/pic-whole.png';
+
+function clear_active(map,point) {
+    // console.log("point",point);
+    let allOverlay = map.getOverlays();
+    allOverlay.map(function(i,v,arry){
+      if(i instanceof BLNOverlay || i instanceof LocalOverlay){
+      }else if(i._point === point){
+        i.show(); 
+        console.log(i._point);
+      }else {
+        i.hide();
+      }
     })
-    return point;
+}
+let MarkerOverlay = {
+  worker(lng,lat,obj){
+    let point = new BMap.Point(lng, lat);
+    return new MirrorOverlay(point,obj);
+  },
+  boss(lng,lat,obj){
+    let point = new BMap.Point(lng, lat);
+    return new HouseOverlay(point,obj);
+  },
+  whole(lng,lat,obj){
+    let point = new BMap.Point(lng, lat);
+    return new WholeOverlay(point,obj);
+  }
+}
+function LocalOverlay(point,obj){
+  this._point = point;
+  this._obj = obj;
+  this._image = this._obj.image;
+}
+LocalOverlay.prototype = new BMap.Overlay();
+LocalOverlay.prototype.initialize = function(map){
+  this._map = map;
+  var div = this._div = document.createElement("div");
+  div.style.position = "absolute";
+  div.style.width = "38px";
+  div.style.height = "38px";
+  div.style.background = "url("+this._image+") no-repeat";
+  div.style.backgroundSize = "100% 100%";
+  div.style.zIndex = "9999";
+
+  map.getPanes().labelPane.appendChild(div);
+  return div;
+}
+LocalOverlay.prototype.draw = function(){
+  var map = this._map;
+  var pixel = map.pointToOverlayPixel(this._point);
+  this._div.style.left = pixel.x -19 +"px";
+  this._div.style.top = pixel.y -38 + "px";
+}
+function BLNOverlay(point){
+  this._point = point;
+}
+BLNOverlay.prototype = new BMap.Overlay();
+BLNOverlay.prototype.initialize = function(map){
+  this._map = map;
+  var div = this._div = document.createElement("div");
+  div.style.position = "absolute";
+  div.style.width = "20px";
+  div.style.height = "20px";
+  div.style.backgroundColor = "#fff";
+  div.style.borderRadius ="50%";
+  div.style.boxShadow = "0 0 10px -3px #4d4f58";
+  div.style.zIndex = "8888";
+
+  var circle = this._circle = document.createElement("div");
+  circle.style.position = "absolute";
+  circle.style.top = "50%";
+  circle.style.left = "50%";
+  circle.style.background = "#33a9fc";
+  circle.style.width = "14px";
+  circle.style.height = "14px";
+  circle.style.borderRadius = "50%";
+  circle.style.marginLeft = "-7px";
+  circle.style.marginTop = "-7px";
+  circle.style.animation = "breatheLight 2s linear infinite";
+
+  div.appendChild(circle);
+
+  map.getPanes().labelPane.appendChild(div);
+  return div;
+}
+BLNOverlay.prototype.draw = function(){
+  var map = this._map;
+  var pixel = map.pointToOverlayPixel(this._point);
+  this._div.style.left = pixel.x +"px";
+  this._div.style.top = pixel.y -17 + "px";
+}
+function MirrorOverlay(point,obj){
+  this._point = point;
+  this._obj = obj;
+  this._image = this._obj.image;
+  this._text = this._obj.text;
+  this._bgImage = this._obj.bgImage;
+  this._bgcolor = this._obj.bgcolor;
+}
+MirrorOverlay.prototype = new BMap.Overlay();
+MirrorOverlay.prototype.initialize = function(map){
+  this._map = map;
+  var box = this._box = document.createElement("div");
+  box.style.position = "absolute";
+  box.style.padding = "0";
+  box.style.margin = "0";
+  box.style.border = "0";
+  box.style.width = "1000px";
+  box.style.height = "0";
+
+  var container = this._container = document.createElement("div");
+  container.style.position = "absolute";
+  container.style.width = "38px";
+  container.style.height = "52px";
+  // container.style.backgroundRepeat = "no-repeat";
+  // container.style.backgroundSize = "cover";
+  box.appendChild(container);
+
+  var div = this._div = document.createElement("div");
+  div.style.position = "absolute";
+  div.style.top = "0";
+  div.style.left = "50%";
+  div.style.transform = "translateX(-50%)";
+  div.style.backgroundRepeat = "no-repeat";
+  div.style.backgroundSize = "cover";
+  div.style.backgroundColor = this._bgcolor || "transparent";
+  div.style.borderRadius = "50%";
+  div.style.padding = "2px";
+  div.style.color = "white";
+  div.style.MozUserSelect = "none";
+  container.appendChild(div);
+
+  var arrow = this._arrow = document.createElement("div");
+  arrow.style.background = "url("+this._image+") no-repeat";
+  arrow.style.backgroundSize = "cover";
+  arrow.style.width = "32px";
+  arrow.style.height = "32px";
+  arrow.style.overflow = "hidden";
+  arrow.style.borderRadius = "50%";
+  div.appendChild(arrow);
+ 
+  var span = this._span = document.createElement("span");
+  span.style.position = "absolute";
+  span.style.display = "inline-block";
+  span.style.color = "#fff";
+  span.style.lineHeight = "22px";
+  span.style.fontSize = "12px";
+  span.style.top = "-25px";
+  span.style.left = "-6px";
+  span.style.height = "22px";
+  span.style.padding = "1px 8px";
+  span.style.textAlign = "center";
+  span.style.backgroundColor = "rgba(0,0,0,0.5)";
+  span.style.borderTopLeftRadius = "20px";
+  span.style.borderTopRightRadius = "20px";
+  span.style.borderBottomLeftRadius = "20px";
+  span.style.borderBottomRightRadius = "20px";
+  box.appendChild(span);
+  span.appendChild(document.createTextNode(this._text));   
+
+  div.addEventListener('touchstart',() => {
+    clear_active(this._map,this._point);
+    // container.style.background = "url("+this._bgImage+")";
+    // container.style.backgroundSize = "cover";
+    // span.style.opacity = "0";
+    // container.style.zIndex = "8000";
+  })
+
+  map.getPanes().markerPane.appendChild(box);
+  return box;
+}
+MirrorOverlay.prototype.draw = function(){
+  var map = this._map;
+  var pixel = map.pointToOverlayPixel(this._point);
+  this._box.style.left = pixel.x +"px";
+  this._box.style.top = pixel.y -30 + "px";
+  // this._box.style.left = pixel.x - parseInt(this._arrow.style.left) + "px";
+  // this._box.style.top  = pixel.y - 30 + "px";
+}
+MirrorOverlay.prototype.hide = function(){
+  var span = this._span;
+  var container = this._container;
+  container.style.background = "";
+  span.style.opacity = "1";
+  container.style.zIndex = "0";
+}
+MirrorOverlay.prototype.show = function(){
+  var container = this._container;
+  var span = this._span;
+  container.style.background = "url("+this._bgImage+")";
+  container.style.backgroundSize = "cover";
+  span.style.opacity = "0";
+  container.style.zIndex = "8000";
+}
+function HouseOverlay(point,obj){
+  this._point = point;
+  this._obj = obj;
+  this._image = this._obj.image;
+  this._text = this._obj.text;
+  this._bgImage = this._obj.bgImage;
+  this._bgcolor = this._obj.bgcolor;
+}
+HouseOverlay.prototype = new BMap.Overlay();
+HouseOverlay.prototype.initialize = function(map){
+  this._map = map;
+  var box = this._box = document.createElement("div");
+  box.style.position = "absolute";
+  box.style.padding = "0";
+  box.style.margin = "0";
+  box.style.border = "0";
+  box.style.width = "1000px";
+  box.style.height = "0";
+
+  var container = this._container = document.createElement("div");
+  container.style.position = "absolute";
+  container.style.width = "51px";
+  container.style.height = "50px";
+  container.style.backgroundRepeat = "no-repeat";
+  container.style.backgroundSize = "cover";
+  box.appendChild(container);
+
+  var div = this._div = document.createElement("div");
+  div.style.position = "absolute";
+  div.style.backgroundColor = this._bgcolor || "#fff";
+  div.style.backgroundRepeat = "no-repeat";
+  div.style.backgroundSize = "cover";
+  div.style.bottom = "0";
+  div.style.left = "8px";
+  div.style.borderRadius = "50%";
+  div.style.height = "36px";
+  div.style.width = "36px";
+  div.style.borderRadius = "50%";
+  div.style.MozUserSelect = "none";
+  container.appendChild(div);
+
+  var arrow = this._arrow = document.createElement("div");
+  arrow.style.background = "url("+this._image+") no-repeat";
+  arrow.style.backgroundSize = "cover";
+  arrow.style.position = "absolute";
+  arrow.style.bottom = "2px";
+  arrow.style.left = "10px";
+  arrow.style.width = "32px";
+  arrow.style.height = "32px";
+  arrow.style.overflow = "hidden";
+  arrow.style.borderRadius = "50%";
+  container.appendChild(arrow);
+
+  var span = this._span = document.createElement("span");
+  span.style.position = "absolute";
+  span.style.display = "inline-block";
+  span.style.color = "#fff";
+  span.style.lineHeight = "22px";
+  span.style.fontSize = "12px";
+  span.style.top = "-14px";
+  span.style.left = "-6px";
+  span.style.height = "22px";
+  span.style.padding = "1px 8px";
+  span.style.textAlign = "center";
+  span.style.backgroundColor = "rgba(0,0,0,0.5)";
+  span.style.borderTopLeftRadius = "20px";
+  span.style.borderTopRightRadius = "20px";
+  span.style.borderBottomLeftRadius = "20px";
+  span.style.borderBottomRightRadius = "20px";
+  box.appendChild(span);
+  span.appendChild(document.createTextNode(this._text));        
+ 
+  arrow.addEventListener('touchstart',() => {
+    clear_active(this._map,this._point);
+    // container.style.backgroundImage = "url("+this._bgImage+")";
+    // container.style.zIndex = "8000";
+    // div.style.backgroundColor = "transparent";
+    // span.style.opacity = "0";
+  })
+
+  map.getPanes().markerPane.appendChild(box);
+  return box;
+}
+HouseOverlay.prototype.draw = function(){
+  var map = this._map;
+  var pixel = map.pointToOverlayPixel(this._point);
+  this._box.style.left = pixel.x +"px";
+  this._box.style.top = pixel.y -35 + "px";
+  // this._box.style.left = pixel.x - parseInt(this._arrow.style.left) + "px";
+  // this._box.style.top  = pixel.y - 30 + "px";
+}
+HouseOverlay.prototype.hide = function(){
+  var bgcolor = this._bgcolor;
+  var container = this._container;
+  var div = this._div;
+  var span = this._span;
+  container.style.backgroundImage = "";
+  container.style.zIndex = "0";
+  div.style.backgroundColor = bgcolor || "#fff";
+  span.style.opacity = "1";
+}
+HouseOverlay.prototype.show = function(){
+  var container = this._container;
+  var div = this._div;
+  var span = this._span;
+  container.style.backgroundImage = "url("+this._bgImage+")";
+  container.style.zIndex = "8000";
+  div.style.backgroundColor = "transparent";
+  span.style.opacity = "0";
+}
+function WholeOverlay(point,obj){
+  this._point = point;
+  this._obj = obj;
+  this._image = this._obj.image;
+  this._text = this._obj.text;
+  this._bgImage = this._obj.bgImage;
+  this._bgcolor = this._obj.bgcolor;
+}
+WholeOverlay.prototype = new BMap.Overlay();
+WholeOverlay.prototype.initialize = function(map){
+  this._map = map;
+  var box = this._box = document.createElement("div");
+  box.style.position = "absolute";
+  box.style.padding = "0";
+  box.style.margin = "0";
+  box.style.border = "0";
+  box.style.width = "1000px";
+  box.style.height = "0";
+
+  var container = this._container = document.createElement("div");
+  container.style.position = "absolute";
+  container.style.width = "51px";
+  container.style.height = "50px";
+  container.style.backgroundRepeat = "no-repeat";
+  container.style.backgroundSize = "cover";
+  box.appendChild(container);
+
+  var div = this._div = document.createElement("div");
+  div.style.position = "absolute";
+  div.style.backgroundColor = this._bgcolor || "#fff";
+  div.style.backgroundRepeat = "no-repeat";
+  div.style.backgroundSize = "cover";
+  div.style.bottom = "0";
+  div.style.left = "8px";
+  div.style.borderRadius = "50%";
+  div.style.height = "36px";
+  div.style.width = "36px";
+  div.style.borderRadius = "50%";
+  // div.style.padding = "2px";
+  div.style.MozUserSelect = "none";
+  container.appendChild(div);
+
+  var arrow = this._arrow = document.createElement("div");
+  arrow.style.background = "url("+this._image+") no-repeat";
+  arrow.style.backgroundSize = "cover";
+  arrow.style.position = "absolute";
+  arrow.style.bottom = "2px";
+  arrow.style.left = "10px";
+  arrow.style.width = "32px";
+  arrow.style.height = "32px";
+  arrow.style.overflow = "hidden";
+  arrow.style.borderRadius = "50%";
+  container.appendChild(arrow);
+
+  var span = this._span = document.createElement("span");
+  span.style.position = "absolute";
+  span.style.display = "inline-block";
+  span.style.color = "#fff";
+  span.style.lineHeight = "22px";
+  span.style.fontSize = "12px";
+  span.style.top = "-14px";
+  span.style.left = "0";
+  span.style.height = "22px";
+  span.style.padding = "1px 8px";
+  span.style.textAlign = "center";
+  span.style.backgroundColor = "rgba(76,197,98,0.4)";
+  span.style.borderTopLeftRadius = "20px";
+  span.style.borderTopRightRadius = "20px";
+  span.style.borderBottomLeftRadius = "20px";
+  span.style.borderBottomRightRadius = "20px";
+  box.appendChild(span);
+  span.appendChild(document.createTextNode("全城服务"));        
+ 
+  container.addEventListener('touchstart',() => {
+    clear_active(this._map,this._point);
+    // container.style.backgroundImage = "url("+this._bgImage+")";
+    // div.style.backgroundColor = "transparent";
+    // span.style.opacity = "0";
+    // div.style.zIndex = "8000";
+  })
+
+  map.getPanes().markerPane.appendChild(box);
+  return box;
+}
+WholeOverlay.prototype.draw = function(){
+  var map = this._map;
+  var pixel = map.pointToOverlayPixel(this._point);
+  this._box.style.left = pixel.x +"px";
+  this._box.style.top = pixel.y -35 + "px";
+}
+WholeOverlay.prototype.hide = function(){
+  var container = this._container;
+  var div = this._div;
+  var span = this._span;
+  var bgcolor = this._bgcolor;
+  container.style.backgroundImage = "";
+  div.style.backgroundColor = bgcolor || "#fff";
+  span.style.opacity = "1";
+  div.style.zIndex = "0";
+}
+WholeOverlay.prototype.show = function(){
+  var container = this._container;
+  var div = this._div;
+  var span = this._span;
+  container.style.backgroundImage = "url("+this._bgImage+")";
+  div.style.backgroundColor = "transparent";
+  span.style.opacity = "0";
+  div.style.zIndex = "8000";
 }
 
-function GeolocationControl(){
-  var geolocationControl = new BMap.GeolocationControl({
-    anchor: BMAP_ANCHOR_BOTTOM_LEFT, //控件停靠位置
-    offset: new BMap.Size(10, 30),
-    showAddressBar: false, //是否显示定位信息面板
-    locationIcon: new BMap.Icon(LocalImg, new BMap.Size(22, 22)) //自定义定位中心点的icon
-  });
-  geolocationControl.addEventListener("locationSuccess", function(e) {
-    // 定位成功事件
-    var address = '';
-    address += e.addressComponent.province;
-    address += e.addressComponent.city;
-    address += e.addressComponent.district;
-    address += e.addressComponent.street;
-    address += e.addressComponent.streetNumber;
-    console.log("当前定位地址为：" + e);
-    var pot = e.point;
-    map.clearOverlays();
-    //alert(pot);    
-    // var myIcon = new BMap.Icon(localTop, new BMap.Size(22,46));
-    // if(mk0.point || mk1.point){
-    //     //已经定位成功，移动到定位点
-    //     console.log("mk0:",mk0.point,"mk1:",mk1.point);
-    // map.panTo(mk0.point); 
-    // mk1.setPosition(mk0.point);
-    // }            
-  });
-  geolocationControl.addEventListener("locationError", function(e) {
-    // 定位失败事件
-    alert(e.message);
-  });
-}
 
 export default {
 	name:"service",
   data(){
     return {
-      totals:["全部","小时工","木工","保姆","三级类型","保姆","类型"]
+      totals:["全部","小时工","木工","保姆","三级类型","保姆","类型"],
+      someList:[
+          {
+              title: 'slide1',
+              style:{
+                   'background':'#1bbc9b',
+              },
+          },
+          {
+              title: 'slide2',
+              style:{
+                   'background':'#4bbfc3',
+              },
+          },
+          {
+              title: 'slide3',
+              style:{
+                   'background':'#7baabe',
+              },
+          }
+      ],
+      sliderinit: {
+          currentPage: 1,
+          // start: {},
+          // end: {},
+          // tracking: false,
+          thresholdTime: 500,//滑动时间阈值判定距离
+          thresholdDistance: 100,//滑动距离阈值
+          // direction:'vertical',//垂直滚动
+          // loop:true,//无限循环
+          // autoplay:1000,//自动播放:时间[ms]
+      }
     }
   },
 	mounted:function(){
-    let map = new BMap.Map("map-container");          // 创建地图实例  
+    console.log(this);
+    let mapClassType = this.mapClassType;
+    let map = new BMap.Map("map-container");          // 创建地图实例 
     let point = new BMap.Point(116.404, 39.915);  // 创建点坐标  
-    map.centerAndZoom(point, 15);                 // 初始化地图，设置中心点坐标和地图级别  
-    let myIcon = new BMap.Icon(LocalImg, new BMap.Size(22, 22));
-    let mk = new BMap.Marker(point, {
-        icon: myIcon
-    });     
-    let GeoloPoint = firstGeolocation(map);
-    mk.setTop(true); // 放置到最顶层
-    mk.setZIndex(10000);
-    mk.disableMassClear(); //不能被clear掉
-    map.addOverlay(mk); //mk放到地图中
+    map.centerAndZoom(point, 15);                 // 初始化地图，设置中心点坐标和地图级别   
+    const home = {
+      map,
+      point,
+      init(){
+        this.autoGeolocation(); // 自动定位
+        this.manualGeolocation(); // 手动定位
+      },
+      createMarker(workers,business,wholeW,wholeB){
+        let whole = [];
+        if(wholeW && wholeB){
+          whole = wholeW.concat(wholeB);
+          // console.log("whole",whole);
+        } 
+        if(workers && workers.length > 0){
+          workers.map(function(i,v,arr){
+            let worker = MarkerOverlay.worker(i.Longitude,i.Latitude,{
+              image:i.Photo,
+              text:i.DefaultService.Name,
+              bgImage:workerImg,
+              bgcolor:"#ff9d2f"
+            })
+            map.addOverlay(worker);
+          })
+        }
+        if(business && business.length > 0){
+          business.map(function(i,v,arr){
+            let boss = MarkerOverlay.boss(i.Longitude,i.Latitude,{
+              image:i.Photo,
+              text:i.DefaultService.Name,
+              bgImage:bossImg,
+              bgcolor:"#1daefa"
+            })
+            map.addOverlay(boss);
+          })
+        }
+        if(whole && whole.length > 0){
+          whole.map(function(i,v,arr){
+            let all = MarkerOverlay.whole(i.Longitude,i.Latitude,{
+              image:i.Photo,
+              text:i.DefaultService.Name,
+              bgImage:wholeImg,
+              bgcolor:"rgb(77,199,102)"
+            })
+            map.addOverlay(all);
+          })
+        }  
+      },
+      autoGeolocation(){
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function(r) {
+          if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+              point = r.point;
+              var mark = new BLNOverlay(r.point);
+              map.addEventListener('clearoverlays',function(){
+                map.addOverlay(mark);
+              })
+              map.addOverlay(mark); //mk放到地图中
+              map.panTo(r.point); //地图中心移动到定位点
+              console.log('您的位置：' + r.point.lng + ',' + r.point.lat);
+          } else {
+              alert('failed' + this.getStatus());
+          }
+        }, {
+            enableHighAccuracy: true
+        })
+      },
+      manualGeolocation(){
+        var geolocationControl = new BMap.GeolocationControl({
+          anchor: BMAP_ANCHOR_BOTTOM_LEFT, //控件停靠位置
+          offset: new BMap.Size(10, 60),
+          showAddressBar: false, //是否显示定位信息面板
+          // locationIcon: new BMap.Icon(LocalImg, new BMap.Size(22, 22)) //自定义定位中心点的icon
+        });
+        geolocationControl.addEventListener("locationSuccess", function(e) {
+          // 定位成功事件
+          var address = '';
+          address += e.addressComponent.province;
+          address += e.addressComponent.city;
+          address += e.addressComponent.district;
+          address += e.addressComponent.street;
+          address += e.addressComponent.streetNumber;
+          console.log("当前定位地址为：" + e);
+          var pot = e.point;
+          map.clearOverlays();
+          var mk1 = new LocalOverlay(pot,{
+            image:LocalImg
+          });
+          map.addOverlay(mk1); 
+          var mk2 = new BLNOverlay(pot);
+          map.addOverlay(mk2);      
+        });
+        geolocationControl.addEventListener("locationError", function(e) {
+          // 定位失败事件
+          alert(e.message);
+        });
+        map.addControl(geolocationControl);
+      }
+    }
+    home.init();
+    // let image = "http://image.zhujiash.com/Upload/HeadPic/1x1/thumb/Worker/2017-01-06/e5c5ed627c8fb6261b222f5e1a52c58e.png";
+    // var myCompOverlay = MarkerOverlay.boss(116.404, 39.915,{
+    //   image:image,
+    //   text:"实木地板安装",
+    //   bgImage:bossImg,
+    //   bgcolor:"#1daefa"
+    // });
+    // // myCompOverlay.addEventListener();
+    // // var myCompOverlay = MarkerOverlay.boss(point,{
+    // //   image:image,
+    // //   text:"实木地板安装",
+    // //   bgImage:workerImg
+    // // });
+    // map.addOverlay(myCompOverlay);
 
+    let that = this;
     //移动地图事件
     map.addEventListener("moveend",function(){
       // console.log("地图移动结束时触发此事件");
       let point_c = map.getCenter();
-      // console.log("移动定位中点",point_c);
-      mk.setPosition(point_c);
-      // searchData(point_c.lng,point_c.lat);
-
+      map.clearOverlays();
+      let mk = new LocalOverlay(point_c,{
+        image:LocalImg
+      });
+      map.addOverlay(mk);
+      that.searchData(point_c.lng,point_c.lat).then((res)=>{
+        console.log(res.data);
+        home.createMarker(res.data.Body.Workers,res.data.Body.Business,res.data.Body.WholeWorkers,res.data.Body.WholeBusiness);
+      });
+      // SearchData(point_c.lng,point_c.lat,mapFastType,mapClassType);
       // localStorage.setItem("Map_Lng",point_c.lng);
       // localStorage.setItem("Map_Lat",point_c.lat+0.019439); //加上百度坐标偏移
-
-      console.log("移动后定位点的坐标",mk.getPosition());
+      // console.log("移动后定位点的坐标",mk.getPosition());
     })      
-
-
-    async function SearcData(){
-      await axios.post(API.IndexEx2,qs.stringify({
-        "Latitude":"39.9",
-        "Longitude":"116.39",
-        "Type":"0",
-        "QueryStr":"",
-        "QueryType":"3",
-        "ServiceId":"",
-        "Token":""
-      }),{
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      }).then((res) => {
-        console.log(res.data);
-      })
-    }
-    SearcData();
+    // async function SearchData(lng,lat,queryStr,type){
+    //   await axios.post(API.IndexEx2,qs.stringify({
+    //     "Latitude":lat,
+    //     "Longitude":lng,
+    //     "Type": type,
+    //     "QueryStr":queryStr,
+    //     "QueryType":"3",
+    //     "ServiceId":"",
+    //     "Token":""
+    //   }),{
+    //     headers: {'Content-Type':'application/x-www-form-urlencoded'}
+    //   }).then((res) => {
+    //     console.log(res.data);
+    //     home.createMarker(res.data.Body.Workers,res.data.Body.Business,res.data.Body.WholeWorkers,res.data.Body.WholeBusiness);
+    //   })
+    // }
   },
-  computed: mapState(['type']),
+  computed: mapState(['mapFastType','mapClassType']),
   methods:{
     searchType(item){
       this.$store.dispatch('searchMap',{
         txt:item
       });
-      console.log(this);
+    },
+    switchType(){
+      this.$store.dispatch('switchMap');
+    },
+    async searchData(lng,lat){
+      console.log("123",this.mapFastType);
+      let type = this.mapClassType;
+      let queryStr = this.mapFastType;
+      let response = await axios.post(API.IndexEx2,qs.stringify({
+        "Latitude":lat,
+        "Longitude":lng,
+        "Type": type,
+        "QueryStr":queryStr,
+        "QueryType":"3",
+        "ServiceId":"",
+        "Token":""
+      }),{
+        header: {'Content-Type':'application/x-www-form-urlencoded'}
+      })
+      return response;
+    },
+    turnTo (num) {
+        // 传递事件 vue 2.0 传递事件修改了，好的写法应该直接写在空vue类中
+        this.$children[0].$emit('slideTo', num);
+        console.log(this);
+    },
+    slideNext () {
+        this.$children[0].$emit('slideNext');
+    },
+    slidePre () {
+        this.$children[0].$emit('slidePre');
+    },
+    appendslider(){
+        this.someList.push({
+            title: 'slidernew',
+            style:{
+                background:'#333',
+                color:'#fff'
+            }
+        });
+    },
+    // 监听事件也发生了变化,需要指向一个子组件实例
+    slide(pagenum){
+        console.log(pagenum);
     }
   },
-  components:{searchAll,searchFast,searchCity,searchWorker,searchShop}
+  components:{searchAll,searchFast,serviceCity,serviceWorker,serviceShop,slider}
 }
 </script>
 
@@ -209,7 +760,29 @@ export default {
   right:16px;
   transform:translateY(-50%);
 }
+.vue-slider {
+  position:absolute;
+  top:120px;
+  right:10px;
+  z-index:10;
+  width:40px;
 
+  img {
+    width:100%;
+  }
+}
+.slider {
+  position:absolute;
+  bottom:30px;
+}
+@keyframes breatheLight {
+  from,to{
+    transform:scale(.9);
+  }
+  50% {
+    transform:scale(.7);
+  }
+}
 
 
 </style>

@@ -18,6 +18,19 @@
   </div>
 
 
+  <slider :pages="someList" :sliderinit="sliderinit" @slide='slide'>
+    <template slot="item" scope="props">
+        <div class="slider-item" style="background:red;">
+            <span>{{props.item.title}}</span>
+        </div>
+      </template>
+  </slider>
+  <div class="sliderButton">
+  <button @click="slidePre">上一页</button>
+  <button @click="slideNext">下一页</button>
+  <button @click="appendslider">添加一页</button>
+  <button @click="turnTo(2)">跳转到第三页</button>
+
     
 </div>
 </template>
@@ -50,15 +63,13 @@ export default {
           }
       ],
       sliderinit: {
-          currentPage: 1,
-          // start: {},
-          // end: {},
-          // tracking: false,
-          thresholdTime: 500,//滑动时间阈值判定距离
-          thresholdDistance: 100,//滑动距离阈值
-          // direction:'vertical',//垂直滚动
-          // loop:true,//无限循环
-          // autoplay:1000,//自动播放:时间[ms]
+        currentPage: 1,
+        start: {},
+        end: {},
+        tracking: false,
+        thresholdTime: 500,//滑动判定距离
+        thresholdDistance: 100,//滑动判定时间
+        loop:true,//无限循环
       }
     }
   },

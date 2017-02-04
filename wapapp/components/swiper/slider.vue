@@ -4,9 +4,9 @@
   overflow: hidden;
   position: relative;
   z-index: 1;
-  height: 400px;
-  margin: 20px auto;
-  width: 70%;
+  /*height: 400px;*/
+  margin: 0 auto;
+  width: 100%;
 }
 .slider-wrapper {
   box-sizing: content-box;
@@ -38,13 +38,13 @@
     width: 100%;
 }
 .slider-item {
-    align-items: center;
+    /*align-items: center;*/
     background: #fff none repeat scroll 0 0;
     display: flex;
     font-size: 40px;
     justify-content: center;
-    text-align: center;
-    color: #fff;
+    /*text-align: center;*/
+    /*color: #fff;*/
 }
 .slider-item {
     background-position: center center!important;
@@ -79,9 +79,9 @@
 /*移动端优化*/
  @media screen and (max-width:414px) {
     .slider-container {
-    height: 200px;
-    margin: 20px auto;
-    width: 90%;
+    height: 152px;
+    margin: 0 auto;
+    width: 100%;
     }
 }
 </style>
@@ -105,7 +105,15 @@
         </div>
       </slot>
      </template>
-    
+      
+      <!-- 无缝滚动 -->
+       <template  v-if="sliderinit.loop">
+        <div class="slider-item" :style="pages[pages.length-1].style">{{pages[pages.length-1].title}}</div>
+         <slot name="item"  v-for="item in pages">
+          <div class="slider-item" :style="item.style">{{item.title}}</div>
+         </slot>
+        <div class="slider-item" :style="pages[0].style">{{pages[0].title}}</div>
+       </template>
     </div>
     <!-- <div class="slider-pagination slider-pagination-bullets">
        <template v-for="n in pagenums">
