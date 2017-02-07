@@ -1,58 +1,67 @@
 <template>
 	<div style="background:rgba(0, 0, 0, 0.6);width:100%;height:100%;position:absolute;">
     <div class="QRcode-container">
-      <img :src="avatarUrl" class="user-avatar">
-      <div class="user-info">
-        <span class="name">我是条咸鱼</span>
-        <img class="user-sex">
+      <div class="container">
+        <img :src="userInfo.SmallPic" src="../../static/images/pic.png" class="user-avatar">
+        <p class="user-info">
+          {{userInfo.NickName}}
+        </p>
+        <p class="name">
+
+        </p>
+      </div>    
+      <div class="qr-code">
+        <img :src="userInfo.QrCode" src="../../static/images/pic.png" style="width:100%;"  alt="">
       </div>
-      <div class="user-addr">
-        <span>浙江</span>
-        <span>杭州</span>
-      </div>
-      <div class="qr-code"></div>
       <div class="code-msg">扫一扫上面的二维码图案，加我</div>
     </div>
 	</div>
 </template>
 
 <script>
+import {mapState} from 'vuex';
 export default{
   data(){
     return{
-      avatarUrl:'',
 
     }
-  }
+  },
+  computed: mapState(['userInfo'])
 }
 </script>
 
 <style scoped>
 .QRcode-container{
+  position: absolute;
+  top:50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
   width: 91%;
-  height: 477px;
   background: #fff;
-  margin: 48px auto 0;
+}
+.container {
+  position: relative;
+  padding:20px;
+  height: 80px;
 }
 .user-avatar{
-  margin: 20px 0 0 23px;
+  position: absolute;
+  top:20px;
+  left:20px;
   width: 80px;
   height: 80px;
   border-radius: 2px;
-  background: url(../../static/images/logo.png) no-repeat;
-  background-size: 80px 80px;
 }
 .user-info{
-  position: relative;
-  top: -75px;
-  left: 118px;
+  padding-left:100px;
+  margin-top: 15px;
   font-size: 18px;
   color: #3f3e48;
 }
-.name{
-  position: relative;
-/*  top: -51px;
-  left: 6px;*/
+.name {
+  padding-left:100px;
+  font-size: 18px;
+  color: #3f3e48;
 }
 .user-sex{
   background: url(../../static/images/female_logo.png) no-repeat;
@@ -68,15 +77,13 @@ export default{
   color: #3f3e48;
 }
 .qr-code{
-  width: 295px;
-  height: 295px;
-  background: grey;
-  margin: -34px auto 0;
+  width: 80%;
+  margin:0 auto;
 }
 .code-msg{
   color: #3f3e48;
   font-size: 11px;
   text-align: center;
-  margin-top: 15px;
+  margin: 6px 0;
 }
 </style>

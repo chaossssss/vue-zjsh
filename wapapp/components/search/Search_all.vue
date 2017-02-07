@@ -6,13 +6,13 @@
         <form class="vue-search-bar__form" action="javascript:return true;">
             <div class="vue-search-bar__box">
                 <i class="weui-icon-search"></i>
-                <input type="search" class="vue-search-bar__input" placeholder="搜服务/工人/商户" required="">
-                <a href="javascript:" class="weui-icon-clear"></a>
+                <input type="search" class="vue-search-bar__input" placeholder="搜服务/工人/商户" v-model="mapSearchInput" required="">
+                <!-- <a href="javascript:" class="weui-icon-clear"></a> -->
             </div>
-            <label class="vue-search-bar__label">
+            <!-- <label class="vue-search-bar__label">
                 <i class="weui-icon-search"></i>
                 <span>搜索</span>
-            </label>
+            </label> -->
         </form>
       </router-link>
     </div>
@@ -21,8 +21,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
-	name:'searchAll'
+	name:'searchAll',
+  computed:mapState(['mapSearchInput'])
 }
 </script>
 

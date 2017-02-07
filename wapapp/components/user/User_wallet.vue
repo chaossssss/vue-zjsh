@@ -1,49 +1,51 @@
 <template>
 	<div style="background:#fbfbfb;width:100%;height:100%;position:absolute;">
-    <div v-if="showBroadcast" class="zj_broadcast">
+    <!-- <div v-if="showBroadcast" class="zj_broadcast">
       <div class="news_broadcast">助家生活充值全部8.5折</div>
       <div @click="closeBroadcast" class="close_broadcast"></div>
-    </div>
+    </div> -->
     <div class="my_wallet">
       <div class="balance_title">
         账户余额(元)
       </div>
-      <div class="balance_number">
-        0.00
-      </div>
+      <p class="balance_number">
+        {{userInfo.Balance}}
+      </p>
     </div>
-    <div class="recharge_interface">
+    <!-- <div class="recharge_interface">
       <router-link to="/user_recharge">
         <div class="recharge_btn">充值</div>
       </router-link>
-    </div>
-    <div class="weui-cells">
-    <router-link class="weui-cell weui-cell_access" to="/user_bill">
-      <div class="weui-cell__hd">
-        <img class="wallet_bill" src="../../static/images/wallet_bill.png">
-      </div>
-      <div class="weui-cell__bd">
-        <router-link to="/user_bill">
-          <p>账单明细</p>
-        </router-link>
-      </div>
-      <div class="weui-cell__ft"></div>
-    </router-link>
-</div>
+    </div> -->
+    <!-- <div class="weui-cells">
+      <router-link class="weui-cell weui-cell_access" to="/user_bill">
+        <div class="weui-cell__hd">
+          <img class="wallet_bill" src="../../static/images/wallet_bill.png">
+        </div>
+        <div class="weui-cell__bd">
+          <router-link to="/user_bill">
+            <p>账单明细</p>
+          </router-link>
+        </div>
+        <div class="weui-cell__ft"></div>
+      </router-link>
+    </div> -->
 	</div>
 </template>
 
 <script>
+import {mapState} from 'vuex';
 export default{
   data(){
     return{
-      showBroadcast:true
+      // showBroadcast:true
     }
   },
+  computed: mapState(['userInfo']),
   methods:{
-    closeBroadcast:function(){
-      this.showBroadcast = false;
-    }
+    // closeBroadcast:function(){
+    //   this.showBroadcast = false;
+    // }
   }
 }
 </script>

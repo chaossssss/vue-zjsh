@@ -466,7 +466,6 @@ WholeOverlay.prototype.show = function(){
   div.style.zIndex = "8000";
 }
 
-
 export default {
 	name:"service",
   data(){
@@ -511,7 +510,7 @@ export default {
     let point = new BMap.Point(116.404, 39.915);  // 创建点坐标  
     map.centerAndZoom(point, 15);                 // 初始化地图，设置中心点坐标和地图级别   
 
-    // sessionStorage 做本地缓存
+    // 移动点point sessionStorage 做本地缓存
     if(sessionStorage.getItem("Point")){
       let storePoint = JSON.parse(sessionStorage.getItem("Point"));  
       getHot(storePoint.lng,storePoint.lat).then((res)=>{
@@ -715,6 +714,15 @@ export default {
       this.$store.dispatch('searchMap',{
         txt:item
       });
+      if(item === '全部'){
+        this.$store.dispatch('searchInput',{
+          txt:""
+        })
+      }else{
+        this.$store.dispatch('searchInput',{
+          txt:item
+        })
+      }
     },
     switchType(){
       this.$store.dispatch('switchMap');

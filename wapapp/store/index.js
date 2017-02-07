@@ -11,7 +11,11 @@ default new Vuex.Store({
 	state: {
 		mapFastType: "全部",
 		mapClassType: 0,
-		mapPoint: {}
+		mapSearchInput: "",
+		mapPoint: {},
+
+		Token: "",
+		userInfo: {}
 	},
 	actions: {
 		changeMap({
@@ -35,6 +39,22 @@ default new Vuex.Store({
 		}) {
 			console.log(types.SWITCH_MAP_CLASS);
 			commit(types.SWITCH_MAP_CLASS);
+		},
+		searchInput({
+			commit
+		}, data) {
+			console.log(types.SEARCH_MAP_INPUT);
+			commit(types.SEARCH_MAP_INPUT, {
+				txt: data.txt
+			});
+		},
+		setUserInfo({
+			commit
+		}, data) {
+			console.log(types.SET_USER_INFO);
+			commit(types.SET_USER_INFO, {
+				txt: data.txt
+			});
 		}
 	},
 	mutations: {
@@ -59,6 +79,18 @@ default new Vuex.Store({
 			}
 			console.log(state.mapClassType);
 			return state.mapClassType;
+		},
+		[types.SEARCH_MAP_INPUT](state, {
+			txt
+		}) {
+			console.log(txt);
+			return state.mapSearchInput = txt;
+		},
+		[types.SET_USER_INFO](state, {
+			txt
+		}) {
+			console.log(txt);
+			return state.userInfo = txt;
 		}
 	}
 })

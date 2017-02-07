@@ -8,11 +8,17 @@ import OrderList from './components/order/Order_list.vue';
 import QuickOrder from './components/quick_order/Quick_order.vue';
 import Service from './components/service/Service.vue';
 
+// 登录
+import Login from './components/login/Login.vue';
+
 // 活动
 import Activity from './components/activity/activity.vue';
 
 // 订单
 import OrderDetail from './components/order/Order_detail.vue';
+
+// 服务地址
+import AddrList from './components/address/Addr_list.vue';
 
 // 搜索
 import SearchAll from './components/search/Search_all.vue';
@@ -65,6 +71,14 @@ export default new VueRouter({
 			path: 'user',
 			component: User
 		}]
+	}, {
+		// 登录
+		path: '/login',
+		component: Login
+	}, {
+		// 服务地址列表
+		path: '/addr_list',
+		component: AddrList
 	}, {
 		// 个人信息
 		path: '/user_info',
