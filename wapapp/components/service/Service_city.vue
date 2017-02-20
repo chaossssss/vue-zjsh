@@ -4,36 +4,36 @@
     <div class="vue-silder__box">
       <div class="vue-slider__box_content">
         <div class="vue-box__hd">
-          <img style="width:85px;" src="../../static/images/pic.png" alt="">  
+          <img style="width:85px;height:85px;position:relative;" :src="msg.Photo" alt="">  
         </div>
         <div class="vue-box__bd">
           <div class="vue-box__bd_title">
-            <label class="label">红玲电动车维修店 </label>
+            <label class="label">{{msg.Name}}</label>
             <span class="service">全城服务</span>
           </div> 
           <div class="vue-box__bd_content">
             <span class="star">🌟🌟🌟🌟🌟</span>
-            <span class="score">5.0</span>
-            <i class="discount">减</i>
-            <i class="rebate">返</i>
-            <em class="distance">1.1km</em>
+            <span class="score">{{msg.Grade}}</span>
+            <i class="discount" v-show="msg.IsReduction === '1'">减</i>
+            <i class="rebate" v-show="msg.IsReturn === '1'">返</i>
+            <em class="distance">{{msg.Distance}}</em>
           </div>
-          <div class="vue-box__bd__location">
+          <div class="vue-box__bd__location" v-show="msg.Address">
             <img class="location" src="../../static/images/pic-location.png" alt="">
-            <p class="content">江干区秋涛路11号秋涛路11江干区秋涛路11号秋涛路11</p>
+            <p class="content">{{msg.Address}}</p>
           </div>
-          <p class="vue-box__bd_foot">汽车维修、电瓶车维修、汽车补胎、自行车补胎、自行车维修</p>
+          <p class="vue-box__bd_foot"><span style="margin-right:10px;" v-for="item in msg.ServiceTypes">{{item.Name}}</span></p>
         </div>
       </div>
       <div class="vue-slider__box_footer">
-        <div class="vue-box__btn_left">
+        <div @click="routeToOrder" class="vue-box__btn_left">
           <img src="../../static/images/pic-order.png" alt="">
-          <span>下单</span>
+          <span >下单</span>
         </div>
-        <div class="vue-box__btn_right">
+        <a :href="phoneNumber" class="vue-box__btn_right">
           <img src="../../static/images/pic-phone.png" alt="">
-          <span>电话</span>
-        </div>
+          <span style="color:#000">电话</span>
+        </a>
       </div>
     </div>
   </div>
@@ -41,13 +41,44 @@
 </template>
 <script>
 export default {
-	name:"serviceCity"
+	name:"serviceCity",
+  props: ['msg'],
+  data(){
+    return {
+
+    }
+  },
+  computed:{
+    phoneNumber(){
+      return "tel:"+this.msg.PhoneNumber;
+    },
+    pointShop(){
+      return this.$store.state.pointShop;
+    }
+  },
+  methods:{
+    routeToOrder(){
+      this.pointShop.ObjectId = this.msg.Id;
+      if(this.msg.Belong === 3){
+        this.pointShop.ObjectType = '1';
+      }else{
+        this.pointShop.ObjectType = '2';
+      }
+      this.setPointShop();
+      this.$router.push({path:'/point_order'});
+    },
+    setPointShop(){
+      this.$store.dispatch('setPointShop',{
+        txt:this.pointShop
+      });
+    }
+  }
 }
 </script>
 
 <style lang="less" scoped>
 .vue-slider {
-  width:100%;
+
   height:140px;
   background-color:transparent;
   z-index:3;
@@ -57,7 +88,7 @@ export default {
   position:relative;
   background-color:#fff;
   width:330px;
-  margin:0 auto;
+
   box-shadow:0 0 10px -2px rgba(34,48,59,0.33);
 
   &:before {
@@ -99,10 +130,21 @@ export default {
   padding-left:10px;
 
 	.vue-box__bd_title {
+    position:relative;
+
 		.label {
 	  	font-size:18px;
+      overflow:hidden;
+      white-space:nowrap;
+      text-overflow:ellipsis;
+      max-width:140px;
+      display:inline-block;
+      line-height:1.1em;
 	  }
 	  .service {
+      position:absolute;
+      top:0;
+      margin-left:10px;
 			color:#fff;
 			border-radius:4px;
 			padding:3px;
@@ -198,5 +240,15 @@ export default {
 
     }
   }
-	
+img:after { 
+  content: url('../../static/images/pic.png');
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width:85px;
+  height:85px;
+  overflow:hidden;
+  background-color: #fff;
+}	
 </style>

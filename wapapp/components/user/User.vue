@@ -42,7 +42,7 @@
         </div>
     </div>
 	<div class="weui-cells mt15" style="margin-top: 0.5em;font-size:14px;color:#333639;">
-        <router-link class="list-item weui-cell_access" to="/addr_list">
+        <router-link class="list-item weui-cell_access" :to="{name:'addr_list',params:{origin:'user'}}">
             <div class="weui-cell__bd">
                 <p>服务地址</p>
             </div>
@@ -97,41 +97,10 @@ export default {
 
     }   
   },
-  mounted:function(){
-    // 登录
-    async function login(){
-      let response = await axios.post(API.Login,qs.stringify({
-        "LoginName":"18257561789",
-        "Password":"123456",
-      }),{
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      }).catch(function (error) {
-        console.log(error);
-      });
-      return response;
+  mounted(){
+    if(!this.userInfo){
+      this.$router.push({path:'/login'});
     }
-
-    async function getUserInfo(token){
-      let response = await axios.post(API.GetUserInfo,qs.stringify({
-        "Token":token
-      }),{
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      }).catch(function (error) {
-        console.log(error);
-      });
-      return response;
-    }
-    login().then((res)=>{
-      console.log(res.data);
-      if(res.data.Body){
-        getUserInfo(res.data.Body.Token).then((res)=>{
-          console.log(res.data);
-          if(res.data.Body){
-            this.setUserInfo(res.data.Body.Info);
-          }
-        });
-      }
-    });
   },
   computed: mapState(['Token','userInfo']),
   methods:{
@@ -191,7 +160,7 @@ export default {
     margin-top: 3px;
 }
 .list-item{
-    padding: 19px 15px;
+    padding: 13px 15px;
     position: relative;
     display: -webkit-box;
     display: -webkit-flex;

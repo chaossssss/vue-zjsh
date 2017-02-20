@@ -48,6 +48,7 @@ const devConfig = {
 	],
 	externals: {
 		BMap: 'BMap',
+		Swiper: 'Swiper'
 	},
 	// watch: true,
 	// watchOptions: {

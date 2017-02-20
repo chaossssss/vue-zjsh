@@ -33,7 +33,7 @@ export default {
             this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
           }
         })
-      },
+      }
     },
     components:{InfiniteLoading}
 }

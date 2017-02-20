@@ -9,8 +9,46 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
+import axios from 'axios';
+
 export default {
-  name:"app"
+  name:"app",
+  data(){
+    return {
+
+    }
+  },
+  mounted(){
+    // 初始化项目获取token
+    if(!this.Token){
+      if(this.getCookie('Token')){
+        this.$store.dispatch('setToken',{
+          txt:this.getCookie('Token')
+        })
+      };
+    }
+
+    // 登录跳转处理
+    axios.interceptors.response.use(function (response) {
+      
+      return response;
+    }, function (error) {
+      // Do something with response error
+      return Promise.reject(error);
+    });
+  },
+  methods:{
+    getCookie(name){
+      let arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+      if(arr=document.cookie.match(reg)){
+        return unescape(arr[2]);
+      }else{
+        return null;
+      }
+    }
+  },
+  computed:mapState(['Token'])
 }
 </script>
 

@@ -19,16 +19,25 @@
 
 	<div id="map-container"></div> 
   
-  <!-- <service-city></service-city> -->
-  <!-- <service-worker></service-worker> -->
-  <!-- <service-shop></service-shop> -->
-  <!-- <slider class="slider" :pages="someList" :sliderinit="sliderinit" @slide='slide'>
-    <template slot="item" scope="props">
-      <div class="slider-item" style="background:transparent;">
-          <service-city></service-city>
-      </div>
-    </template>
-  </slider> -->
+  <div class="vue-swiper" v-show="isSwiper">
+    <div class="swiper-container swiper-container-horizontal">
+      <div class="swiper-wrapper" style="transition-duration: 0ms; -webkit-transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+            <!-- 这边的顺序需要和swipeList里面一致 -->
+            <!-- 全城服务 -->
+            <div class="swiper-slide" v-if="item.Belong === 3 || item.Belong === 4" v-for="item in swiperList">
+              <service-city :msg="item"></service-city>
+            </div>
+            <!-- 工人 -->
+            <div class="swiper-slide" v-if="item.Belong === 0" v-for="item in swiperList">
+              <service-worker :msg="item"></service-worker>
+            </div>
+            <!-- 商户 -->
+            <div class="swiper-slide" v-if="item.Belong === 1" v-for="item in swiperList">
+              <service-shop :msg="item"></service-shop>
+            </div>               
+        </div>
+    </div>
+  </div>
 
 </div>
 </template>
@@ -58,14 +67,27 @@ function clear_active(map,point) {
     let allOverlay = map.getOverlays();
     allOverlay.map(function(i,v,arry){
       if(i instanceof BLNOverlay || i instanceof LocalOverlay){
-      }else if(i._point === point){
+      }else if(i._point.lat === point.lat && i._point.lng === point.lng){
         i.show(); 
-        console.log(i._point);
       }else {
         i.hide();
       }
     })
 }
+/**
+ * 查找point在数组中是第几个
+ * return index
+ */
+function swiper_slide(point,arry){
+  let index;
+  arry.map((v,i,arr)=>{
+    if(v.Latitude === point.Latitude && v.Longitude === point.Longitude){
+      index = i;
+    }
+  })
+  return index;
+}
+
 let MarkerOverlay = {
   worker(lng,lat,obj){
     let point = new BMap.Point(lng, lat);
@@ -150,6 +172,7 @@ function MirrorOverlay(point,obj){
   this._text = this._obj.text;
   this._bgImage = this._obj.bgImage;
   this._bgcolor = this._obj.bgcolor;
+  this._touchStart = this._obj.touchStart;
 }
 MirrorOverlay.prototype = new BMap.Overlay();
 MirrorOverlay.prototype.initialize = function(map){
@@ -214,6 +237,7 @@ MirrorOverlay.prototype.initialize = function(map){
 
   div.addEventListener('touchstart',() => {
     clear_active(this._map,this._point);
+    this._touchStart();
     // container.style.background = "url("+this._bgImage+")";
     // container.style.backgroundSize = "cover";
     // span.style.opacity = "0";
@@ -253,6 +277,7 @@ function HouseOverlay(point,obj){
   this._text = this._obj.text;
   this._bgImage = this._obj.bgImage;
   this._bgcolor = this._obj.bgcolor;
+  this._touchStart = this._obj.touchStart;
 }
 HouseOverlay.prototype = new BMap.Overlay();
 HouseOverlay.prototype.initialize = function(map){
@@ -320,10 +345,7 @@ HouseOverlay.prototype.initialize = function(map){
  
   arrow.addEventListener('touchstart',() => {
     clear_active(this._map,this._point);
-    // container.style.backgroundImage = "url("+this._bgImage+")";
-    // container.style.zIndex = "8000";
-    // div.style.backgroundColor = "transparent";
-    // span.style.opacity = "0";
+    this._touchStart();
   })
 
   map.getPanes().markerPane.appendChild(box);
@@ -363,6 +385,7 @@ function WholeOverlay(point,obj){
   this._text = this._obj.text;
   this._bgImage = this._obj.bgImage;
   this._bgcolor = this._obj.bgcolor;
+  this._touchStart = this._obj.touchStart;
 }
 WholeOverlay.prototype = new BMap.Overlay();
 WholeOverlay.prototype.initialize = function(map){
@@ -431,6 +454,7 @@ WholeOverlay.prototype.initialize = function(map){
  
   container.addEventListener('touchstart',() => {
     clear_active(this._map,this._point);
+    this._touchStart();
     // container.style.backgroundImage = "url("+this._bgImage+")";
     // div.style.backgroundColor = "transparent";
     // span.style.opacity = "0";
@@ -471,38 +495,13 @@ export default {
   data(){
     return {
       map:{},
-      totals:["全部","小时工","木工","保姆","三级类型","保姆","类型"],
-      someList:[
-          {
-              title: 'slide1',
-              style:{
-                   'background':'#1bbc9b',
-              },
-          },
-          {
-              title: 'slide2',
-              style:{
-                   'background':'#4bbfc3',
-              },
-          },
-          {
-              title: 'slide3',
-              style:{
-                   'background':'#7baabe',
-              },
-          }
-      ],
-      sliderinit: {
-          currentPage: 1,
-          // start: {},
-          // end: {},
-          // tracking: false,
-          thresholdTime: 500,//滑动时间阈值判定距离
-          thresholdDistance: 100,//滑动距离阈值
-          // direction:'vertical',//垂直滚动
-          // loop:true,//无限循环
-          // autoplay:1000,//自动播放:时间[ms]
-      }
+      totals:["全部"],  // 热门服务
+      workers:[],       // 工人
+      business:[],        // 商户
+      wholes:[],         // 全城工人，商户
+      swiperList:[],  // 所有数据的集合
+      mySwiper:{},    // 滑动对象
+      isSwiper:false   // 是否显示滑动
     }
   },
 	mounted:function(){ 
@@ -586,6 +585,11 @@ export default {
     //移动地图事件
     map.addEventListener("moveend",()=>{
       // console.log("地图移动结束时触发此事件");
+      
+      // 清空缓存
+      // this.isSwiper = false;
+      // this.swiperList = [];
+
       let point_c = map.getCenter();   
       this.changePoint(point_c);
       sessionStorage.setItem("Point",JSON.stringify(point_c));
@@ -594,7 +598,7 @@ export default {
       getHot(point_c.lng,point_c.lat).then((res)=>{
         console.log("热门",res.data);
         this.totals = res.data.Body;
-      });
+      });   
     })   
 
     /**
@@ -626,6 +630,7 @@ export default {
   methods:{
     drawMap(){
       if(this.mapFastType === '全部'){
+        // 3 默认搜索 未选择搜索条件
         axios.post(API.IndexEx2,qs.stringify({
           "Latitude":this.mapPoint.lat,
           "Longitude":this.mapPoint.lng,
@@ -638,9 +643,38 @@ export default {
           header: {'Content-Type':'application/x-www-form-urlencoded'}
         }).then((res) => {
           console.log(res.data);
-          this.createMarker(res.data.Body.Workers,res.data.Body.Business,res.data.Body.WholeWorkers,res.data.Body.WholeBusiness);
+          if(res.data.Meta.ErrorCode === '0'){
+            // 工人 0，商户 1，全城工人 3，全城商户 4
+            if(res.data.Body && res.data.Body.Workers){
+              res.data.Body.Workers.map((v,i,arry)=>{
+                v['Belong'] = 0
+              })
+            }
+            if(res.data.Body && res.data.Body.Business){
+              res.data.Body.Business.map((v,i,arry)=>{
+                v['Belong'] = 1
+              })
+            }
+            if(res.data.Body && res.data.Body.WholeWorkers){
+              res.data.Body.WholeWorkers.map((v,i,arry)=>{
+                v['Belong'] = 3
+              })
+            }
+            if(res.data.Body && res.data.Body.WholeBusiness){
+              res.data.Body.WholeBusiness.map((v,i,arry)=>{
+                v['Belong'] = 4
+              })
+            }
+            this.isSwiper = false;
+            this.wholes = [];
+            this.swiperList = [];
+            this.wholes = res.data.Body.WholeWorkers.concat(res.data.Body.WholeBusiness);
+            this.swiperList = this.wholes.concat(res.data.Body.Workers,res.data.Body.Business);
+            this.createMarker(res.data.Body.Workers,res.data.Body.Business,res.data.Body.WholeWorkers,res.data.Body.WholeBusiness);
+          }
         })  
       }else{
+        // 0 文字搜索 有搜索条件
         axios.post(API.IndexEx2,qs.stringify({
           "Latitude":this.mapPoint.lat,
           "Longitude":this.mapPoint.lng,
@@ -653,7 +687,35 @@ export default {
           header: {'Content-Type':'application/x-www-form-urlencoded'}
         }).then((res) => {
           console.log(res.data);
-          this.createMarker(res.data.Body.Workers,res.data.Body.Business,res.data.Body.WholeWorkers,res.data.Body.WholeBusiness);
+          if(res.data.Meta.ErrorCode === '0'){
+            // 工人 0，商户 1，全城工人 3，全城商户 4
+            if(res.data.Body && res.data.Body.Workers){
+              res.data.Body.Workers.map((v,i,arry)=>{
+                v['Belong'] = 0
+              })
+            }
+            if(res.data.Body && res.data.Body.Business){
+              res.data.Body.Business.map((v,i,arry)=>{
+                v['Belong'] = 1
+              })
+            }
+            if(res.data.Body && res.data.Body.WholeWorkers){
+              res.data.Body.WholeWorkers.map((v,i,arry)=>{
+                v['Belong'] = 3
+              })
+            }
+            if(res.data.Body && res.data.Body.WholeBusiness){
+              res.data.Body.WholeBusiness.map((v,i,arry)=>{
+                v['Belong'] = 4
+              })
+            }
+            this.isSwiper = false;
+            this.wholes = [];
+            this.swiperList = [];
+            this.wholes = res.data.Body.WholeWorkers.concat(res.data.Body.WholeBusiness);
+            this.swiperList = this.wholes.concat(res.data.Body.Workers,res.data.Body.Business);
+            this.createMarker(res.data.Body.Workers,res.data.Body.Business,res.data.Body.WholeWorkers,res.data.Body.WholeBusiness);
+          }
         })  
       }
     },
@@ -677,7 +739,28 @@ export default {
             image:i.Photo,
             text:i.DefaultService.Name,
             bgImage:workerImg,
-            bgcolor:"#ff9d2f"
+            bgcolor:"#ff9d2f",
+            touchStart:()=>{
+              let index = swiper_slide(i,this.swiperList);      
+              if(!this.isSwiper){
+                this.isSwiper = true;
+                this.mySwiper = new Swiper ('.swiper-container', {
+                  width:330,
+                  spaceBetween: 10,
+                  onSlideChangeEnd:(swiper)=>{
+                    //切换结束时，告诉我现在是第几个slide
+                    // console.log(this.swiperList);
+                    // console.log(swiper.activeIndex);
+                    // console.log("第几个",this.swiperList[swiper.activeIndex]);
+                    let lat = this.swiperList[swiper.activeIndex].Latitude;
+                    let lng = this.swiperList[swiper.activeIndex].Longitude;
+                    let point = new BMap.Point(lng, lat); 
+                    clear_active(this.map,point);
+                  }
+                }) 
+              }        
+              this.swiperTo(index);
+            }
           })
           this.map.addOverlay(worker);
         })
@@ -688,21 +771,64 @@ export default {
             image:i.Photo,
             text:i.Name,
             bgImage:bossImg,
-            bgcolor:"#1daefa"
+            bgcolor:"#1daefa",
+            touchStart:()=>{
+              console.log("this.isSwiper",this.isSwiper);
+              let index = swiper_slide(i,this.swiperList);      
+              if(!this.isSwiper){
+                this.isSwiper = true;
+                this.mySwiper = new Swiper ('.swiper-container', {
+                  width:330,
+                  spaceBetween: 10,
+                  onSlideChangeEnd:(swiper)=>{
+                    //切换结束时，告诉我现在是第几个slide
+                    // console.log(this.swiperList);
+                    // console.log(swiper.activeIndex);
+                    // console.log("第几个",this.swiperList[swiper.activeIndex]);
+                    let lat = this.swiperList[swiper.activeIndex].Latitude;
+                    let lng = this.swiperList[swiper.activeIndex].Longitude;
+                    let point = new BMap.Point(lng, lat); 
+                    clear_active(this.map,point);
+                  }
+                }) 
+              }        
+              this.swiperTo(index);
+            }
           })
           this.map.addOverlay(boss);
         })
       }
       if(whole && whole.length > 0){
-        // whole.map((i,v,arr) => {
-        //   let all = MarkerOverlay.whole(i.Longitude,i.Latitude,{
-        //     image:i.Photo,
-        //     text:i.DefaultService.Name,
-        //     bgImage:wholeImg,
-        //     bgcolor:"rgb(77,199,102)"
-        //   })
-        //   this.map.addOverlay(all);
-        // })
+        whole.map((i,v,arr) => {
+          let all = MarkerOverlay.whole(i.Longitude,i.Latitude,{
+            image:i.Photo,
+            text:i.DefaultService.Name,
+            bgImage:wholeImg,
+            bgcolor:"rgb(77,199,102)",
+            touchStart:()=>{
+              let index = swiper_slide(i,this.swiperList);      
+              if(!this.isSwiper){
+                this.isSwiper = true;
+                this.mySwiper = new Swiper ('.swiper-container', {
+                  width:330,
+                  spaceBetween: 10,
+                  onSlideChangeEnd:(swiper)=>{
+                    //切换结束时，告诉我现在是第几个slide
+                    // console.log(this.swiperList);
+                    // console.log(swiper.activeIndex);
+                    // console.log("第几个",this.swiperList[swiper.activeIndex]);
+                    let lat = this.swiperList[swiper.activeIndex].Latitude;
+                    let lng = this.swiperList[swiper.activeIndex].Longitude;
+                    let point = new BMap.Point(lng, lat); 
+                    clear_active(this.map,point);
+                  }
+                }) 
+              }        
+              this.swiperTo(index);
+            }
+          })
+          this.map.addOverlay(all);
+        })
       }  
     },
     changePoint(point){
@@ -727,32 +853,11 @@ export default {
     switchType(){
       this.$store.dispatch('switchMap');
     },
-    turnTo (num) {
-        // 传递事件 vue 2.0 传递事件修改了，好的写法应该直接写在空vue类中
-        this.$children[0].$emit('slideTo', num);
-        console.log(this);
-    },
-    slideNext () {
-        this.$children[0].$emit('slideNext');
-    },
-    slidePre () {
-        this.$children[0].$emit('slidePre');
-    },
-    appendslider(){
-        this.someList.push({
-            title: 'slidernew',
-            style:{
-                background:'#333',
-                color:'#fff'
-            }
-        });
-    },
-    // 监听事件也发生了变化,需要指向一个子组件实例
-    slide(pagenum){
-        console.log(pagenum);
+    swiperTo(i){
+      this.mySwiper.slideTo(i, 1000, false);
     }
   },
-  components:{searchAll,searchFast,serviceCity,serviceWorker,serviceShop,slider}
+  components:{searchAll,searchFast,serviceCity,serviceWorker,serviceShop}
 }
 </script>
 
@@ -823,6 +928,13 @@ export default {
     transform:scale(.7);
   }
 }
-
-
+.vue-swiper {
+  position:absolute;
+  bottom:20px;
+  left:0;
+  height:152px;
+}
+.swiper-container {
+  height:100%;
+}
 </style>

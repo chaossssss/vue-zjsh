@@ -27,7 +27,7 @@
               </span>
               <p class="vue-tabbar__label vue-tabbar__circle_label">一键下单</p>
           </router-link>
-          <router-link to="/menu/order_list" class="vue-tabbar__item" active-class="vue-bar__item_on">
+          <router-link to="/point_order" class="vue-tabbar__item" active-class="vue-bar__item_on">
               <span style="display: inline-block;position: relative;">
                   <span class="vue-tabbar__icon vue-tabbar__orderlist"></span>
                 

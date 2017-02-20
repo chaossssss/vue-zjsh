@@ -4,21 +4,31 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 import Menu from './components/menu/Menu.vue';
-import OrderList from './components/order/Order_list.vue';
-import QuickOrder from './components/quick_order/Quick_order.vue';
 import Service from './components/service/Service.vue';
 
 // 登录
 import Login from './components/login/Login.vue';
+import Regist from './components/login/Regist.vue';
+import Forget from './components/login/Forget.vue';
 
 // 活动
 import Activity from './components/activity/activity.vue';
 
 // 订单
+import QuickOrder from './components/quick_order/Quick_order.vue';
+import ChooseServiceType from './components/quick_order/Choose_service_type.vue';
 import OrderDetail from './components/order/Order_detail.vue';
+import OrderList from './components/order/Order_list.vue';
+import PointOrder from './components/point_order/Point_order.vue'
+import ChoosePointServiceType from './components/point_order/Choose_point_service_type.vue';
+
+// 支付
+import Pay from './components/pay/Pay.vue';
 
 // 服务地址
 import AddrList from './components/address/Addr_list.vue';
+import AddrEdit from './components/address/Addr_edit.vue';
+import AddrAdd from './components/address/Addr_add.vue';
 
 // 搜索
 import SearchAll from './components/search/Search_all.vue';
@@ -76,9 +86,27 @@ export default new VueRouter({
 		path: '/login',
 		component: Login
 	}, {
+		// 注册
+		path: '/regist',
+		component: Regist
+	}, {
+		// 忘记密码
+		path: '/forget',
+		component: Forget
+	}, {
 		// 服务地址列表
+		name: 'addr_list',
 		path: '/addr_list',
 		component: AddrList
+	}, {
+		// 增加服务地址
+		path: '/addr_add',
+		component: AddrAdd
+	}, {
+		// 编辑服务地址
+		name: 'addr_edit',
+		path: '/addr_edit',
+		component: AddrEdit
 	}, {
 		// 个人信息
 		path: '/user_info',
@@ -144,16 +172,35 @@ export default new VueRouter({
 		path: '/payment_recharge',
 		component: PaymentRecharge
 	}, {
+		// 指定下单
+		path: '/point_order',
+		component: PointOrder
+	}, {
+		// 指定下单选择服务类型
+		name: 'point_service_type',
+		path: '/point_service_type',
+		component: ChoosePointServiceType
+	}, {
 		// 一键下单
 		path: '/quick_order',
 		component: QuickOrder
+	}, {
+		// 一键下单选择服务类型
+		path: '/choose_service_type',
+		component: ChooseServiceType
 	}, {
 		// 搜索
 		path: '/search',
 		component: Search
 	}, {
 		// 订单详情
+		name: 'order_detail',
 		path: '/order_detail',
 		component: OrderDetail
+	}, {
+		// 支付
+		name: 'pay',
+		path: '/pay',
+		component: Pay
 	}]
 });

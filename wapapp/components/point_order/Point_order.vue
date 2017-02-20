@@ -1,9 +1,9 @@
 <template>
 <div style="position:relative;background-color: #fbfbfb;height:100%;">
   <form name="form" novalidate="novalidate" style="overflow-x:hidden;" enctype="multipart/form-data">
-  <!-- 服务地址 -->
-  <div class="weui-cells" style="margin-top:0;">
-    <router-link :to="{name:'addr_list',params:{origin:'quick_order'}}" href="javascript:;" class="weui-cell weui-cell_access">
+  <!-- 个人信息 -->
+  <div class="weui-cells zj_border" style="margin-top:0;"> 
+    <router-link :to="{name:'addr_list',params:{origin:'point_order'}}" href="javascript:;" class="weui-cell weui-cell_access">
       <div class="weui-cell__hd">
         <img src="../../static/images/pic-location.png" alt="" style="width:20px;margin-right:10px;display:block">
       </div>
@@ -26,34 +26,41 @@
         <p class="pblue" style="float:right;">请选择服务地址</p>
       </div>
       <div class="weui-cell__ft"></div>
-    </router-link>
+    </router-link> 
+    <div class="weui-cell" style="padding:10px;">
+      <div class="weui-cell__hd"><img :src="wk.Photo" alt="" style="width:26px;margin-right:15px;display:block;border-radius:50%;"></div>
+      <div class="weui-cell__bd weui-cell_primary">
+        <span>{{wk.Name}}</span>
+        <span v-if="iswk && wk.Gender ==='0'">师傅</span>
+        <span v-if="iswk && wk.Gender ==='1'">阿姨</span>
+      </div>
+      <div class="zj_cell_ft icon_phone">
+          <a :href="wkPhoneNumber"><img src="../../static/images/phone.png" alt="" style="width:28px;height:28px;display:block;padding-right:7px;"></a>
+        </div>
+    </div>
   </div>
   <!-- 服务类型-->
   <div class="weui-cells">
-    <router-link to="/choose_service_type" href="javascript:;" class="weui-cell weui-cell_access" style="padding:5px 10px 5px 0;" >
+    <div  @click="routeToType" class="weui-cell weui-cell_access" style="padding:5px 10px 5px 0;" >
       <div class="weui-cell__hd"> 
       </div>
       <div class="weui-cell__bd weui-cell_primary">
         <p class="service_bg">服务类型</p>
       </div>
-      <div class="weui-cell__ft" v-show="quickShop.ServiceTypeId">
-        <span>{{quickShop.ServiceTypeName}}</span>
+      <div class="weui-cell__ft" v-show="pointShop.ServiceTypeId">
+        <span>{{pointShop.ServiceTypeName}}</span>
       </div>
-      <div class="weui-cell__ft" v-show="!quickShop.ServiceTypeId">
+      <div class="weui-cell__ft" v-show="!pointShop.ServiceTypeId">
          请选择服务类型
       </div>
-    </router-link>
+    </div>
   </div>
   <!-- IsNegotiable 1 面议，0 定价 -->
   <div class="weui-cells" style="margin-top:-1px;" v-show="sv.IsNegotiable">
     <div class="weui-cell clean_border" style="padding:5px 30px;text-align:right;color:#888;">
       <div class="weui-cell__bd weui-cell_primary">
-        <p>{{quickShop.ServiceTypeName}} 价格范围：¥{{sv.Min}}~{{sv.Max}}/{{sv.UnitName}}</p>
+        <p>{{pointShop.ServiceTypeName}} 价格范围：¥{{sv.Min}}~{{sv.Max}}/{{sv.UnitName}}</p>
       </div>
-<!--  <div class="zj_cell_ft">
-        <span style="font-size:15px;">      
-        </span>
-      </div> -->
     </div>
   </div>
   <!-- 服务价格&服务数量&服务时间-->
@@ -66,8 +73,7 @@
         <p>服务价格</p>
       </div>
       <div class="weui-cell_primary" style="text-align:right;">
-        <select class=" weui-select rtl fc8" name="" id="" v-model="quickShop.ServicePrice">
-          <!-- <option value="">--请选择服务价格--</option> -->
+        <select class=" weui-select rtl fc8" name="" id="" v-model="pointShop.ServicePrice">
           <option :value="item" v-for="item in sv.PriceList">{{item}}</option>
         </select>
       </div>
@@ -80,15 +86,15 @@
         <p>服务数量</p>
       </div>
       <div class="weui-cell__ft" style="text-align:right;" v-if="ct">
-        <select class="vue-select rtl fc8" name="" id="" v-model="quickShop.Total">
+        <select class="vue-select rtl fc8" name="" id="" v-model="pointShop.Total">
           <option :value="item" v-for="item in ct">{{item}}{{sv.UnitName}}</option>
         </select>
       </div>
       <div class="zj_cell_right" v-if="!ct">
         <div class="zj_select_plus">
-          <i class="zj_select_sub" @click="quickShop.Total--"></i>
-          <input class="zj_select_num" type="number" maxlength="4" v-model="quickShop.Total">
-          <i class="zj_select_add" @click="quickShop.Total++"></i>
+          <i class="zj_select_sub" @click="pointShop.Total--"></i>
+          <input class="zj_select_num" type="number" maxlength="4" v-model="pointShop.Total">
+          <i class="zj_select_add" @click="pointShop.Total++"></i>
         </div>
       </div>
     </div>
@@ -99,9 +105,9 @@
       <div class="weui-cell__bd weui-cell_primary">
         <p>服务时间</p>
       </div>
-      <div class="weui-cell__ft pblue" v-show="!quickShop.ServiceStartAt">请选择服务时间</div>
-      <div class="weui-cell__ft pblue" v-show="quickShop.ServiceStartAt">
-        <span>{{quickShop.ServiceStartAt}}</span>
+      <div class="weui-cell__ft pblue" v-show="!pointShop.ServiceStartAt">请选择服务时间</div>
+      <div class="weui-cell__ft pblue" v-show="pointShop.ServiceStartAt">
+        <span>{{pointShop.ServiceStartAt}}</span>
       </div>
     </a> 
   </div>
@@ -114,7 +120,6 @@
       </div>
       <div class="weui-cell__bd weui-cell_primary">
         <span class="f14 fc8">{{item.Ads}}</span>
-        <!-- <img src="../../static/images/pic-help.png" alt="" style="width:18px;vertical-align:text-top;"> -->
       </div>
       <div class="zj_cell_ft">
         <img v-show="item.Upper <= bill" style="width:16px;" src="../../static/images/pic-new-choose.png">
@@ -127,7 +132,6 @@
       </div>
       <div class="weui-cell__bd weui-cell_primary">
         <span class="f14 fc8">{{item.Ads}}</span>
-        <!-- <img src="../../static/images/pic-help.png" alt="" style="width:18px;vertical-align:text-top;"> -->
       </div>
       <div class="zj_cell_ft">
         <img v-show="item.Upper <= bill" style="width:16px;" src="../../static/images/pic-new-choose.png">
@@ -142,7 +146,7 @@
       <div class="weui-media-box weui-media-box_text">
         <span class="f14">订单金额</span>
         <span style="float:right;font-size:14px;color:#888">
-          <span style="padding-right:20px;">¥{{quickShop.ServicePrice}} x {{quickShop.Total}}</span>
+          <span style="padding-right:20px;">¥{{pointShop.ServicePrice}} x {{pointShop.Total}}</span>
           <span>¥{{bill}}</span>
         </span>
       </div>
@@ -172,10 +176,10 @@
     <div class="weui-cell" style="padding:10px;">
       <div class="weui-cell__bd weui-cell_primary">
         <h4>备注</h4>
-        <textarea name="" id="textarea" textarea-size cols="20" rows="4" placeholder="描述您的服务要求，例如服务总时间，对工人的要求等" class="weui-textarea h40" maxlength="200" v-model="quickShop.ServiceContent"></textarea>
+        <textarea name="" id="textarea" textarea-size cols="20" rows="4" placeholder="描述您的服务要求，例如服务总时间，对工人的要求等" class="weui-textarea h40" maxlength="200" v-model="pointShop.ServiceContent"></textarea>
         <div class="weui-textarea-counter">
           <span></span>
-          {{quickShop.ServiceContent.length}}/200
+          {{pointShop.ServiceContent.length}}/200
         </div>
       </div>
     </div>
@@ -208,7 +212,7 @@
   <div class="weui-cell bgf mb49 fc8 lh30">
     <div class="weui-cell__bd weui-cell_primary">
       <p class="f15">服务说明</p>
-      <!-- <p class="f15" ng-bind="fw.Description"></p> -->
+      <p class="f15" ng-bind="fw.Description"></p>
       <p class="f13 lh24">
         <span ng-bind="item"></span>
       </p>
@@ -265,7 +269,7 @@
               <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" @click="isError = false">朕 知道了!</a>
           </div>
       </div>
-  </div> 	
+  </div>  
 
 <!-- 正在提交提示 -->
   <div id="loadingToast" v-show="isLoading">
@@ -285,7 +289,7 @@ import axios from 'axios';
 import qs from 'qs';
 
 export default {
-	name:"quick_order",
+  name:"point_order",
   data(){
     return {
       addr:{},  // 地址
@@ -294,6 +298,8 @@ export default {
       sv:{},  // 服务价格
       dp:{},  // 服务时间
       ct:{},  // 服务可选数量
+      wk:{}, // 工人信息or商户信息
+      iswk:false,   // 工人信息or商户信息 是否显示(师傅 阿姨)
       discountSum:"", // 优惠折扣
       dpDate:"",
       dpTime:"",
@@ -305,13 +311,13 @@ export default {
     }
   },
   mounted(){
-    console.log(this);
+    console.log(this.pointShop);
     console.log("Token",this.Token);
     // 获取地址详情
-    if(this.quickShop.ServiceAddressId){
+    if(this.pointShop.ServiceAddressId){
       axios.post(API.GetAddress,qs.stringify({
         "Token": this.Token,
-        "Id": this.quickShop.ServiceAddressId
+        "Id": this.pointShop.ServiceAddressId
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
@@ -329,24 +335,25 @@ export default {
         this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
       });
     }
-    console.log("quickShop",this.quickShop);
 
-    // 获取服务价格
-    if(this.quickShop.ServiceTypeId){
-      axios.post(API.GetServicePriceEx,qs.stringify({
+    // 获取工人/商户详细信息
+    if(this.pointShop.ObjectId){
+      axios.post(API.Detail,qs.stringify({
         "Token": this.Token,
-        "ServiceTypeId": this.quickShop.ServiceTypeId,
-        "ServiceProviderType": "2"
+        "Type": this.pointShop.ObjectType,
+        "Id": this.pointShop.ObjectId
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
-        console.log("服务价格",res.data);
+        console.log("工人/商户详细信息",res.data);
         if(res.data.Meta.ErrorCode === '0'){
-          this.sv = res.data.Body;
-          if(res.data.Body.IsNegotiable === '0'){
-            this.quickShop.ServicePrice = res.data.Body.PriceList[0];
-          }else{
-            this.pointShop.ServicePrice = res.data.Body.StartingPrice;
+          if(res.data.Body){
+            if(res.data.Body.Business){
+              this.wk = res.data.Body.Business;
+            }else{
+              this.wk = res.data.Body.Worker;
+              this.iswk = true;
+            }
           }
         }else{
           this.isDelete = false;
@@ -360,10 +367,42 @@ export default {
       });
     }
 
+    // 获取服务价格
+    if(this.pointShop.ServiceAddressId){
+      if(this.pointShop.ServiceTypeId){
+        axios.post(API.GetServicePriceEx,qs.stringify({
+          "Token": this.Token,
+          "ServiceTypeId": this.pointShop.ServiceTypeId,
+          "ServiceProviderType": this.pointShop.ObjectType,
+          "ServiceAddressId": this.pointShop.ServiceAddressId
+        }),{
+          headers: {'Content-Type':'application/x-www-form-urlencoded'}
+        }).then((res)=>{
+          console.log("服务价格",res.data);
+          if(res.data.Meta.ErrorCode === '0'){
+            this.sv = res.data.Body;
+            if(res.data.Body.IsNegotiable === '0'){
+              this.pointShop.ServicePrice = res.data.Body.PriceList[0];
+            }else{
+              this.pointShop.ServicePrice = res.data.Body.StartingPrice;
+            }
+          }else{
+            this.isDelete = false;
+            this.isError = true;
+            this.errorMsg = res.data.Meta.ErrorMsg;
+          }
+        }).catch(function (error) {
+          console.log(error);
+          this.isError = true;
+          this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+        });
+      }
+    }
+
     // 获取服务可选数量
-    if(this.quickShop.ServiceTypeId && (this.quickShop.ServiceTypeId ==='5' || this.quickShop.ServiceTypeId === '733')){
+    if(this.pointShop.ServiceTypeId && (this.pointShop.ServiceTypeId ==='5' || this.pointShop.ServiceTypeId === '733')){
       axios.post(API.GetServiceQty,qs.stringify({
-        "ServiceId": this.quickShop.ServiceTypeId,
+        "ServiceId": this.pointShop.ServiceTypeId,
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
@@ -371,7 +410,7 @@ export default {
         if(res.data.Meta.ErrorCode === '0'){
           this.ct = res.data.Body;
           if(res.data.Body){
-            this.quickShop.Total = res.data.Body[0];
+            this.pointShop.Total = res.data.Body[0];
           }
         }else{
           this.isDelete = false;
@@ -386,9 +425,9 @@ export default {
     }
 
     // 获取有效服务时间
-    if(this.quickShop.ServiceTypeId){
+    if(this.pointShop.ServiceTypeId){
       axios.post(API.ServiceTimeStartAt,qs.stringify({
-        "ServiceTypeId": this.quickShop.ServiceTypeId
+        "ServiceTypeId": this.pointShop.ServiceTypeId
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
@@ -408,10 +447,10 @@ export default {
     }
 
     // 获取当前可参与的活动
-    if(this.quickShop.ServiceTypeId){
+    if(this.pointShop.ServiceTypeId){
       axios.post(API.GetActivity,qs.stringify({
         "Token": this.Token,
-        "ServiceTypeId": this.quickShop.ServiceTypeId
+        "ServiceTypeId": this.pointShop.ServiceTypeId
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
@@ -431,10 +470,10 @@ export default {
     }
 
     // 获取此类型的服务说明
-    if(this.quickShop.ServiceTypeId){
+    if(this.pointShop.ServiceTypeId){
       axios.post(API.GetAllDescription,qs.stringify({
         "Code": "Code002",
-        "ServiceId": this.quickShop.ServiceTypeId
+        "ServiceId": this.pointShop.ServiceTypeId
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
@@ -454,8 +493,17 @@ export default {
     }
   },
   methods:{
+    routeToType(){
+      // 选择服务类型
+      if(this.pointShop.ServiceAddressId){
+        this.$router.push({name:'point_service_type'});
+      }else{
+        this.isError = true;
+        this.errorMsg = "请先选择服务地址！";
+      } 
+    },
     chooseDate(){
-      if(this.quickShop.ServiceTypeId){
+      if(this.pointShop.ServiceTypeId){
         this.isTime = true;
       }else{
         this.isError = true;
@@ -463,27 +511,29 @@ export default {
       }   
     },
     submit(){
-      if(this.Token && this.quickShop.ServiceTypeId && this.quickShop.ServiceStartAt && this.quickShop.ServiceAddressId && this.quickShop.ServicePrice){
+      if(this.Token && this.pointShop.ServiceTypeId && this.pointShop.ServiceStartAt && this.pointShop.ServiceAddressId && this.pointShop.ServicePrice){
         this.isLoading = true;
         let Json_data = {
           "Token": this.Token,
-          "ServiceTypeId": this.quickShop.ServiceTypeId,
-          "ServiceContent": this.quickShop.ServiceContent,
-          "Total": this.quickShop.Total,
+          "ObjectType": this.ObjectType,
+          "ObjectId": this.ObjectId,
+          "ServiceTypeId": this.pointShop.ServiceTypeId,
+          "ServiceContent": this.pointShop.ServiceContent,
+          "Total": this.pointShop.Total,
           "OrderFrom": "1",
-          "ServiceStartAt": this.quickShop.ServiceStartAt,
-          "ServiceAddressId": this.quickShop.ServiceAddressId,
-          "ServicePrice": this.quickShop.ServicePrice
+          "ServiceStartAt": this.pointShop.ServiceStartAt,
+          "ServiceAddressId": this.pointShop.ServiceAddressId,
         }
         let formdata = new FormData();
         formdata.append("Token", this.Token);
-        formdata.append("ServiceTypeId", this.quickShop.ServiceTypeId);
-        formdata.append("ServiceContent", this.quickShop.ServiceContent);
-        formdata.append("Total", this.quickShop.Total);
+        formdata.append("ObjectType", this.pointShop.ObjectType);
+        formdata.append("ObjectId", this.pointShop.ObjectId);
+        formdata.append("ServiceTypeId", this.pointShop.ServiceTypeId);
+        formdata.append("ServiceContent", this.pointShop.ServiceContent);
+        formdata.append("Total", this.pointShop.Total);
         formdata.append("OrderFrom", "1");
-        formdata.append("ServiceStartAt", this.quickShop.ServiceStartAt);
-        formdata.append("ServiceAddressId", this.quickShop.ServiceAddressId);
-        formdata.append("ServicePrice", this.quickShop.ServicePrice);
+        formdata.append("ServiceStartAt", this.pointShop.ServiceStartAt);
+        formdata.append("ServiceAddressId", this.pointShop.ServiceAddressId);
         formdata.append("img","");
         formdata.append("JSON_Data", JSON.stringify(Json_data));
         axios.post(API.CreateOrderOneKey,formdata,{
@@ -493,6 +543,7 @@ export default {
           console.log("提交表单",res.data);
           if(res.data.Meta.ErrorCode === '0'){
             let orderId = res.data.Body.OrderId;
+            this.setOrderId(orderId);
             //0 定价去支付页面，1 面议去订单详情页面
             if(this.sv.IsNegotiable === '0'){
               this.$router.push({name:'pay',params:{OrderId:orderId}});
@@ -522,16 +573,23 @@ export default {
     checkTime(item){
       this.dpTime = item.Time;
       if(this.dpDate && (item.IsVacant === '1')){
-        this.quickShop.ServiceStartAt = this.dpDate + '' + this.dpTime;
+        this.pointShop.ServiceStartAt = this.dpDate + '' + this.dpTime;
         this.isTime = false;
       }
+    },
+    setOrderId(item){
+      this.$store.dispatch('setOrderId',{
+        txt:item
+      })
     }
   },
   computed:{
     bill(){
-      return parseFloat(this.quickShop.ServicePrice)*parseFloat(this.quickShop.Total);
+      // 订单总价
+      return parseFloat(this.pointShop.ServicePrice)*parseFloat(this.pointShop.Total);
     },
     payable(){
+      // 订单优惠后价格 应付价格
       if(this.gt.SpecialRule && this.gt.SpecialRule.length > 0){
         let discountList = this.gt.SpecialRule.map((v,i,arry)=>{
           if(parseFloat(this.bill) > parseFloat(v.Upper)){
@@ -547,21 +605,26 @@ export default {
     Token(){
       return this.$store.state.Token;
     },
-    quickShop(){
-      return this.$store.state.quickShop;
+    pointShop(){
+      return this.$store.state.pointShop;
     },
     orderId(){
       return this.$store.state.orderId;
+    },
+    wkPhoneNumber(){
+      if(this.wk){
+        return "tel:"+ this.wk.PhoneNumber;
+      }
     }
   },
   watch:{
-    ['quickShop.Total'](){
-      if(this.quickShop.Total < 1){
-        this.quickShop.Total = 1;
+    ['pointShop.Total'](){
+      if(this.pointShop.Total < 1){
+        this.pointShop.Total = 1;
         this.isError = true;
         this.errorMsg = "客官，数量不能小于1哦!";
       } 
-      if(!this.quickShop.Total){
+      if(!this.pointShop.Total){
 
       }
     }

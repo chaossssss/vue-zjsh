@@ -1,69 +1,139 @@
 <template>
-<div>
-	<div class="msg">
-		<div class="weui_msg">
-			<div class="weui_icon_area">
-				<img src="/images/location/img-local.png" alt="" style="width:130px;">
+<div style="position:relative;height:100%;background-color:rgb(238,238,238);">
+	<div class="msg" v-show="addrList.length === 0">
+		<div class="weui-msg">
+			<div class="weui-msg__icon-area">
+				<img src="../../static/images/img-local.png" alt="" style="width:130px;">
 			</div>
-			<div class="weui_text_area">
-				<p class="weui_msg_desc">
-					您还没有添加服务地址哦，快去 <a  href="javascript:;" class="pblue" >新增&nbsp;</a>吧
+			<div class="weui-msg__text-area">
+				<p class="weui-msg__desc">
+					您还没有添加服务地址哦，快去 <router-link  to="/addr_add" class="pblue" >新增&nbsp;</router-link>吧
 				</p>
 			</div>
 		</div>
 	</div>
 
-	<div class="weui_cells weui_cells_access" style="margin-bottom:44px;">
-		<a href="javascript:;" class="weui_cell" >
+	<div class="weui-cells" style="margin:0 0 44px 0;font-size:15px;">
+		<a href="javascript:;" @click="routerTo(item.Id)" class="weui-cell weui-cell_access" v-for="item in addrList">
 			<div class="zj_cell_left">
-				<div class="weui_cell_hd">
-					<span ng-bind="item.Contact"></span>
-					<span class="pl10">男</span>
-					<span class="pl10">女</span>
-					<span class="pl10"></span>
+				<div class="weui-cell__bd">
+					<span>{{item.Contact}}</span>
+					<span class="pl10" v-show="item.Gender === '0'">男</span>
+					<span class="pl10" v-show="item.Gender === '1'">女</span>
+					<span class="pl10">{{item.PhoneNumber}}</span>
 				</div>
-				<div class="weui_cell_bd">
-					<span class="tag" ></span>
-					<span class="f12 fc8"></span>
-					<span class="f12 fc8"></span>
+				<div class="weui-cell__bd">
+					<span class="tag" >{{item.Tag}}</span>
+					<span class="f12 fc8">{{item.Address1}}</span>
+					<span class="f12 fc8">{{item.Address2}}</span>
 				</div>
 			</div>
-			<div class="zj_cell_right" ng-cloak>
-				<p><img src="/images/location/edit.png" alt="" style="width:22px;"></p>
-			</div>
-		</a>
+			<router-link :to="{name:'addr_edit',params:{ addrId: item.Id }}" class="zj_cell_right">
+				<p><img src="../../static/images/btn-edit.png" alt="" style="width:22px;"></p>
+			</router-link>
+		</router-link>
 	</div>
 	
 	<div class="footer">
-		<div class="weui_cells weui_cells_access">
-			<a href="javascript:;" class="weui_cell flexjc" style="padding:10px" >
-				<div class="weui_cell_hd">
-					<img src="/images/location/add.png" alt="" style="width:20px;display:block;margin-right:10px;">
+		<div class="weui-cells" style="margin-top:0;">
+			<router-link to="/addr_add" class="weui-cell weui-cell_access flexjc" style="padding:10px" >
+				<div class="weui-cell__bd">
+					<img src="../../static/images/btn-add.png" alt="" style="width:20px;display:block;margin-right:15px;float:right;">
 				</div>
-				<div class="weui_cell_bd">
+				<div class="weui-cell__bd">
 					<p>新增地址</p>
 				</div>
-			</a>
+			</router-link>
 		</div>
 	</div>
+
+	<!-- 错误提示 -->
+	<div class="js_dialog" id="iosDialog2" v-show="isError">
+      <div class="weui-mask"></div>
+      <div class="weui-dialog">
+          <div class="weui-dialog__bd">{{errorMsg}}</div>
+          <div class="weui-dialog__ft">
+              <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" @click="isError = false">朕 知道了!</a>
+          </div>
+      </div>
+  </div>
 </div>	
 </template>
 
 <script>
+import {mapState} from 'vuex';
+import API from '../../config/backend';
+import axios from 'axios';
+import qs from 'qs';
+
 export default {
 	name:'addrList',
 	data(){
 		return {
-
+			addrList:[],
+			isError:false,
+			errorMsg:""
+		}
+	},
+	mounted(){
+		this.addrList[1];	
+		if(this.Token){
+			axios.post(API.GetAddress,qs.stringify({
+        "Token": this.Token
+      }),{
+        headers: {'Content-Type':'application/x-www-form-urlencoded'}
+      }).then((res)=>{
+      	console.log(res.data);
+      	if(res.data.Meta.ErrorCode === '0'){
+      		this.addrList = res.data.Body
+      	}else{
+	    		this.isDelete = false;
+	    		this.isError = true;
+	    		this.errorMsg = res.data.Meta.ErrorMsg;
+	    	}
+      }).catch(function (error) {
+        console.log(error);
+        this.isError = true;
+  			this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+      });
+		}
+	},
+	computed: mapState(['Token','quickShop','pointShop']),
+	methods:{
+		setQuickShop(){
+			this.$store.dispatch('setQuickShop',{
+				txt: this.quickShop
+			})
+		},
+		setPointShop(){
+			this.$store.dispatch('setPointShop',{
+				txt: this.pointShop
+			})
+		},
+		routerTo(id){
+			if(this.$route.params.hasOwnProperty('origin')){
+				switch (this.$route.params.origin) {
+					case 'user' :					
+						break;
+					case 'quick_order' :
+						this.quickShop.ServiceAddressId = id;
+						this.setQuickShop();
+						this.$router.push({path:'/quick_order'});
+						break;
+					case 'point_order' :
+						this.pointShop.ServiceAddressId = id;
+						this.setPointShop();
+						this.$router.push({path:'/point_order'});
+						break;
+					default :
+						break;
+				}
+			}
 		}
 	}
 }
 </script>
 <style scoped>
-/*基础样式*/
-body {
-	background-color: rgb(238,238,238);
-}
 /*文本 左 中 右*/
 .tl{ text-align:left;}
 .tc{ text-align:center;}
@@ -145,7 +215,7 @@ body {
 	font-size: 23px;
 	display: inline-block;
 }
-.weui_msg {
+.weui-msg {
 	position: absolute;
 	top:40%;
 	left: 50%;
@@ -187,6 +257,22 @@ body {
   -webkit-transform: scaleY(0.5);
           transform: scaleY(0.5);
   left: 10px;
+}
+.weui-btn_disabled.weui-btn_primary {
+	background-color: #27b8f3;
+}
+.weui-btn_primary:not(.weui-btn_disabled):active {
+  color: rgba(255, 255, 255, 0.6);
+  background-color: #27b8f3;
+}
+.weui-btn_primary {
+	background-color: #27b8f3;
+}
+.weui-icon-success {
+	color:#27b8f3;
+} 
+.weui-dialog__btn_primary{
+	color: #27b8f3
 }
 .foot {
 	margin-top: 70px;

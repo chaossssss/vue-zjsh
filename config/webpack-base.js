@@ -31,6 +31,12 @@ const baseConfig = {
 				}
 			}
 		}, {
+			test: /\.js$/,
+			loader: 'babel-loader',
+			exclude: [
+				path.resolve(__dirname, '../node_modules')
+			]
+		}, {
 			test: /\.(png|gif|jpe?g)$/,
 			loader: 'url-loader',
 			query: {
@@ -54,11 +60,11 @@ const baseConfig = {
 		}, {
 			test: /\.sass$/,
 			loader: 'sass-loader',
-			exclude: '/node_modules/'
+			// exclude: '/node_modules/'
 		}, {
 			test: /\.less$/,
 			loader: 'less-loader',
-			exclude: '/node_modules/'
+			// exclude: '/node_modules/'
 		}]
 	},
 	_resolve: {

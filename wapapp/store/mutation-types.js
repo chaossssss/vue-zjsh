@@ -21,3 +21,12 @@ const SET_USER_INFO = "SET_USER_INFO";
 // 设置token
 export
 const SET_TOKEN = "SET_TOKEN";
+// 设置 快速下单缓存
+export
+const SET_QUICK_SHOP = "SET_QUICK_SHOP";
+// 设置 指定下单缓存
+export
+const SET_POINT_SHOP = "SET_POINT_SHOP";
+// 设置 订单ID
+export
+const SET_ORDER_ID = "SET_ORDER_ID";
