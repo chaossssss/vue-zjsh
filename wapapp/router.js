@@ -36,6 +36,10 @@ import SearchAll from './components/search/Search_all.vue';
 import SearchFast from './components/search/Search_fast.vue';
 import Search from './components/search/Search.vue';
 
+// 商户 & 工人 主页
+import worker from './components/worker/WorkerDetail.vue';
+import business from './components/business/BusinessDetail.vue';
+
 // 我的
 import User from './components/user/User.vue';
 import UserInfo from './components/user/User_info.vue';
@@ -207,5 +211,13 @@ export default new VueRouter({
 		// 红包
 		path: '/discount',
 		component: Discount
+	}, {
+		// 工人主页
+		path: '/worker',
+		component: WorkerDetail
+	}, {
+		// 商户主页
+		path: '/business',
+		component: BusinessDetail
 	}]
 });
