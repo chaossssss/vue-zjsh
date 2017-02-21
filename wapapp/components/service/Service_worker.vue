@@ -71,7 +71,7 @@ export default {
     routeToOrder(){
       this.pointShop.ObjectId = this.msg.Id;
       if(this.msg.Belong === 0){
-        this.pointShop.ObjectType = '1';
+        this.pointShop.ObjectType = '2';
       }
       this.setPointShop();
       this.$router.push({path:'/point_order'});

@@ -76,6 +76,16 @@ const api = {
 		// 获取订单详情
 		"GetOrderInfoEx": "http://192.168.1.191:3001/api/v3/OrderInfo/GetOrderInfoEx",
 
+		// 支付-余额付款
+		"BalancePay": "http://192.168.1.191:3001/api/v2/orderinfo/BalancePay",
+
+		// 支付-支付宝付款
+		"GetAlipaySign": "http://192.168.1.191:3001/api/v2/orderinfo/GetAlipaySign",
+
+		// 支付-微信付款
+		"GetWxpaySign": "http://192.168.1.191:3001/api/v2/orderinfo/GetWxpaySign",
+
+
 	}
 	// const api = {
 	// 	// 获取活动

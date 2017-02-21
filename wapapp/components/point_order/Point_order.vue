@@ -335,12 +335,16 @@ export default {
         this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
       });
     }
-
-    // 获取工人/商户详细信息
+    // 获取工人/商户详细信息  Type: 1 工人；2 商户
+    if(this.pointShop.ObjectType === '2'){
+      var objectType = '1';
+    }else{
+      var objectType = '2';
+    }
     if(this.pointShop.ObjectId){
       axios.post(API.Detail,qs.stringify({
         "Token": this.Token,
-        "Type": this.pointShop.ObjectType,
+        "Type": objectType,
         "Id": this.pointShop.ObjectId
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
@@ -515,8 +519,8 @@ export default {
         this.isLoading = true;
         let Json_data = {
           "Token": this.Token,
-          "ObjectType": this.ObjectType,
-          "ObjectId": this.ObjectId,
+          "ObjectType":this.pointShop.ObjectType,
+          "ObjectId": this.pointShop.ObjectId,
           "ServiceTypeId": this.pointShop.ServiceTypeId,
           "ServiceContent": this.pointShop.ServiceContent,
           "Total": this.pointShop.Total,
@@ -546,9 +550,9 @@ export default {
             this.setOrderId(orderId);
             //0 定价去支付页面，1 面议去订单详情页面
             if(this.sv.IsNegotiable === '0'){
-              this.$router.push({name:'pay',params:{OrderId:orderId}});
+              this.$router.push({path:'/pay'});
             }else{
-              this.$router.push({name:'order_detail',params:{OrderId:orderId}});
+              this.$router.push({path:'/order_detail'});
             }
           }else{
             this.isDelete = false;
@@ -567,10 +571,12 @@ export default {
       
     },
     checkDate(item){
+      // 选定日期
       this.dpDate = item.Date;
       this.timeRange2 = item.TimeRange2;
     },
     checkTime(item){
+      // 选定时间
       this.dpTime = item.Time;
       if(this.dpDate && (item.IsVacant === '1')){
         this.pointShop.ServiceStartAt = this.dpDate + '' + this.dpTime;

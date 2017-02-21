@@ -15,9 +15,9 @@ default new Vuex.Store({
 		mapPoint: {}, // 定位地点
 
 		Token: "",
-		userInfo: {},
+		userInfo: {}, // 用户信息
 		pointShop: {
-			ObjectType: "", // 1 工人，2 商户
+			ObjectType: "", // 2 工人，3 商户
 			ObjectId: "", //工人／商户 id
 			ServiceTypeId: "", // 服务类别 id
 			ServiceTypeName: "", // 服务类别名称
@@ -36,7 +36,8 @@ default new Vuex.Store({
 			ServiceAddressId: "",
 			ServicePrice: ""
 		},
-		orderId: ""
+		orderId: "", // 订单id
+		couponId: "" // 红包id
 	},
 	actions: {
 		changeMap({
@@ -73,6 +74,7 @@ default new Vuex.Store({
 			commit
 		}, data) {
 			console.log(types.SET_USER_INFO);
+			sessionStorage.setItem('UserInfo', JSON.stringify(data.txt));
 			commit(types.SET_USER_INFO, {
 				txt: data.txt
 			});
@@ -128,6 +130,7 @@ default new Vuex.Store({
 			commit
 		}, data) {
 			console.log(types.SET_ORDER_ID);
+			sessionStorage.setItem("OrderId", data.txt);
 			commit(types.SET_ORDER_ID, {
 				txt: data.txt
 			});

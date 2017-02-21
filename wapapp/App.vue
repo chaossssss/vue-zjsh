@@ -19,7 +19,7 @@ export default {
 
     }
   },
-  mounted(){
+  created(){
     // 初始化项目获取token
     if(!this.Token){
       if(this.getCookie('Token')){
@@ -27,6 +27,23 @@ export default {
           txt:this.getCookie('Token')
         })
       };
+    }
+    // 初始化获取 订单id
+    if(!this.orderId){
+      if(this.getSession('OrderId')){
+        this.$store.dispatch('setOrderId',{
+          txt: this.getSession('OrderId')
+        })
+      }
+    }
+
+    // 初始化获取 个人信息
+    if(JSON.stringify(this.userInfo) === "{}"){
+      if(this.getSession('UserInfo')){
+        this.$store.dispatch('setUserInfo',{
+          txt: JSON.parse(this.getSession('UserInfo'))
+        })
+      }
     }
 
     // 登录跳转处理
@@ -46,9 +63,12 @@ export default {
       }else{
         return null;
       }
+    },
+    getSession(name){
+      return sessionStorage.getItem(name);
     }
   },
-  computed:mapState(['Token'])
+  computed:mapState(['Token','orderId','userInfo'])
 }
 </script>
 

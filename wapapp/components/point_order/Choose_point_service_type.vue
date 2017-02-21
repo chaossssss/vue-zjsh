@@ -32,7 +32,7 @@ export default {
   },
   mounted(){
   	// 获取工人的服务类型列表
-  	if(this.pointShop.ObjectType === '1'){
+  	if(this.pointShop.ObjectType === '2'){
       axios.post(API.GetWorkerServiceListEx,qs.stringify({
         "WorkerId": this.pointShop.ObjectId
       }),{
@@ -53,7 +53,7 @@ export default {
       });
     }
     // 获取商户的服务类型列表
-    if(this.pointShop.ObjectType === '2'){
+    if(this.pointShop.ObjectType === '3'){
       axios.post(API.GetMerchantServiceListEx,qs.stringify({
         "MerchantId": this.pointShop.ObjectId
       }),{

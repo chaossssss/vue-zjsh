@@ -785,9 +785,9 @@ export default {
                     // console.log(this.swiperList);
                     // console.log(swiper.activeIndex);
                     // console.log("第几个",this.swiperList[swiper.activeIndex]);
-                    let lat = this.swiperList[swiper.activeIndex].Latitude;
-                    let lng = this.swiperList[swiper.activeIndex].Longitude;
-                    let point = new BMap.Point(lng, lat); 
+                    var lat = this.swiperList[swiper.activeIndex].Latitude;
+                    var lng = this.swiperList[swiper.activeIndex].Longitude;
+                    var point = new BMap.Point(lng, lat); 
                     clear_active(this.map,point);
                   }
                 }) 

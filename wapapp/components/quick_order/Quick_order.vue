@@ -493,11 +493,12 @@ export default {
           console.log("提交表单",res.data);
           if(res.data.Meta.ErrorCode === '0'){
             let orderId = res.data.Body.OrderId;
+            this.setOrderId(orderId);
             //0 定价去支付页面，1 面议去订单详情页面
             if(this.sv.IsNegotiable === '0'){
-              this.$router.push({name:'pay',params:{OrderId:orderId}});
+              this.$router.push({path:'/pay'});
             }else{
-              this.$router.push({name:'order_detail',params:{OrderId:orderId}});
+              this.$router.push({path:'/order_detail'});
             }
           }else{
             this.isDelete = false;
@@ -525,6 +526,11 @@ export default {
         this.quickShop.ServiceStartAt = this.dpDate + '' + this.dpTime;
         this.isTime = false;
       }
+    },
+    setOrderId(item){
+      this.$store.dispatch('setOrderId',{
+        txt:item
+      })
     }
   },
   computed:{
