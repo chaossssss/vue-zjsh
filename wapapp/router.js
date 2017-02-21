@@ -37,8 +37,8 @@ import SearchFast from './components/search/Search_fast.vue';
 import Search from './components/search/Search.vue';
 
 // 商户 & 工人 主页
-import worker from './components/worker/WorkerDetail.vue';
-import business from './components/business/BusinessDetail.vue';
+import WorkerDetail from './components/worker/Worker_detail.vue';
+import BusinessDetail from './components/business/Business_detail.vue';
 
 // 我的
 import User from './components/user/User.vue';
