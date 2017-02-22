@@ -18,9 +18,12 @@ const SEARCH_MAP_INPUT = "SEARCH_MAP_INPUT";
 // 设置个人信息
 export
 const SET_USER_INFO = "SET_USER_INFO";
-// 设置token
+// 设置token 
 export
 const SET_TOKEN = "SET_TOKEN";
+// 设置code 微信支付
+export
+const SET_CODE = "SET_CODE";
 // 设置 快速下单缓存
 export
 const SET_QUICK_SHOP = "SET_QUICK_SHOP";
@@ -30,3 +33,6 @@ const SET_POINT_SHOP = "SET_POINT_SHOP";
 // 设置 订单ID
 export
 const SET_ORDER_ID = "SET_ORDER_ID";
+// 设置 红包缓存
+export
+const SET_COUPON = "SET_COUPON";

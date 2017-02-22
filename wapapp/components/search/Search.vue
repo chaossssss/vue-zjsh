@@ -1,5 +1,5 @@
 <template>
-<div style="position:relative;height:100%;">
+<div style="height:100%;">
 	<div class="vue-search-bar">
 	    <form class="vue-search-bar__form" action="javascript:return true;">
 	        <div class="vue-search-bar__box">

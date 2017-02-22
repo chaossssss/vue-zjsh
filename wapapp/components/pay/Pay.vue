@@ -3,24 +3,27 @@
 	<div class="weui-cells" style="margin-top:0;">
 		<div class="weui-cell">
 			<div class="weui-cell__bd">订单总价</div>
-			<div class="weui-cell__ft">{{od.TotalPrice}}元</div>
+			<div class="weui-cell__ft">{{od.TotalPrice}} 元</div>
 		</div>
 	</div>
 	<div class="weui-cells">
 		<div class="weui-cell" v-if="od.Activity && od.Activity.SpecialRule" v-for="item in od.Activity.SpecialRule">
 			<div class="weui-cell__bd">{{item.Title}}</div>
-			<div class="weui-cell__ft">-¥{{item.Minus}}</div>
+			<div class="weui-cell__ft">-¥ {{item.Minus}}</div>
 		</div>
-		<router-link to="/discount" class="weui-cell weui-cell_access">
+		<router-link :to="{name:'discount',params:{totalPrice:od.TotalPrice}}" class="weui-cell weui-cell_access">
 			<div class="weui-cell__bd">红包</div>
-			<div class="weui-cell__ft">
-				<span class="red"></span>
+			<div class="weui-cell__ft" v-show="coupon.CouponId">
+				<span class="red">
+					满{{coupon.Amount}}减{{coupon.DiscountAmount}}元
+				</span>
 			</div>
+			<div class="weui-cell__ft" v-show="!coupon.CouponId"></div>
 		</router-link>
 		<div class="weui-cell">
 			<div class="weui-cell__bd">支付金额</div>
 			<div class="weui-cell__ft">
-				<span class="red">¥</span>
+				<span class="red">¥ {{payable}}</span>
 			</div>
 		</div>
 	</div>
@@ -30,7 +33,7 @@
 		<div class="weui-cell weui-cell_access" @click="isCount = !isCount">
         <div class="weui-cell__hd"><img src="../../static/images/pic-yue.png" alt="" style="width:35px;margin-right:5px;display:block"></div>
         <div class="weui-cell__bd">
-            <p>账户余额支付</p>
+            <p>账户余额支付 <span style="font-size:12px;color:#999;">余额{{account}}元</span></p>
         </div>
         <div class="vue-cell__ft" v-show="!isCount" >
         	<img src="../../static/images/unselected.png" alt="" style="width:25px;margin-right:5px;display:block">
@@ -39,7 +42,7 @@
         	<img src="../../static/images/select.png" alt="" style="width:25px;margin-right:5px;display:block">
         </div>
     </div>
-    <div class="weui-cell weui-cell_access" @click="zhifubao">
+    <div class="weui-cell weui-cell_access" @click="zhifubao" v-show="!Code">
         <div class="weui-cell__hd"><img src="../../static/images/pic-zhifubao.png" alt="" style="width:35px;margin-right:5px;display:block"></div>
         <div class="weui-cell__bd">
             <p>支付宝支付</p>
@@ -51,7 +54,7 @@
         	<img src="../../static/images/select.png" alt="" style="width:25px;margin-right:5px;display:block">
         </div>
     </div>
-    <div class="weui-cell weui-cell_access" @click="weixin">
+    <div class="weui-cell weui-cell_access" @click="weixin" v-show="Code">
         <div class="weui-cell__hd"><img src="../../static/images/pic-weixin.png" alt="" style="width:35px;margin-right:5px;display:block"></div>
         <div class="weui-cell__bd">
             <p>微信支付</p>
@@ -113,11 +116,12 @@ export default {
 	name:"pay",
 	data(){
 		return {
-			od:{
+			od:{						// 订单详情
 				Activity:{
 					SpecialRule:[]
 				}
-			}, // 订单详情
+			}, 
+			account:"",	// 账户余额
 			isCount:false, // 是否余额支付
 			isZhiFuBao:false, // 是否支付宝付款
 			isWeiXin:false, // 是否微信付款
@@ -128,7 +132,26 @@ export default {
 	},
 	mounted(){
 		this.code = getvl("code");
-		console.log("orderId",this.orderId);
+		// 获取账户余额
+		axios.post(API.MySettlement,qs.stringify({
+        "Token": this.Token
+      }),{
+        headers: {'Content-Type':'application/x-www-form-urlencoded'}
+      }).then((res)=>{
+        console.log("账户余额",res.data);
+        if(res.data.Meta.ErrorCode === '0'){
+          if(res.data.Body){
+          	this.account = res.data.Body.SettlementBalance;
+          }
+        }else{
+          this.isError = true;
+          this.errorMsg = res.data.Meta.ErrorMsg;
+        }
+      }).catch(function (error) {
+        console.log(error);
+        this.isError = true;
+        this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+      });
 		// 获取订单详情
 		if(this.orderId){
       axios.post(API.GetOrderInfoEx,qs.stringify({
@@ -176,6 +199,7 @@ export default {
 			if(!this.isZhiFuBao && !this.isWeiXin){
 				if(this.isCount){
 					console.log("余额支付");
+					this.payCount(this.singBalancePay);
 				}else{
 					console.log("未选择支付方式");
 					this.isError = true;
@@ -186,29 +210,35 @@ export default {
 			if(this.isZhiFuBao){
 				if(this.isCount){
 					console.log("支付宝+余额");
+					this.payZhiFuBao(this.balancePay,this.thirdPay);
 				}else{
 					console.log("支付宝");
+					this.payZhiFuBao(0,this.singBalancePay);
 				}
 			}
 			// 微信+余额 or 微信
 			if(this.isWeiXin){
 				if(this.isCount){
 					console.log("微信+余额");
+					this.payWeiXin(this.balancePay,this.thirdPay);
 				}else{
 					console.log("微信");
+					this.payWeiXin(0,this.singBalancePay);
 				}
 			}
 		},
-		payCount(){
+		payCount(balancePay){
+			this.isLoading = true;
 			// 余额支付
 			axios.post(API.BalancePay,qs.stringify({
         "Token": this.Token,
         "OrderId": this.orderId,
-        "CouponId": this.couponId,
-        "BalancePay": this.payable
+        "CouponId": this.coupon.CouponId,
+        "BalancePay": balancePay
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
+      	this.isLoading = false;
         console.log("余额支付",res.data);
         if(res.data.Meta.ErrorCode === '0'){
           
@@ -222,20 +252,22 @@ export default {
         this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
       })
 		},
-		payZhiFuBao(){
+		payZhiFuBao(balancePay,thirdPay){
+			this.isLoading = true;
 			// 支付宝支付
-			axios.post(API.BalancePay,qs.stringify({
+			axios.post(API.GetAlipaySign,qs.stringify({
         "Token": this.Token,
         "OrderId": this.orderId,
-        "CouponId": this.couponId,
-        "Alipay": this.alipay,
-        "BalancePay": this.payable
+        "CouponId": this.coupon.CouponId,
+        "Alipay": thirdPay,
+        "BalancePay": balancePay
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
+      	this.isLoading = false;
         console.log("支付宝支付",res.data);
         if(res.data.Meta.ErrorCode === '0'){
-          
+          window.location.href = res.data.Body.GATEWAY_NEW + res.data.Body.AlipaySign;
         }else{
           this.isError = true;
           this.errorMsg = res.data.Meta.ErrorMsg;
@@ -246,21 +278,50 @@ export default {
         this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
       })
 		},
-		payWeiXin(){
+		payWeiXin(balancePay,thirdPay){
+			this.isLoading = true;
 			// 微信支付
-			axios.post(API.BalancePay,qs.stringify({
+			axios.post(API.GetWxpaySign,qs.stringify({
         "Token": this.Token,
         "OrderId": this.orderId,
-        "CouponId": this.couponId,
-        "WxPay": this.wxPay,
-        "BalancePay": this.payable,
-        "Code": this.code
+        "CouponId": this.coupon.CouponId,
+        "WxPay": thirdPay,
+        "BalancePay": balancePay,
+        "Code": this.Code
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
+      	this.isLoading = false;
         console.log("微信支付",res.data);
         if(res.data.Meta.ErrorCode === '0'){
-          
+        	//微信支付
+					function onBridgeReady() {
+						WeixinJSBridge.invoke(
+							'getBrandWCPayRequest', {
+								"appId": res.data.Body.appId, //公众号名称，由商户传入     
+								"timeStamp": res.data.Body.timeStamp, //时间戳，自1970年以来的秒数     
+								"nonceStr": res.data.Body.nonceStr, //随机串     
+								"package": res.data.Body.package,
+								"signType": res.data.Body.signType, //微信签名方式     
+								"paySign": res.data.Body.paySign //微信签名 
+							},
+							function(res) {
+								if (res.err_msg == "get_brand_wcpay_request：ok") {
+									window.location.href = "www.baidu.com";
+								} // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
+							}
+						);
+					}
+					if (typeof WeixinJSBridge == "undefined") {
+						if (document.addEventListener) {
+							document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+						} else if (document.attachEvent) {
+							document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+							document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+						}
+					} else {
+						onBridgeReady();
+					}
         }else{
           this.isError = true;
           this.errorMsg = res.data.Meta.ErrorMsg;
@@ -273,11 +334,73 @@ export default {
 		}
 	},
 	computed:{
+		payable(){
+			// 显示支付金额
+			let totalPrice = this.od.TotalPrice;
+			if(this.coupon.DiscountAmount){
+				totalPrice = parseFloat(this.od.TotalPrice) - parseFloat(this.coupon.DiscountAmount); 
+			}
+			if(this.od.Activity && this.od.Activity.SpecialRule.length>0){
+				this.od.Activity.SpecialRule.map((v,i,arry)=>{
+					totalPrice = parseFloat(totalPrice) - parseFloat(v.Minus); 
+				})
+			}
+			return totalPrice;
+		},
+		singBalancePay(){
+			// 账户支付 (减掉红包以后的价格)
+			let price = this.od.TotalPrice;
+			if(this.coupon.DiscountAmount){
+				price = parseFloat(this.od.TotalPrice) - parseFloat(this.coupon.DiscountAmount); 		
+			}
+			return price;
+		},
+		balancePay(){
+			// 账户支付 (减掉红包以后的价格)
+			let price = this.od.TotalPrice;
+			if(parseFloat(this.account) >= parseFloat(this.payable)){
+				if(this.coupon.DiscountAmount){
+					price = parseFloat(this.od.TotalPrice) - parseFloat(this.coupon.DiscountAmount); 
+					return price;
+				}else{
+					return price;
+				}
+			}else{		
+				return this.account;
+			}		
+		},
+		thirdPay(){
+			// 第三方支付	
+			let price = this.od.TotalPrice;
+			if(parseFloat(this.account) < parseFloat(this.payable)){
+				if(this.coupon.DiscountAmount){
+					// 余额不够
+					price = parseFloat(this.od.TotalPrice) - parseFloat(this.coupon.DiscountAmount) - parseFloat(this.balancePay); 
+					alert("price",price);
+					return price;
+				}else{
+					price = parseFloat(this.od.TotalPrice) - parseFloat(this.balancePay);
+					alert("price",price);
+					return price;
+				}	
+			}else{
+				return 0;
+			}
+		},
 		Token(){
 			return this.$store.state.Token;
 		},
+		Code(){
+			return this.$store.state.Code; 
+		},
 		orderId(){
 			return this.$store.state.orderId;
+		},
+		coupon(){
+			return this.$store.state.coupon;
+		},
+		userInfo(){
+			return this.$store.state.userInfo;
 		}
 	}
 }
@@ -291,7 +414,7 @@ export default {
 	line-height:1.75;
 }
 .red {
-	color:#f43530;
+	color:#ff5000;
 }
 .vue-cell__ft {
 	text-align:right;

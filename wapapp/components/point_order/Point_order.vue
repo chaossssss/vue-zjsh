@@ -56,29 +56,32 @@
     </div>
   </div>
   <!-- IsNegotiable 1 面议，0 定价 -->
-  <div class="weui-cells" style="margin-top:-1px;" v-show="sv.IsNegotiable">
+  <!-- <div class="weui-cells" style="margin-top:-1px;" v-show="pointShop.IsNegotiable">
     <div class="weui-cell clean_border" style="padding:5px 30px;text-align:right;color:#888;">
       <div class="weui-cell__bd weui-cell_primary">
         <p>{{pointShop.ServiceTypeName}} 价格范围：¥{{sv.Min}}~{{sv.Max}}/{{sv.UnitName}}</p>
       </div>
     </div>
-  </div>
+  </div> -->
   <!-- 服务价格&服务数量&服务时间-->
   <div class="weui-cells">
-    <a href="javascript:;" class="weui-cell weui-cell_access weui-cell_select" v-show="sv.IsNegotiable ==='0'">
+    <a href="javascript:;" class="weui-cell weui-cell_access" v-show="pointShop.IsNegotiable ==='0'">
       <div class="weui-cell__hd">
         <img src="../../static/images/pic-price.png" alt="" style="width:20px;margin-right:10px;display:block">
       </div>
       <div class="weui-cell__bd">
         <p>服务价格</p>
       </div>
-      <div class="weui-cell_primary" style="text-align:right;">
+      <div class="weui-cell__ft" style="text-align:right;">
+        {{pointShop.ServicePrice}}
+      </div>
+      <!-- <div class="weui-cell_primary" style="text-align:right;">
         <select class=" weui-select rtl fc8" name="" id="" v-model="pointShop.ServicePrice">
           <option :value="item" v-for="item in sv.PriceList">{{item}}</option>
         </select>
-      </div>
+      </div> -->
     </a>
-    <div class="weui-cell" :class="{'weui-cell_access':ct}"  v-show="sv.IsNegotiable ==='0'">
+    <div class="weui-cell" :class="{'weui-cell_access':ct}"  v-show="pointShop.IsNegotiable ==='0'">
       <div class="weui-cell__hd">
         <img src="../../static/images/pic-count.png" alt="" style="width:20px;margin-right:10px;display:block">
       </div>
@@ -87,7 +90,7 @@
       </div>
       <div class="weui-cell__ft" style="text-align:right;" v-if="ct">
         <select class="vue-select rtl fc8" name="" id="" v-model="pointShop.Total">
-          <option :value="item" v-for="item in ct">{{item}}{{sv.UnitName}}</option>
+          <option :value="item" v-for="item in ct">{{item}}{{pointShop.UnitName}}</option>
         </select>
       </div>
       <div class="zj_cell_right" v-if="!ct">
@@ -141,7 +144,7 @@
   </div>
 
   <!-- 订单总计 -->
-  <div class="weui-panel weui-panel_access" v-if="sv.IsNegotiable ==='0'">
+  <div class="weui-panel weui-panel_access" v-if="pointShop.IsNegotiable ==='0'">
     <div class="weui-panel__bd">
       <div class="weui-media-box weui-media-box_text">
         <span class="f14">订单金额</span>
@@ -224,14 +227,14 @@
     <div class="zj_foot_hd">
       总计
     </div>
-    <div class="zj_foot_bd" v-show="!sv.IsNegotiable">
+    <div class="zj_foot_bd" v-show="!pointShop.IsNegotiable">
     </div>
-    <div class="zj_foot_bd" v-show="sv.IsNegotiable ==='0'">
+    <div class="zj_foot_bd" v-show="pointShop.IsNegotiable ==='0'">
       <span>¥{{payable}}</span>
       <span class="f14 fc8">已优惠¥{{discountSum}}</span>
     </div>
-    <div class="zj_foot_bd" v-show="sv.IsNegotiable ==='1'">
-      <span>¥{{sv.StartingPrice}}</span>
+    <div class="zj_foot_bd" v-show="pointShop.IsNegotiable ==='1'">
+      <span>¥{{pointShop.StartingPrice}}</span>
       <span class="f14 fc8">起</span>
     </div>
     <div class="zj_foot_ft" @click="submit">
@@ -372,36 +375,36 @@ export default {
     }
 
     // 获取服务价格
-    if(this.pointShop.ServiceAddressId){
-      if(this.pointShop.ServiceTypeId){
-        axios.post(API.GetServicePriceEx,qs.stringify({
-          "Token": this.Token,
-          "ServiceTypeId": this.pointShop.ServiceTypeId,
-          "ServiceProviderType": this.pointShop.ObjectType,
-          "ServiceAddressId": this.pointShop.ServiceAddressId
-        }),{
-          headers: {'Content-Type':'application/x-www-form-urlencoded'}
-        }).then((res)=>{
-          console.log("服务价格",res.data);
-          if(res.data.Meta.ErrorCode === '0'){
-            this.sv = res.data.Body;
-            if(res.data.Body.IsNegotiable === '0'){
-              this.pointShop.ServicePrice = res.data.Body.PriceList[0];
-            }else{
-              this.pointShop.ServicePrice = res.data.Body.StartingPrice;
-            }
-          }else{
-            this.isDelete = false;
-            this.isError = true;
-            this.errorMsg = res.data.Meta.ErrorMsg;
-          }
-        }).catch(function (error) {
-          console.log(error);
-          this.isError = true;
-          this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
-        });
-      }
-    }
+    // if(this.pointShop.ServiceAddressId){
+    //   if(this.pointShop.ServiceTypeId){
+    //     axios.post(API.GetServicePriceEx,qs.stringify({
+    //       "Token": this.Token,
+    //       "ServiceTypeId": this.pointShop.ServiceTypeId,
+    //       "ServiceProviderType": this.pointShop.ObjectType,
+    //       "ServiceAddressId": this.pointShop.ServiceAddressId
+    //     }),{
+    //       headers: {'Content-Type':'application/x-www-form-urlencoded'}
+    //     }).then((res)=>{
+    //       console.log("服务价格",res.data);
+    //       if(res.data.Meta.ErrorCode === '0'){
+    //         this.sv = res.data.Body;
+    //         if(res.data.Body.IsNegotiable === '0'){
+    //           this.pointShop.ServicePrice = res.data.Body.PriceList[0];
+    //         }else{
+    //           this.pointShop.ServicePrice = res.data.Body.StartingPrice;
+    //         }
+    //       }else{
+    //         this.isDelete = false;
+    //         this.isError = true;
+    //         this.errorMsg = res.data.Meta.ErrorMsg;
+    //       }
+    //     }).catch(function (error) {
+    //       console.log(error);
+    //       this.isError = true;
+    //       this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+    //     });
+    //   }
+    // }
 
     // 获取服务可选数量
     if(this.pointShop.ServiceTypeId && (this.pointShop.ServiceTypeId ==='5' || this.pointShop.ServiceTypeId === '733')){
@@ -452,7 +455,7 @@ export default {
 
     // 获取当前可参与的活动
     if(this.pointShop.ServiceTypeId){
-      axios.post(API.GetActivity,qs.stringify({
+      axios.post(API.GetActivityEx,qs.stringify({
         "Token": this.Token,
         "ServiceTypeId": this.pointShop.ServiceTypeId
       }),{
@@ -549,7 +552,7 @@ export default {
             let orderId = res.data.Body.OrderId;
             this.setOrderId(orderId);
             //0 定价去支付页面，1 面议去订单详情页面
-            if(this.sv.IsNegotiable === '0'){
+            if(this.pointShop.IsNegotiable === '0'){
               this.$router.push({path:'/pay'});
             }else{
               this.$router.push({path:'/order_detail'});
