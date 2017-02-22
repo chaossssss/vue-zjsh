@@ -15,6 +15,7 @@ default new Vuex.Store({
 		mapPoint: {}, // 定位地点
 
 		Token: "",
+		Code: "", // 微信支付凭证
 		userInfo: {}, // 用户信息
 		pointShop: {
 			ObjectType: "", // 2 工人，3 商户
@@ -25,7 +26,9 @@ default new Vuex.Store({
 			Total: "1", // 服务数量
 			ServiceStartAt: "", // 服务开始时间
 			ServiceAddressId: "", // 服务地址标识
-			ServicePrice: "" // 服务价格
+			ServicePrice: "", // 服务价格
+			IsNegotiable: "", // 是否面议 0 定价，1 面议
+			UnitName: "" // 单位名称
 		},
 		quickShop: {
 			ServiceTypeId: "",
@@ -37,7 +40,12 @@ default new Vuex.Store({
 			ServicePrice: ""
 		},
 		orderId: "", // 订单id
-		couponId: "" // 红包id
+		order: {}, // 订单详情
+		coupon: {
+			CouponId: "", // 红包id
+			Amount: "",
+			DiscountAmount: ""
+		}
 	},
 	actions: {
 		changeMap({
@@ -110,6 +118,14 @@ default new Vuex.Store({
 				txt: data.txt
 			});
 		},
+		setCode({
+			commit
+		}, data) {
+			console.log(types.SET_CODE);
+			commit(types.SET_CODE, {
+				txt: data.txt
+			});
+		},
 		setQuickShop({
 			commit
 		}, data) {
@@ -135,6 +151,15 @@ default new Vuex.Store({
 				txt: data.txt
 			});
 		},
+		setCoupon({
+			commit
+		}, data) {
+			console.log(types.SET_COUPON);
+			sessionStorage.setItem("Coupon", JSON.stringify(data.txt));
+			commit(types.SET_COUPON, {
+				txt: data.txt
+			});
+		}
 	},
 	mutations: {
 		[types.CHANGE_MAP_POINT](state, {
@@ -194,6 +219,18 @@ default new Vuex.Store({
 		}) {
 			console.log(txt);
 			return state.orderId = txt;
+		},
+		[types.SET_COUPON](state, {
+			txt
+		}) {
+			console.log(txt);
+			return state.coupon = txt;
+		},
+		[types.SET_CODE](state, {
+			txt
+		}) {
+			console.log(txt);
+			return state.Code = txt;
 		}
 	}
 })

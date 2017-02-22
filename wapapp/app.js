@@ -16,7 +16,7 @@ import VueAwesomeSwiper from './static/vue-awesome-swiper';
 // 注册插件
 // Vue.use(VueResource);
 // Vue.use(axios);
-Vue.use(VueAwesomeSwiper);
+// Vue.use(VueAwesomeSwiper);
 
 // import $ from 'jquery';
 // console.log("jquery", $);
@@ -27,5 +27,5 @@ const app = new Vue({
 	render: h => h(App)
 }).$mount('#gogo')
 
-console.log("vue", app);
-console.log("router", router);
+// console.log("vue", app);
+// console.log("router", router);

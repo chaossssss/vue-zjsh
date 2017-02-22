@@ -209,6 +209,7 @@ export default new VueRouter({
 		component: Pay
 	}, {
 		// 红包
+		name: 'discount',
 		path: '/discount',
 		component: Discount
 	}, {

@@ -860,15 +860,22 @@ export default {
   components:{searchAll,searchFast,serviceCity,serviceWorker,serviceShop}
 }
 </script>
-
+<style scoped>
+.vue-tab__panel {
+  overflow:hidden;
+}
+#map-container {
+    font-size:14px;
+    width:100%;
+    box-sizing: border-box;
+    height:calc(100vh - 111px);
+}
+</style>
 <style lang="less" scoped>
 .page {
   position: relative;
   height: 100%;
-}
-#map-container {
-    width:100%;
-    height:calc(100%);
+  font-size:14px;
 }
 .vue-topnav {
   position:absolute;

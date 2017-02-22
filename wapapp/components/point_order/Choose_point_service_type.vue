@@ -8,8 +8,11 @@
 			<div class="vue-cell__bd">
 				{{item.ServiceTypeName}}
 			</div>
-			<div class="vue-cell__ft">
-				{{item.StartingPrice}}&nbsp;{{item.UnitName}}
+      <div class="vue-cell__ft" v-if="item.IsNegotiable === '0'">
+        {{item.Price}}/{{item.UnitName}}
+      </div>
+			<div class="vue-cell__ft" v-if="item.IsNegotiable === '1'">
+				{{item.StartingPrice}}/{{item.UnitName}}
 			</div>
 		</div>
 	</div>
@@ -78,6 +81,13 @@ export default {
   	routeToOrder(item){
   		this.pointShop.ServiceTypeId = item.ServiceTypeId;
   		this.pointShop.ServiceTypeName = item.ServiceTypeName;
+      this.pointShop.IsNegotiable = item.IsNegotiable;
+      this.pointShop.UnitName = item.UnitName;
+      if(item.IsNegotiable === '0'){
+        this.pointShop.ServicePrice = item.Price;
+      }else{
+        this.pointShop.ServicePrice = item.StartingPrice;
+      }
   		this.$store.dispatch('setPointShop',{
   			txt: this.pointShop
   		});
