@@ -1,44 +1,35 @@
 <template>
   <div>
     <div class="order-detail">
-      <div id="fade" class="black_overlay"></div>
-      <div id="MyDiv" class="white_content">
-      <div class="swiper-container">
-            <div class="swiper-wrapper">
+      <div id="statusBg" class="status-bg">
+        <div class="score">
+          <div class="notice-info">
+            <img src="../../static/images/pic-new-choose.png" alt="">
+            <div class="info">
+              <div class="info-state">支付成功</div>
+              <div style="font-size:13px;color:#666">请耐心等待客服为您安排工人</div>
             </div>
+            <div class="clear"></div>
+          </div>
+        </div> 
+        <div class="status-line">
+            <ul>
+              <li>订单已提交</li>
+              <li>已付款</li>
+              <li class="step_ac">待工人接单</li>
+              <li>待服务</li>
+            </ul>
+            <img src="../../static/images/step_2.png" alt="" id="step">
         </div>
       </div>
-    <!--   <div id="orderStatus" class="order-status">
-        <p id="status" class="status"></p>
-        <p id="explanation" class="explanation"></p>
-      </div>
-      <div class="process">
-        <div id="proFirst" class="process-status">
-          <div id="roundFirst" class="round"></div>
-          <span id="tabFirst"></span>
-        </div>
-        <div id="proSecond" class="process-status">
-          <div id="roundSecond" class="round"></div>
-          <span id="tabSecond"></span>
-        </div>
-        <div id="proThird" class="process-status">
-          <div id="roundThird" class="round"></div>
-          <span id="tabThird"></span>
-        </div>
-        <div id="proFourth" class="process-status">
-          <div id="roundFourth" class="round"></div>
-          <span id="tabFourth"></span>
-        </div>
-      </div> -->
-      <div id="statusBg" class="status-bg"></div>
       <div class="bd">
         <div class="weui-cells zj-cell-border">
           <div id="zjWorker" class="weui-cell zj-worker">
             <div class="weui-cell__bd weui-cell__primary">
               <a id="goToProvider" href="">
                 <img id="providerHead" class="head-pic" src="" alt="">
-                <p class="zj-fontsize worker-call"><span id="serviceProviderName"></span></p>
-                <p class="zj-fontsize worker-call"><span id="workerGender"></span></p>
+                <p class="zj-fontsize worker-call"><span id="serviceProviderName">鲁大锤</span></p>
+                <p class="zj-fontsize worker-call"><span id="workerGender">女</span></p>
                 <p id="toProviderDetail" class="zj-fontsize zj-arrow"></p>
               </a>
             </div>
@@ -48,23 +39,22 @@
             <div class="weui-cell__bd weui-cell__primary">
               <p class="zj-fontsize zj-cell-left">服务类型</p>
             </div>
-            <div class="weui-cell__ft zj-fontsize zj-cell-right"><span id="serviceName"></span></div>
+            <div class="weui-cell__ft zj-fontsize zj-cell-right"><span id="serviceName">小时工(不擦玻璃)</span></div>
           </div>
           <div class="weui-cell zj-cell-border">
             <div class="weui-cell__bd weui-cell__primary">
               <p class="zj-fontsize zj-font">服务时间</p>
             </div>
-            <div id="serviceTime" class="weui-cell__ft zj-fontsize zj-cell-right"><span id="serviceAt"></span></div>
+            <div id="serviceTime" class="weui-cell__ft zj-fontsize zj-cell-right"><span id="serviceAt">2016-02-01 08:23</span></div>
           </div>
-          <div id="zjRemarks" class="weui-cell zj-mark zj-cell-border">
+           <!--<div id="zjRemarks" class="weui-cell zj-mark zj-cell-border">
             <div class="weui-cell__bd weui-cell__primary">
               <p class="zj-fontsize">备注</p>
             </div>
             <div id="addRemark" class="weui-cell__ft zj-remark zj-fontsize" style="display:none">
               </div>
-          </div>
-            <ul id="remarkLists" class="remark">
-            </ul>
+          </div> 
+          <ul id="remarkLists" class="remark"></ul>
           <div id="pictureLine" class="weui-cells weui-cells_form zj-cells zj-cell-border">
             <div class="weui-cell zj-worker-pic">
               <div class="weui-cell__bd weui-cell__primary">
@@ -76,34 +66,36 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>-->
           <div id="priceBox" class="weui-media-box weui-media-box_text zj-pay zj-cell-border">
             <div id="servicePrice" class="weui-media-box__desc zj-fontsize spacing">服务价格
-            <p id="ifNegotiable" class="money">
-              <!-- <span id="negotiable">面议</span>  -->       
-              <span id="unitPrice">
-                <span id="single"></span>
-                <span id="unit"></span>
-              </span>
-              <span id="multiple" class="multiple">
-                <span id="quantity"></span>
-              </span>
-            </p>
+              <p id="ifNegotiable" class="money">
+                <!-- <span id="negotiable">面议</span>  -->       
+                <span id="unitPrice">
+                  <span id="single">￥35</span>
+                  <span id="unit">/小时</span>
+                </span>
+                <span id="multiple" class="multiple">
+                  <span id="quantity">*3</span>
+                </span>
+              </p>
             </div>
             <div id="orderPrice" class="weui-media-box__desc zj-fontsize spacing">订单总价
-            <p id="total" class="money"><span id="price"></span></p></div>
-            <div id="specialPrice" class="weui-media-box__desc zj-fontsize spacing">
+              <p id="total" class="money"><span id="price">122</span></p>
+            </div>
+             <!--  <div id="specialPrice" class="weui-media-box__desc zj-fontsize spacing">
             <span id="specialTitle">活动</span>
             <p id="special" class="money"><span id="hourly"></span></p></div>
-    <!--         <div id="activityName" class="weui-media-box__desc zj-fontsize spacing">优惠活动名称
+          <div id="activityName" class="weui-media-box__desc zj-fontsize spacing">优惠活动名称
             <p id="activityRight" class="money"><span id="activityPrice"></span></p></div> -->
+            
+            <div id="orderDiscount" class="weui-media-box__desc zj-fontsize spacing">红包
+            <p class="money"><span id="discountInfo"></span>-10</p></div>
             <div id="waitOrder" class="weui-media-box__desc zj-fontsize spacing">
             待支付
-            <p id="wait" class="money"><span id="toBePaid"></span></p></div>
-            <div id="orderDiscount" class="weui-media-box__desc zj-fontsize spacing">红包
-            <p class="money"><span id="discountInfo"></span></p></div>
-            <div id="orderActual" class="weui-media-box__desc zj-fontsize spacing">实付款
-            <p class="money actual"><span id="actualMoney"></span></p></div>
+            <p id="wait" class="money"><span id="toBePaid">￥95</span></p></div>
+           <!-- <div id="orderActual" class="weui-media-box__desc zj-fontsize spacing">实付款
+            <p class="money actual"><span id="actualMoney"></span></p></div> -->
           </div>
           <div id="filling1" class="filling"></div>
           <div id="refundRecord" class="weui-panel weui-panel_access zj-panel zj-cell-border">
@@ -164,100 +156,99 @@
               </div>
             </div>
           </div>
+        </div>
+        <div id="filling3" class="fill-content"></div>
+        <div id="optionFooter" class="delete-order">
+          <div id="btnRight" class="right-btnfr"></div>
+          <div id="btnLeft" class="left-btnfr"></div>
+        </div>    
       </div>
-      <div id="filling3" class="fill-content"></div>
-      <div id="optionFooter" class="delete-order">
-        <div id="btnRight" class="right-btnfr"></div>
-        <div id="btnLeft" class="left-btnfr"></div>
-      </div>    
-    </div>
-    <div class="weui_dialog_confirm" id="workerPhone" style="display:none;">
-      <div class="weui_mask"></div>
-      <div class="weui_dialog">
-        <div class="weui_dialog_hd"><strong class="weui_dialog_title">联系师傅</strong></div>
-        <div class="weui_dialog_bd zj-align  zj-confirm-word">暂时不接受电话</div>
-        <div class="weui_dialog_ft">
-          <a href="javascript:;" id="cancelBtn" class="weui_btn_dialog default">取消</a>
-          <a href="javascript:;" class="weui_btn_dialog primary bluecol">确定</a>
+      <div class="weui_dialog_confirm" id="workerPhone" style="display:none;">
+        <div class="weui_mask"></div>
+        <div class="weui_dialog">
+          <div class="weui_dialog_hd"><strong class="weui_dialog_title">联系师傅</strong></div>
+          <div class="weui_dialog_bd zj-align  zj-confirm-word">暂时不接受电话</div>
+          <div class="weui_dialog_ft">
+            <a href="javascript:;" id="cancelBtn" class="weui_btn_dialog default">取消</a>
+            <a href="javascript:;" class="weui_btn_dialog primary bluecol">确定</a>
+          </div>
         </div>
       </div>
-    </div>
-    <!--要打电话-->
-    <div class="weui_dialog_confirm" id="callWorkerPhone" style="display:none;">
-      <div class="weui_mask"></div>
-      <div class="weui_dialog">
-        <div class="weui_dialog_hd"><strong class="weui_dialog_title">联系师傅</strong></div>
-        <div id="workerPhoneNum" class="weui_dialog_bd zj-align zj-confirm-word">电话</div>
-        <div class="weui_dialog_ft">
-          <a href="javascript:;" id="cancelCallBtn" class="weui_btn_dialog default">取消</a>
-          <a href="javascript:;" id="callWorker" class="weui_btn_dialog primary bluecol">呼叫</a>
+      <!--要打电话-->
+      <div class="weui_dialog_confirm" id="callWorkerPhone" style="display:none;">
+        <div class="weui_mask"></div>
+        <div class="weui_dialog">
+          <div class="weui_dialog_hd"><strong class="weui_dialog_title">联系师傅</strong></div>
+          <div id="workerPhoneNum" class="weui_dialog_bd zj-align zj-confirm-word">电话</div>
+          <div class="weui_dialog_ft">
+            <a href="javascript:;" id="cancelCallBtn" class="weui_btn_dialog default">取消</a>
+            <a href="javascript:;" id="callWorker" class="weui_btn_dialog primary bluecol">呼叫</a>
+          </div>
         </div>
       </div>
-    </div>
-    <!--备注-->
-    <div class="weui_dialog_confirm" id="userMemo" style="display:none">
-      <div class="weui_mask"></div>
-      <div class="weui_dialog">
-        <div class="weui_dialog_hd"><strong class="weui_dialog_title">补充备注</strong></div>
-        <div class="weui_dialog_bd"><input id="memoText" class="memo-text" typ="text"/></div>
-        <div class="weui_dialog_ft">
-          <a href="javascript:;" id="cancelBtn" class="weui_btn_dialog default">取消</a>
-          <a href="javascript:;" id="confirmBtn" class="weui_btn_dialog primary">确定</a>
+      <!--备注-->
+      <div class="weui_dialog_confirm" id="userMemo" style="display:none">
+        <div class="weui_mask"></div>
+        <div class="weui_dialog">
+          <div class="weui_dialog_hd"><strong class="weui_dialog_title">补充备注</strong></div>
+          <div class="weui_dialog_bd"><input id="memoText" class="memo-text" typ="text"/></div>
+          <div class="weui_dialog_ft">
+            <a href="javascript:;" id="cancelBtn" class="weui_btn_dialog default">取消</a>
+            <a href="javascript:;" id="confirmBtn" class="weui_btn_dialog primary">确定</a>
+          </div>
         </div>
       </div>
-    </div>
-    <!--删除订单-->
-    <div class="weui_dialog_confirm" id="deleteOrder" style="display:none">
-      <div class="weui_mask"></div>
-      <div class="weui_dialog">
-        <div class="weui_dialog_hd"><strong class="weui_dialog_title">删除订单</strong></div>
-        <div class="weui_dialog_bd zj-align zj-confirm-word">确定删除订单吗？删除后不可恢复哦</div>
-        <div class="weui_dialog_ft">
-          <a href="javascript:;" id="deleteCancel" class="weui_btn_dialog default">取消</a>
-          <a href="javascript:;" id="deleteBtn" class="weui_btn_dialog primary bluecol">删除</a>
+      <!--删除订单-->
+      <div class="weui_dialog_confirm" id="deleteOrder" style="display:none">
+        <div class="weui_mask"></div>
+        <div class="weui_dialog">
+          <div class="weui_dialog_hd"><strong class="weui_dialog_title">删除订单</strong></div>
+          <div class="weui_dialog_bd zj-align zj-confirm-word">确定删除订单吗？删除后不可恢复哦</div>
+          <div class="weui_dialog_ft">
+            <a href="javascript:;" id="deleteCancel" class="weui_btn_dialog default">取消</a>
+            <a href="javascript:;" id="deleteBtn" class="weui_btn_dialog primary bluecol">删除</a>
+          </div>
         </div>
       </div>
-    </div>
-    <!--客户成功下单，取消订单-->
-    <div class="weui_dialog_confirm" id="cancelOrder1" style="display:none">
-      <div class="weui_mask"></div>
-      <div class="weui_dialog">
-        <div class="weui_dialog_hd"><strong class="weui_dialog_title">取消订单</strong></div>
-        <div class="weui_dialog_bd zj-align zj-confirm-word">确定取消订单吗？</div>
-        <div class="weui_dialog_ft">
-          <a href="javascript:;" id="cancelBtn1" class="weui_btn_dialog default">先不取消</a>
-          <a href="javascript:;" id="cancelOrderBtn" class="weui_btn_dialog primary zj-bluecol">确定</a>
+      <!--客户成功下单，取消订单-->
+      <div class="weui_dialog_confirm" id="cancelOrder1" style="display:none">
+        <div class="weui_mask"></div>
+        <div class="weui_dialog">
+          <div class="weui_dialog_hd"><strong class="weui_dialog_title">取消订单</strong></div>
+          <div class="weui_dialog_bd zj-align zj-confirm-word">确定取消订单吗？</div>
+          <div class="weui_dialog_ft">
+            <a href="javascript:;" id="cancelBtn1" class="weui_btn_dialog default">先不取消</a>
+            <a href="javascript:;" id="cancelOrderBtn" class="weui_btn_dialog primary zj-bluecol">确定</a>
+          </div>
         </div>
       </div>
-    </div>
-    <!--提示黑框-->
-    <!-- <div id="prompt" class="zj-prompt">
-      <p class="prompt-news">抱歉，请耐心等待工人接单</p>
-    </div> -->
-    <!--支付弹窗-->
-    <div class="weui_dialog_alert" id="pay-box" style="display:none">
-      <div class="weui_mask"></div>
-      <div class="weui_dialog">
-        <div class="weui_dialog_hd"><strong class="weui_dialog_title"></strong></div>
-        <div class="weui_dialog_bd zj-alert-word">您已完成下单，请等待工人接单后完成支付，预计时间0.5-1小时。详情请查看【首页-个人中心-我的订单】</div>
-        <div class="weui_dialog_ft">
-            <a id="know" href="javascript:;" class="weui_btn_dialog primary zj-bluecol">我知道了</a>
+      <!--提示黑框-->
+      <!-- <div id="prompt" class="zj-prompt">
+        <p class="prompt-news">抱歉，请耐心等待工人接单</p>
+      </div> -->
+      <!--支付弹窗-->
+      <div class="weui_dialog_alert" id="pay-box" style="display:none">
+        <div class="weui_mask"></div>
+        <div class="weui_dialog">
+          <div class="weui_dialog_hd"><strong class="weui_dialog_title"></strong></div>
+          <div class="weui_dialog_bd zj-alert-word">您已完成下单，请等待工人接单后完成支付，预计时间0.5-1小时。详情请查看【首页-个人中心-我的订单】</div>
+          <div class="weui_dialog_ft">
+              <a id="know" href="javascript:;" class="weui_btn_dialog primary zj-bluecol">我知道了</a>
+          </div>
         </div>
       </div>
-    </div>
-    <!--客户已付款，工人还未确认取消订单-->
-    <div class="weui_dialog_confirm" id="cancelOrder2" style="display:none">
-      <div class="weui_mask"></div>
-      <div class="weui_dialog">
-        <div class="weui_dialog_hd">工人/商户已接单，若需取消，请联系客服</div>
-        <div class="weui_dialog_bd zj-align zj-confirm-word">客服电话：4008-262-056</div>
-        <div class="weui_dialog_ft">
-          <a href="javascript:;" id="cancelBtn2" class="weui_btn_dialog default">先不取消</a>
-          <a href="tel:4008-262-056;" id="contactWorkerBtn" class="weui_btn_dialog primary zj-bluecol">联系客服</a>
+      <!--客户已付款，工人还未确认取消订单-->
+      <div class="weui_dialog_confirm" id="cancelOrder2" style="display:none">
+        <div class="weui_mask"></div>
+        <div class="weui_dialog">
+          <div class="weui_dialog_hd">工人/商户已接单，若需取消，请联系客服</div>
+          <div class="weui_dialog_bd zj-align zj-confirm-word">客服电话：4008-262-056</div>
+          <div class="weui_dialog_ft">
+            <a href="javascript:;" id="cancelBtn2" class="weui_btn_dialog default">先不取消</a>
+            <a href="tel:4008-262-056;" id="contactWorkerBtn" class="weui_btn_dialog primary zj-bluecol">联系客服</a>
+          </div>
         </div>
-      </div>
-    </div>
-      
+      </div> 
     </div>
   </div>
 </template>
@@ -281,7 +272,7 @@ div,li,a{ -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
 .order-detail .explanation{ color: #666; font-size: 12px; margin: 0 auto; width: 200px; }
 
 /*--新版订单状态--*/
-.status-bg{ width: 100%; height: 174px; background-size: 100% auto; background-repeat: no-repeat; margin-bottom: 13px; }
+.status-bg{ width: 100%; height: 174px; background-size: 100% auto; background-repeat: no-repeat; margin-bottom: 13px; background: #fff;}
 /*--新版订单状态--*/
 
 .order-detail .weui-cell .zj-remark{ height: 30px; width: 72px; padding-left: 5px; background: url(../../static/images/addRemark.png) no-repeat; background-size: 100% auto; }
@@ -472,5 +463,57 @@ div,li,a{ -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
   width: 40px;
   height: 40px;
   z-index:1000;
+}
+
+/*后加*/
+
+.notice-info{
+  width: 66%;
+  margin: auto;
+  padding: 8% 0 8% 0;
+}
+.info{
+    float: left;
+    margin-top: -10px;
+    margin-left: 8px;
+}
+.notice-info img{
+  float: left;
+}
+.info-state{
+  font-size: 18px;
+  color: #3ebff8;
+}
+.score{
+  position: relative;
+
+}
+.score:before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 1px;
+    bottom: 0;
+    border-bottom: 1px dashed #e4e4e4;
+    border-top:1px dashed #e4e4e4;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scale(.5,.5);
+    transform: scale(.5,.5);
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.status-line li{
+  color: #676767;
+  float: left;
+  width: 25%;
+  text-align: center;
+  padding: 10px 0;
+}
+#step{
+  width: 100%;
+}
+.step_ac{
+  color:#40bdfd !important;
 }
 </style>
