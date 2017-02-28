@@ -25,6 +25,8 @@ import ChoosePointServiceType from './components/point_order/Choose_point_servic
 // 支付
 import Pay from './components/pay/Pay.vue';
 import Discount from './components/pay/Discount.vue';
+import PaySuccess from './components/pay/Pay_success.vue';
+import PayError from './components/pay/Pay_error.vue';
 
 // 服务地址
 import AddrList from './components/address/Addr_list.vue';
@@ -207,6 +209,14 @@ export default new VueRouter({
 		name: 'pay',
 		path: '/pay',
 		component: Pay
+	}, {
+		// 支付成功
+		path: '/paySuccess',
+		component: PaySuccess
+	}, {
+		// 支付失败
+		path: '/payError',
+		component: PayError
 	}, {
 		// 红包
 		name: 'discount',

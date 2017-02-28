@@ -28,11 +28,11 @@
       <div class="weui-cell__ft"></div>
     </router-link> 
     <div class="weui-cell" style="padding:10px;">
-      <div class="weui-cell__hd"><img :src="wk.Photo" alt="" style="width:26px;margin-right:15px;display:block;border-radius:50%;"></div>
+      <div class="weui-cell__hd"><img :src="pointShop.ObjectPhoto" alt="" style="width:26px;margin-right:15px;display:block;border-radius:50%;"></div>
       <div class="weui-cell__bd weui-cell_primary">
-        <span>{{wk.Name}}</span>
-        <span v-if="iswk && wk.Gender ==='0'">师傅</span>
-        <span v-if="iswk && wk.Gender ==='1'">阿姨</span>
+        <span>{{pointShop.ObjectName}}</span>
+        <span v-if="pointShop.ObjectGender && pointShop.ObjectGender ==='0'">师傅</span>
+        <span v-if="pointShop.ObjectGender && pointShop.ObjectGender ==='1'">阿姨</span>
       </div>
       <div class="zj_cell_ft icon_phone">
           <a :href="wkPhoneNumber"><img src="../../static/images/phone.png" alt="" style="width:28px;height:28px;display:block;padding-right:7px;"></a>
@@ -65,7 +65,7 @@
   </div> -->
   <!-- 服务价格&服务数量&服务时间-->
   <div class="weui-cells">
-    <a href="javascript:;" class="weui-cell weui-cell_access" v-show="pointShop.IsNegotiable ==='0'">
+    <a href="javascript:;" class="weui-cell weui-cell_access" v-show="pointShop.IsNegotiable ==='0'" style="padding: 12px 15px;">
       <div class="weui-cell__hd">
         <img src="../../static/images/pic-price.png" alt="" style="width:20px;margin-right:10px;display:block">
       </div>
@@ -88,7 +88,7 @@
       <div class="weui-cell__bd weui-cell_primary">
         <p>服务数量</p>
       </div>
-      <div class="weui-cell__ft" style="text-align:right;" v-if="ct">
+      <div class="weui-cell__ft flex1" style="text-align:right;" v-if="ct">
         <select class="vue-select rtl fc8" name="" id="" v-model="pointShop.Total">
           <option :value="item" v-for="item in ct">{{item}}{{pointShop.UnitName}}</option>
         </select>
@@ -116,29 +116,29 @@
   </div>
 
   <!-- 活动 -->
-  <div class="weui-cells" style="padding:10px 15px 0px 15px;" v-if="JSON.stringify(gt) !== '{}' && (gt.PromotionRule || gt.SpecialRule) && (gt.PromotionRule.length > 0 ||  gt.SpecialRule.length > 0)">
-    <div class="webkit_box pb10" v-show="gt.PromotionRule.length > 0" v-for="item in gt.PromotionRule" >
+  <div class="weui-cells" style="padding:10px 15px 0px 15px;" v-if="serviceTypeRules.length > 0 && pointShop.IsNegotiable ==='0'">
+    <div class="webkit_box pb10" v-show="item.ReturnType === '1'" v-for="item in serviceTypeRules" >
       <div class="weui-cell__hd">
         <img src="../../static/images/pic-orange-back.png" alt="" style="width:14px;margin-right:5px;display:block;">
       </div>
       <div class="weui-cell__bd weui-cell_primary">
-        <span class="f14 fc8">{{item.Ads}}</span>
+        <span class="f14 fc8">{{item.Title}}</span>
       </div>
       <div class="zj_cell_ft">
-        <img v-show="item.Upper <= bill" style="width:16px;" src="../../static/images/pic-new-choose.png">
-        <img v-show="item.Upper > bill" style="width:16px;" src="../../static/images/pic-new-unchoose.png">
+        <img style="width:16px;" src="../../static/images/pic-new-choose.png">
+        <!-- <img v-show="item.Upper > bill" style="width:16px;" src="../../static/images/pic-new-unchoose.png"> -->
       </div>
     </div>
-    <div class="webkit_box pb10" v-show="gt.SpecialRule.length > 0" v-for="item in gt.SpecialRule">
+    <div class="webkit_box pb10" v-show="item.ReturnType === '0'" v-for="item in serviceTypeRules">
       <div class="weui-cell__hd">
         <img src="../../static/images/pic-red-cut.png" alt="" style="width:14px;margin-right:5px;display:block;">
       </div>
       <div class="weui-cell__bd weui-cell_primary">
-        <span class="f14 fc8">{{item.Ads}}</span>
+        <span class="f14 fc8">{{item.Title}}</span>
       </div>
       <div class="zj_cell_ft">
-        <img v-show="item.Upper <= bill" style="width:16px;" src="../../static/images/pic-new-choose.png">
-        <img v-show="item.Upper > bill" style="width:16px;" src="../../static/images/pic-new-unchoose.png">
+        <img style="width:16px;" src="../../static/images/pic-new-choose.png">
+        <!-- <img v-show="item.Upper > bill" style="width:16px;" src="../../static/images/pic-new-unchoose.png"> -->
       </div>
     </div>
   </div>
@@ -154,11 +154,11 @@
         </span>
       </div>
     </div>
-    <div class="weui-panel__bd" v-show="gt.SpecialRule.length > 0" v-for="item in gt.SpecialRule">
+    <div class="weui-panel__bd" v-show="serviceTypeRules.length > 0 && item.ReturnType === '0'" v-for="item in serviceTypeRules">
       <div class="weui-media-box weui-media-box_text">
-        <span class="f14">{{item.Ads}}</span>
+        <span class="f14">{{item.Title}}</span>
         <span style="float:right;font-size:14px;color:#888">
-          <span>-¥{{item.Minus}}</span>
+          <span>-¥{{item.Rule.Minus}}</span>
         </span>
       </div>
     </div>
@@ -214,11 +214,8 @@
   <!-- 服务说明-->
   <div class="weui-cell bgf mb49 fc8 lh30">
     <div class="weui-cell__bd weui-cell_primary">
-      <p class="f15">服务说明</p>
-      <p class="f15" ng-bind="fw.Description"></p>
-      <p class="f13 lh24">
-        <span ng-bind="item"></span>
-      </p>
+      <p class="f14">服务说明</p>
+      <p class="f13" style="line-height:1.8em;" v-for="item in fw">{{item}}</p>
     </div>
   </div>
   
@@ -234,7 +231,7 @@
       <span class="f14 fc8">已优惠¥{{discountSum}}</span>
     </div>
     <div class="zj_foot_bd" v-show="pointShop.IsNegotiable ==='1'">
-      <span>¥{{pointShop.StartingPrice}}</span>
+      <span>¥{{pointShop.ServicePrice}}</span>
       <span class="f14 fc8">起</span>
     </div>
     <div class="zj_foot_ft" @click="submit">
@@ -301,8 +298,6 @@ export default {
       sv:{},  // 服务价格
       dp:{},  // 服务时间
       ct:{},  // 服务可选数量
-      wk:{}, // 工人信息or商户信息
-      iswk:false,   // 工人信息or商户信息 是否显示(师傅 阿姨)
       discountSum:"", // 优惠折扣
       dpDate:"",
       dpTime:"",
@@ -339,40 +334,40 @@ export default {
       });
     }
     // 获取工人/商户详细信息  Type: 1 工人；2 商户
-    if(this.pointShop.ObjectType === '2'){
-      var objectType = '1';
-    }else{
-      var objectType = '2';
-    }
-    if(this.pointShop.ObjectId){
-      axios.post(API.Detail,qs.stringify({
-        "Token": this.Token,
-        "Type": objectType,
-        "Id": this.pointShop.ObjectId
-      }),{
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      }).then((res)=>{
-        console.log("工人/商户详细信息",res.data);
-        if(res.data.Meta.ErrorCode === '0'){
-          if(res.data.Body){
-            if(res.data.Body.Business){
-              this.wk = res.data.Body.Business;
-            }else{
-              this.wk = res.data.Body.Worker;
-              this.iswk = true;
-            }
-          }
-        }else{
-          this.isDelete = false;
-          this.isError = true;
-          this.errorMsg = res.data.Meta.ErrorMsg;
-        }
-      }).catch(function (error) {
-        console.log(error);
-        this.isError = true;
-        this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
-      });
-    }
+    // if(this.pointShop.ObjectType === '2'){
+    //   var objectType = '1';
+    // }else{
+    //   var objectType = '2';
+    // }
+    // if(this.pointShop.ObjectId){
+    //   axios.post(API.Detail,qs.stringify({
+    //     "Token": this.Token,
+    //     "Type": objectType,
+    //     "Id": this.pointShop.ObjectId
+    //   }),{
+    //     headers: {'Content-Type':'application/x-www-form-urlencoded'}
+    //   }).then((res)=>{
+    //     console.log("工人/商户详细信息",res.data);
+    //     if(res.data.Meta.ErrorCode === '0'){
+    //       if(res.data.Body){
+    //         if(res.data.Body.Business){
+    //           this.wk = res.data.Body.Business;
+    //         }else{
+    //           this.wk = res.data.Body.Worker;
+    //           this.iswk = true;
+    //         }
+    //       }
+    //     }else{
+    //       this.isDelete = false;
+    //       this.isError = true;
+    //       this.errorMsg = res.data.Meta.ErrorMsg;
+    //     }
+    //   }).catch(function (error) {
+    //     console.log(error);
+    //     this.isError = true;
+    //     this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+    //   });
+    // }
 
     // 获取服务价格
     // if(this.pointShop.ServiceAddressId){
@@ -454,7 +449,7 @@ export default {
     }
 
     // 获取当前可参与的活动
-    if(this.pointShop.ServiceTypeId){
+    if(this.pointShop.ServiceTypeId && this.pointShop.IsNegotiable ==='0'){
       axios.post(API.GetActivityEx,qs.stringify({
         "Token": this.Token,
         "ServiceTypeId": this.pointShop.ServiceTypeId
@@ -486,7 +481,9 @@ export default {
       }).then((res)=>{
         console.log("服务说明",res.data);
         if(res.data.Meta.ErrorCode === '0'){
-          
+          if(res.data.Body && res.data.Body.Description){
+            this.fw = this.regDec(res.data.Body.Description);
+          } 
         }else{
           this.isDelete = false;
           this.isError = true;
@@ -590,26 +587,64 @@ export default {
       this.$store.dispatch('setOrderId',{
         txt:item
       })
+    },
+    regDec(string){
+      let content = string.replace(/\n/g,'|');
+      let arry = content.split('|');
+      return arry;
     }
   },
   computed:{
     bill(){
-      // 订单总价
+      // 订单金额
       return parseFloat(this.pointShop.ServicePrice)*parseFloat(this.pointShop.Total);
     },
     payable(){
-      // 订单优惠后价格 应付价格
-      if(this.gt.SpecialRule && this.gt.SpecialRule.length > 0){
-        let discountList = this.gt.SpecialRule.map((v,i,arry)=>{
-          if(parseFloat(this.bill) > parseFloat(v.Upper)){
-            return parseFloat(v.Minus);
-          }
+      // 订单优惠后价格 应付价格 0 满减 ，1 满返
+      let discountList =[];
+      if(this.gt.ServiceTypeRules && this.gt.ServiceTypeRules.length > 0){
+        this.gt.ServiceTypeRules.map((v)=>{
+          v.Details.map((x)=>{
+            if(x.ReturnType === '0'){
+              let rule = [];
+              x.Rules.map((y)=>{
+                if(parseFloat(this.bill) >= parseFloat(y.Upper)){
+                  rule.push(parseFloat(y.Minus));
+                }
+              })
+              let max = rule.reduce((x,y)=>{
+                return (x>y) ? x:y;
+              })
+              discountList.push(max);
+            }
+          })
         })
         this.discountSum = discountList.reduce((x,y)=>{
           return x+y;
         },0)
         return this.bill-this.discountSum;
       }
+    },
+    serviceTypeRules(){
+      let discountList = [];
+      if(this.gt.ServiceTypeRules && this.gt.ServiceTypeRules.length > 0){
+        this.gt.ServiceTypeRules.map((v,j,arr)=>{
+          v.Details.map((x,i,arry)=>{
+            let rule = [];
+            x.Rules.map((y)=>{
+              if(parseFloat(this.bill) >= parseFloat(y.Upper)){
+                rule.push(y);
+              }
+            })
+            let max = rule.reduce((x,y)=>{
+              return (parseFloat(x.Minus)> parseFloat(y.Minus)) ? x:y;
+            })
+            arry[i]['Rule'] = max;
+            discountList.push(x);
+          })
+        })      
+      }
+      return discountList;
     },
     Token(){
       return this.$store.state.Token;
@@ -621,9 +656,7 @@ export default {
       return this.$store.state.orderId;
     },
     wkPhoneNumber(){
-      if(this.wk){
-        return "tel:"+ this.wk.PhoneNumber;
-      }
+      return "tel:"+ this.pointShop.ObjectPhone;
     }
   },
   watch:{

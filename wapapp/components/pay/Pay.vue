@@ -241,7 +241,7 @@ export default {
       	this.isLoading = false;
         console.log("余额支付",res.data);
         if(res.data.Meta.ErrorCode === '0'){
-          
+          this.$router.push({path:'/paySuccess'});
         }else{
           this.isError = true;
           this.errorMsg = res.data.Meta.ErrorMsg;

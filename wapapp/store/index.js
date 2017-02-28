@@ -20,6 +20,10 @@ default new Vuex.Store({
 		pointShop: {
 			ObjectType: "", // 2 工人，3 商户
 			ObjectId: "", //工人／商户 id
+			ObjectName: "", // 工人／商户 名称
+			ObjectPhoto: "", // 工人／商户 图片
+			ObjectGender: "", // 工人 性别
+			ObjectPhone: "", // 工人手机号
 			ServiceTypeId: "", // 服务类别 id
 			ServiceTypeName: "", // 服务类别名称
 			ServiceContent: "", // 服务内容
@@ -138,6 +142,7 @@ default new Vuex.Store({
 			commit
 		}, data) {
 			console.log(types.SET_POINT_SHOP);
+			sessionStorage.setItem("PointShop", JSON.stringify(data.txt));
 			commit(types.SET_POINT_SHOP, {
 				txt: data.txt
 			});

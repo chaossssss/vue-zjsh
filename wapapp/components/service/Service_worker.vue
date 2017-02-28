@@ -9,9 +9,9 @@
         <div class="vue-box__bd">
           <div class="vue-box__bd_title">
             <label class="label">{{msg.Name}} </label>
-            <span class="privacy" :class="[msg.Gender ==='1' ? 'blue' : 'pink']">
-            	<span v-show="msg.Gender ==='1'">男</span>
-              <span v-show="msg.Gender ==='0'">女</span>
+            <span class="privacy" :class="[msg.Gender ==='0' ? 'blue' : 'pink']">
+            	<span v-show="msg.Gender ==='1'">女</span>
+              <span v-show="msg.Gender ==='0'">男</span>
             	<span>{{msg.Age}}</span>
             </span>
             <span class="price">
@@ -69,7 +69,19 @@ export default {
   },
   methods:{
     routeToOrder(){
+      // 首页进入重置数据
+      for(var i in this.pointShop){
+        if(this.pointShop[i] === "Total"){
+          this.pointShop[i] = "1";
+        }else{
+          this.pointShop[i] = "";
+        } 
+      }
       this.pointShop.ObjectId = this.msg.Id;
+      this.pointShop.ObjectName = this.msg.Name;
+      this.pointShop.ObjectPhoto = this.msg.Photo;
+      this.pointShop.ObjectGender = this.msg.Gender;
+      this.pointShop.ObjectPhone = this.msg.PhoneNumber;
       if(this.msg.Belong === 0){
         this.pointShop.ObjectType = '2';
       }

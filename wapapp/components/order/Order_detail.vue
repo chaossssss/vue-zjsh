@@ -1,519 +1,603 @@
 <template>
-  <div>
-    <div class="order-detail">
-      <div id="statusBg" class="status-bg">
-        <div class="score">
-          <div class="notice-info">
-            <img src="../../static/images/pic-new-choose.png" alt="">
-            <div class="info">
-              <div class="info-state">支付成功</div>
-              <div style="font-size:13px;color:#666">请耐心等待客服为您安排工人</div>
-            </div>
-            <div class="clear"></div>
-          </div>
-        </div> 
-        <div class="status-line">
-            <ul>
-              <li>订单已提交</li>
-              <li>已付款</li>
-              <li class="step_ac">待工人接单</li>
-              <li>待服务</li>
-            </ul>
-            <img src="../../static/images/step_2.png" alt="" id="step">
-        </div>
+<div style="background-color: #fbfbfb;height:100%;">
+  <div class="weui-cells" style="margin-top:0;">
+    <div class="weui-cell" style="padding:0;">
+      <div class="weui-cell__bd">
+        <img v-show="situation === 10" style="width:100%;" src="../../static/images/pic-ordernew-success.png" alt="">
+        <img v-show="situation === 100" style="width:100%;" src="../../static/images/pic-ordernew-success2.png" alt="">
+        <img v-show="situation === 101" style="width:100%;" src="../../static/images/pic-pay-success.png" alt="">
+        <img v-show="situation === 200" style="width:100%;" src="../../static/images/pic-worker-uncomfirm.png" alt="">
+        <img v-show="situation === 201" style="width:100%;" src="../../static/images/pic-worker-uncomfirms.png" alt="">
+        <img v-show="situation === 301" style="width:100%;" src="../../static/images/pic-newawaiting.png" alt="">
+        <img v-show="situation === 401" style="width:100%;" src="../../static/images/pic-orders_evaluate.png" alt="">
+        <img v-show="situation === 50" style="width:100%;" src="../../static/images/pic-orders_cancel1.png" alt="">
+        <img v-show="situation === 5011" style="width:100%;" src="../../static/images/pic-orders_cancel6.png" alt="">
+        <img v-show="situation === 5012" style="width:100%;" src="../../static/images/pic-orders_cancel2.png" alt="">
       </div>
-      <div class="bd">
-        <div class="weui-cells zj-cell-border">
-          <div id="zjWorker" class="weui-cell zj-worker">
-            <div class="weui-cell__bd weui-cell__primary">
-              <a id="goToProvider" href="">
-                <img id="providerHead" class="head-pic" src="" alt="">
-                <p class="zj-fontsize worker-call"><span id="serviceProviderName">鲁大锤</span></p>
-                <p class="zj-fontsize worker-call"><span id="workerGender">女</span></p>
-                <p id="toProviderDetail" class="zj-fontsize zj-arrow"></p>
-              </a>
-            </div>
-            <a id="serviceProviderPhone" href="javascript:;"><div id="contactWorker" class="weui-cell__ft contact"></div></a>
-          </div>
-          <div class="weui-cell zj-cell-border">
-            <div class="weui-cell__bd weui-cell__primary">
-              <p class="zj-fontsize zj-cell-left">服务类型</p>
-            </div>
-            <div class="weui-cell__ft zj-fontsize zj-cell-right"><span id="serviceName">小时工(不擦玻璃)</span></div>
-          </div>
-          <div class="weui-cell zj-cell-border">
-            <div class="weui-cell__bd weui-cell__primary">
-              <p class="zj-fontsize zj-font">服务时间</p>
-            </div>
-            <div id="serviceTime" class="weui-cell__ft zj-fontsize zj-cell-right"><span id="serviceAt">2016-02-01 08:23</span></div>
-          </div>
-           <!--<div id="zjRemarks" class="weui-cell zj-mark zj-cell-border">
-            <div class="weui-cell__bd weui-cell__primary">
-              <p class="zj-fontsize">备注</p>
-            </div>
-            <div id="addRemark" class="weui-cell__ft zj-remark zj-fontsize" style="display:none">
-              </div>
-          </div> 
-          <ul id="remarkLists" class="remark"></ul>
-          <div id="pictureLine" class="weui-cells weui-cells_form zj-cells zj-cell-border">
-            <div class="weui-cell zj-worker-pic">
-              <div class="weui-cell__bd weui-cell__primary">
-                <div class="weui-uploader">
-                  <div class="weui-uploader_bd">
-                    <ul id="showPics" class="weui-uploader_files">
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>-->
-          <div id="priceBox" class="weui-media-box weui-media-box_text zj-pay zj-cell-border">
-            <div id="servicePrice" class="weui-media-box__desc zj-fontsize spacing">服务价格
-              <p id="ifNegotiable" class="money">
-                <!-- <span id="negotiable">面议</span>  -->       
-                <span id="unitPrice">
-                  <span id="single">￥35</span>
-                  <span id="unit">/小时</span>
-                </span>
-                <span id="multiple" class="multiple">
-                  <span id="quantity">*3</span>
-                </span>
-              </p>
-            </div>
-            <div id="orderPrice" class="weui-media-box__desc zj-fontsize spacing">订单总价
-              <p id="total" class="money"><span id="price">122</span></p>
-            </div>
-             <!--  <div id="specialPrice" class="weui-media-box__desc zj-fontsize spacing">
-            <span id="specialTitle">活动</span>
-            <p id="special" class="money"><span id="hourly"></span></p></div>
-          <div id="activityName" class="weui-media-box__desc zj-fontsize spacing">优惠活动名称
-            <p id="activityRight" class="money"><span id="activityPrice"></span></p></div> -->
-            
-            <div id="orderDiscount" class="weui-media-box__desc zj-fontsize spacing">红包
-            <p class="money"><span id="discountInfo"></span>-10</p></div>
-            <div id="waitOrder" class="weui-media-box__desc zj-fontsize spacing">
-            待支付
-            <p id="wait" class="money"><span id="toBePaid">￥95</span></p></div>
-           <!-- <div id="orderActual" class="weui-media-box__desc zj-fontsize spacing">实付款
-            <p class="money actual"><span id="actualMoney"></span></p></div> -->
-          </div>
-          <div id="filling1" class="filling"></div>
-          <div id="refundRecord" class="weui-panel weui-panel_access zj-panel zj-cell-border">
-            <div class="weui-panel__hd zj-titlewords zj-cell-border">退款记录</div>
-            <div class="weui-panel__bd">
-              <div class="weui-media-box weui-media-box_text">
-                <div class="weui-media-box__desc zj-fontsize">
-                  <p class="refund"><span id="refundAt"></span></p>
-                  <p class="refund refund-money"><span id="actualRefundMoney"></span></p>
-                  <p class="refund refund-complete"><span id="refundStatus"></span></p>
-                </div>
-                <div class="weui-media-box__desc zj-fontsize refund-line">
-                  <p class="clear refund"></p>
-                  <p id="refundDisc" class="refund refund-disc">红包扣除￥<span id="refundDiscount"></span></p>
-                  <!-- <p id="refundLost" class="refund refund-lost">误工费￥<span id="lostIncome"></span>，</p> -->
-                  <p id="refundSum" class="refund refund-sum">应退<span id="refundAmount"></span>，</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div id="filling2" class="filling"></div>
-          <div class="weui-panel weui-panel_access zj-panel zj-cell-border zj-order">
-            <div class="weui-panel__hd zj-titlewords zj-cell-border">订单信息</div>
-            <div class="weui-panel__bd">
-              <div class="weui-media-box weui-media-box_text">
-                <img id="refreshBtn" class="refresh-btn" src="../../static/images/refresh.png">
-                <img id="backhomeBtn" class="backhome-btn" src="../../static/images/backhome.png">
-                <p class="weui-media-box__desc contacts zj-fontsize">
-                  联系人：<span id="clientName"></span>
-                  <span id="clientGender"></span>
-                </p>
-                <p class="weui-media-box__desc contacts zj-fontsize">
-                  服务电话：<span id="clinetPhone"></span>
-                </p>
-                <p class="weui-media-box__desc zj-fontsize">
-                  服务地址：<span id="serviceAddress"></span>
-                </p>
-              </div>
-              <div class="weui-media-box weui-media-box_text zj-cell-border">
-                <p class="weui-media-box__desc contacts zj-fontsize">
-                  订单号：<span id="orderCode"></span>
-                </p>
-                <p id="orderTime" class="weui-media-box__desc zj-fontsize order-time">
-                  下单时间：<span id="createTime"></span>
-                </p>
-                <p id="acceptTime" class="weui-media-box__desc zj-fontsize order-time">
-                  接单时间：<span id="acceptAt"></span>
-                </p>
-                <p id="cancelTime" class="weui-media-box__desc zj-fontsize order-time">
-                  取消时间：<span id="cancelAt"></span>
-                </p>
-                <p id="payTime" class="weui-media-box__desc zj-fontsize order-time">
-                  付款时间：<span id="payOffTime"></span>
-                </p>
-                <p id="finishTime" class="weui-media-box__desc zj-fontsize">
-                  完成时间：<span id="finishAt"></span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="filling3" class="fill-content"></div>
-        <div id="optionFooter" class="delete-order">
-          <div id="btnRight" class="right-btnfr"></div>
-          <div id="btnLeft" class="left-btnfr"></div>
-        </div>    
-      </div>
-      <div class="weui_dialog_confirm" id="workerPhone" style="display:none;">
-        <div class="weui_mask"></div>
-        <div class="weui_dialog">
-          <div class="weui_dialog_hd"><strong class="weui_dialog_title">联系师傅</strong></div>
-          <div class="weui_dialog_bd zj-align  zj-confirm-word">暂时不接受电话</div>
-          <div class="weui_dialog_ft">
-            <a href="javascript:;" id="cancelBtn" class="weui_btn_dialog default">取消</a>
-            <a href="javascript:;" class="weui_btn_dialog primary bluecol">确定</a>
-          </div>
-        </div>
-      </div>
-      <!--要打电话-->
-      <div class="weui_dialog_confirm" id="callWorkerPhone" style="display:none;">
-        <div class="weui_mask"></div>
-        <div class="weui_dialog">
-          <div class="weui_dialog_hd"><strong class="weui_dialog_title">联系师傅</strong></div>
-          <div id="workerPhoneNum" class="weui_dialog_bd zj-align zj-confirm-word">电话</div>
-          <div class="weui_dialog_ft">
-            <a href="javascript:;" id="cancelCallBtn" class="weui_btn_dialog default">取消</a>
-            <a href="javascript:;" id="callWorker" class="weui_btn_dialog primary bluecol">呼叫</a>
-          </div>
-        </div>
-      </div>
-      <!--备注-->
-      <div class="weui_dialog_confirm" id="userMemo" style="display:none">
-        <div class="weui_mask"></div>
-        <div class="weui_dialog">
-          <div class="weui_dialog_hd"><strong class="weui_dialog_title">补充备注</strong></div>
-          <div class="weui_dialog_bd"><input id="memoText" class="memo-text" typ="text"/></div>
-          <div class="weui_dialog_ft">
-            <a href="javascript:;" id="cancelBtn" class="weui_btn_dialog default">取消</a>
-            <a href="javascript:;" id="confirmBtn" class="weui_btn_dialog primary">确定</a>
-          </div>
-        </div>
-      </div>
-      <!--删除订单-->
-      <div class="weui_dialog_confirm" id="deleteOrder" style="display:none">
-        <div class="weui_mask"></div>
-        <div class="weui_dialog">
-          <div class="weui_dialog_hd"><strong class="weui_dialog_title">删除订单</strong></div>
-          <div class="weui_dialog_bd zj-align zj-confirm-word">确定删除订单吗？删除后不可恢复哦</div>
-          <div class="weui_dialog_ft">
-            <a href="javascript:;" id="deleteCancel" class="weui_btn_dialog default">取消</a>
-            <a href="javascript:;" id="deleteBtn" class="weui_btn_dialog primary bluecol">删除</a>
-          </div>
-        </div>
-      </div>
-      <!--客户成功下单，取消订单-->
-      <div class="weui_dialog_confirm" id="cancelOrder1" style="display:none">
-        <div class="weui_mask"></div>
-        <div class="weui_dialog">
-          <div class="weui_dialog_hd"><strong class="weui_dialog_title">取消订单</strong></div>
-          <div class="weui_dialog_bd zj-align zj-confirm-word">确定取消订单吗？</div>
-          <div class="weui_dialog_ft">
-            <a href="javascript:;" id="cancelBtn1" class="weui_btn_dialog default">先不取消</a>
-            <a href="javascript:;" id="cancelOrderBtn" class="weui_btn_dialog primary zj-bluecol">确定</a>
-          </div>
-        </div>
-      </div>
-      <!--提示黑框-->
-      <!-- <div id="prompt" class="zj-prompt">
-        <p class="prompt-news">抱歉，请耐心等待工人接单</p>
-      </div> -->
-      <!--支付弹窗-->
-      <div class="weui_dialog_alert" id="pay-box" style="display:none">
-        <div class="weui_mask"></div>
-        <div class="weui_dialog">
-          <div class="weui_dialog_hd"><strong class="weui_dialog_title"></strong></div>
-          <div class="weui_dialog_bd zj-alert-word">您已完成下单，请等待工人接单后完成支付，预计时间0.5-1小时。详情请查看【首页-个人中心-我的订单】</div>
-          <div class="weui_dialog_ft">
-              <a id="know" href="javascript:;" class="weui_btn_dialog primary zj-bluecol">我知道了</a>
-          </div>
-        </div>
-      </div>
-      <!--客户已付款，工人还未确认取消订单-->
-      <div class="weui_dialog_confirm" id="cancelOrder2" style="display:none">
-        <div class="weui_mask"></div>
-        <div class="weui_dialog">
-          <div class="weui_dialog_hd">工人/商户已接单，若需取消，请联系客服</div>
-          <div class="weui_dialog_bd zj-align zj-confirm-word">客服电话：4008-262-056</div>
-          <div class="weui_dialog_ft">
-            <a href="javascript:;" id="cancelBtn2" class="weui_btn_dialog default">先不取消</a>
-            <a href="tel:4008-262-056;" id="contactWorkerBtn" class="weui_btn_dialog primary zj-bluecol">联系客服</a>
-          </div>
-        </div>
-      </div> 
     </div>
   </div>
+  <div class="weui-cells">
+    <div class="weui-cell" v-if="od.Worker">
+      <div class="weui-cell__hd">
+        <img :src="od.Worker.Icon" style="width:24px;height:24px;margin-right:10px;display:block;border-radius:50%;" alt="">
+      </div>
+      <div class="weui-cell__bd">
+        <span>{{od.Worker.Name}}</span>
+        <span v-if="od.Worker.Gender === '1'">阿姨</span>
+        <span v-if="od.Worker.Gender === '0'">师傅</span>
+      </div>
+      <div class="weui-cell__ft">
+        <a :href="wkPhoneNumber"><img src="../../static/images/phone.png" alt="" style="width:24px;height:24px;display:block;"></a>
+      </div>
+    </div>
+    <div class="weui-cell">
+      <div class="weui-cell__bd">
+        <p>服务类型</p>
+      </div>
+      <div class="weui-cell__ft">
+        {{od.Service.ServiceName}}
+      </div>
+    </div>
+    <div class="weui-cell">
+      <div class="weui-cell__bd">
+        <p>服务时间</p>
+      </div>
+      <div class="weui-cell__ft">
+        {{serviceStartTime}}
+      </div>
+    </div>
+    <div class="weui-cell">
+      <div class="weui-cell__bd">
+        <p>备注</p>
+        <p class="fc9" v-show="od.Service.Content">{{od.Service.Content}}</p>
+        <p class="fc9" v-show="!od.Service.Content">无任何备注信息</p>
+      </div>
+    </div>
+    <!-- 定价 || 接单后 有价格显示-->
+    <div class="weui-panel" v-show="od.IsNegotiable === '0' || situation !== 10">
+      <div class="weui-panel__bd">
+        <div class="weui-media-box weui-media-box_text">
+          <span class="f14">服务价格</span>
+          <span style="float:right;font-size:14px;color:#888">
+            <span style="padding-right:20px;">x{{od.Total}}</span>
+            <span>¥{{od.Price}}</span>
+          </span>
+        </div>
+      </div>
+      <div class="weui-panel__bd">
+        <div class="weui-media-box weui-media-box_text">
+          <span class="f14">订单总计</span>
+          <span style="float:right;font-size:14px;color:#888">
+            <span>¥{{od.TotalPrice}}</span>
+          </span>
+        </div>
+      </div>
+      <div class="weui-panel__bd" v-show="od.DiscountAmount">
+        <div class="weui-media-box weui-media-box_text">
+          <span v-show="od.DiscountInfo" class="f14">{{od.DiscountInfo}}</span>
+          <span v-show="!od.DiscountInfo" class="f14">红包</span>
+          <span style="float:right;font-size:14px;color:#888">
+            <span>-¥{{od.DiscountAmount}}</span>
+          </span>
+        </div>
+      </div>
+      <div class="weui-panel__bd" v-if="serviceTypeRules.length > 0">
+        <div class="weui-media-box weui-media-box_text"  v-for="item in serviceTypeRules">
+          <span class="f14">{{item.Title}}</span>
+          <span style="float:right;font-size:14px;color:#888">
+            <span>-¥{{item.Rule.Minus}}</span>
+          </span>
+        </div>
+      </div>
+      <div class="weui-panel__bd">
+        <div class="weui-media-box weui-media-box_text">
+          <span class="f14">实付款</span>
+          <span style="float:right;font-size:14px;color:#888">
+            <span class="red f16">¥{{payable}}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 面议 || 未接单后 -->
+    <div class="weui-panel" v-show="od.IsNegotiable === '1'">
+      <div class="weui-panel__bd">
+        <div class="weui-media-box weui-media-box_text">
+          <span class="f14">服务价格</span>
+          <span style="float:right;font-size:14px;color:#888">
+            <span>¥{{od.StartingPrice}}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="weui-panel" style="margin-top:10px;" v-if="od.Refunds.length > 0">
+    <div class="weui-panel__hd">退款记录</div>
+    <div class="weui-panel__bd">
+      <div class="weui-media-box weui-media-box_text" v-for="item in od.Refunds">
+        <p class="weui-media-box__desc">
+          <span>{{item.RefundAt}}</span>
+          <span class="red" v-show="item.Status ==='1'">退款中</span>
+          <span class="red" v-show="item.Status ==='2'">退款完成</span>
+          <span>{{item.RefundAmountToBePaid}}</span>
+        </p>
+        <p class="weui-media-box__desc">
+          <span>应退</span>
+          <span>¥{{item.RefundAmount}}</span>,
+          <span>误工费</span>
+          <span>¥{{item.LostIncome}}</span>,
+          <span>优惠券扣除</span>
+          <span>¥{{item.CouponAmount}}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="weui-panel" style="margin-top:10px;">
+    <div class="weui-panel__hd">订单信息</div>
+    <div class="weui-panel__bd">
+        <div class="weui-media-box weui-media-box_text">
+          <p class="weui-media-box__desc">
+            <span>联系人:</span>
+            <span> {{od.Service.AddressInfo.Contact}}</span>
+          </p>
+          <p class="weui-media-box__desc">
+            <span>服务电话:</span>
+            <span> {{od.Service.AddressInfo.PhoneNumber}}</span>
+          </p>
+          <p class="weui-media-box__desc">
+            <span>服务地址:</span>
+            <span> {{od.Service.AddressInfo.Address1}}{{od.Service.AddressInfo.Address2}}</span>
+          </p>
+        </div>
+        <div class="weui-media-box weui-media-box_text">
+          <p class="weui-media-box__desc">
+            <span>订单号:</span>
+            <span>{{od.OrderCode}}</span>
+          </p>
+          <p class="weui-media-box__desc">
+            <span>下单时间:</span>
+            <span>{{orderCreateTime}}</span>
+          </p>
+          <p class="weui-media-box__desc" v-show="acceptTime">
+            <span>接单时间:</span>
+            <span>{{acceptTime}}</span>
+          </p>
+          <p class="weui-media-box__desc" v-show="payOverTime">
+            <span>付款时间:</span>
+            <span>{{payOverTime}}</span>
+          </p>
+          <p class="weui-media-box__desc" v-show="cancelTime">
+            <span>取消时间:</span>
+            <span>{{cancelTime}}</span>
+          </p>
+        </div>
+    </div>
+  </div>
+
+  <div class="weui-cells" v-show="situation === 50 || od.CanCancel === '1' || situation === 100 || situation === 200 || situation === 401">
+    <div class="weui-cell">
+      <div class="weui-cell__bd"></div>
+      <div class="weui-cell__ft">
+        <button @click="delOrder" v-show="situation === 50" class="vue-btn vue-btn_plain-default">删除订单</button>
+        <button @click="cancelOrder" v-show="od.CanCancel === '1'" class="vue-btn vue-btn_plain-default">取消订单</button>
+        <button @click="payOrder" v-show="situation === 100 || situation === 200" class="vue-btn vue-btn_plain-primary">支付</button>
+        <button @click="sureOrder" v-show="situation === 401" class="vue-btn vue-btn_plain-success">确认服务完成</button>
+      </div>
+    </div>
+  </div>
+
+<!-- 错误提示 -->
+  <div class="js_dialog" id="iosDialog2" v-show="isError">
+      <div class="weui-mask"></div>
+      <div class="weui-dialog">
+          <div class="weui-dialog__bd">{{errorMsg}}</div>
+          <div class="weui-dialog__ft">
+              <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" @click="isError = false">朕 知道了!</a>
+          </div>
+      </div>
+  </div>  
+
+<!-- 正在提交提示 -->
+  <div id="loadingToast" v-show="isLoading">
+      <div class="weui-mask_transparent"></div>
+      <div class="weui-toast">
+          <i class="weui-loading weui-icon_toast"></i>
+          <p class="weui-toast__content">正在提交...</p>
+      </div>
+  </div>
+
+</div>  
 </template>
-
 <script>
+import { mapState } from 'vuex';
+import API from '../../config/backend';
+import axios from 'axios';
+import qs from 'qs';
 
-</script>
-
-<style scoped>
-*{ margin:0; padding:0; list-style:none;}
-body{ font-size:14px; background: #f8f8f8;}
-div,li,a{ -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
-.clear{ clear: both; height: 0; line-height: 0; font-size: 0; }
-/*---*/
-.order-detail{ width: 100%; margin: 0 auto; background: #f8f8f8; }
-.order-detail .order-status{ height: 148px; width: 100%; text-align: center; background: #eefaff no-repeat center 10px; background-size: 250px 50%; }
-.order-detail .order-status .status{ color: #3fbef9; font-size: 18px; padding-top: 86px; }
-.order-detail .process{ width: 100%; height: 42.5px; display: flex; display: -webkit-flex; display: box; display: -webkit-box; display: -moz-box; display: -ms-flexbox; background: #fff; border-top: 1px solid #3fbef9; margin-bottom: 13px; border-bottom: 1px #ccc solid; }
-.order-detail .process:after{ border-bottom: 1px solid #ccc; transform: scaleY(.5); }
-.order-detail .process .process-status{ flex: 1; -webkit-box-flex: 1; -webkit-flex: 1; -moz-box-flex: 1; -ms-flex: 1; text-align: center; line-height: 20px; font-size: 14px; }
-.order-detail .explanation{ color: #666; font-size: 12px; margin: 0 auto; width: 200px; }
-
-/*--新版订单状态--*/
-.status-bg{ width: 100%; height: 174px; background-size: 100% auto; background-repeat: no-repeat; margin-bottom: 13px; background: #fff;}
-/*--新版订单状态--*/
-
-.order-detail .weui-cell .zj-remark{ height: 30px; width: 72px; padding-left: 5px; background: url(../../static/images/addRemark.png) no-repeat; background-size: 100% auto; }
-.order-detail .weui-cells .remark{ margin-left: 10px; margin-bottom: 12px; }
-.order-detail .weui-cells .remark li{ font-size: 13px; color: #999; word-wrap: break-word; padding-right: 5px; }
-.order-detail .weui-cell .zj-show-pic{ width: 74px; height: 74px; border-radius: 6.5px; margin-right: 6px; margin-left: 12px; margin-top: 10.5px; margin-bottom: 10.5px; background: center center no-repeat; background-size: cover; float: left; }
-/*.order-detail .weui-cell .zj-show-lastpic{ width: 74px; height: 74px; border-radius: 6.5px; margin-top: 10.5px; margin-bottom: 10.5px; background: center center no-repeat; background-size: cover; float: left; }*/
-.order-detail .zj-mark{ padding-bottom: 8px; }
-.order-detail .remark-box{ border: 0; outline: 0; }
-.order-detail #priceBox{ padding-bottom: 3px; }
-.order-detail .zj-cell-border:before{ border-top: 1px solid #ccc; transform: scaleY(.5); }
-.order-detail .zj-cell-border:after{ border-bottom: 1px solid #ccc; transform: scaleY(.5); }
-.order-detail .zj-cells:before{ left: 10px; }
-.order-detail .zj-cells:after{ border-bottom: 0; }
-.order-detail .filling{ height: 12.5px; width: 100%; background: #f8f8f8;}
-.order-detail .zj-panel{ margin-top: 0px; font-size: 13px; }
-.order-detail .zj-titlewords{ font-size: 15px; color: #333; }
-.order-detail .zj-fontsize{ font-size: 14px; }
-.order-detail .zj-worker-pic{ padding: 10px 0px 13px 0px; }
-.order-detail .fill-content{ width: 100%; height: 59px; background: #f8f8f8; }
-.order-detail .head-pic{ width: 28px; height: 28px; border-radius: 50%; margin-top: 1.5px; }
-.order-detail .worker-call{ display: inline-block; position: relative; top: -9px; left: 5px; color: #333; }
-.order-detail .zj-arrow{ background: url(../../static/images/arrow.png) no-repeat; height: 18px; width: 11px; display: inline-block; position: relative; top: -5px; left: 17px; }
-.order-detail .zj-cell-left{ color: #333; }
-.order-detail .zj-cell-right{ color: #666; }
-.order-detail .contact{ height: 30px; width: 72px; padding-left: 5px; background: url(../../static/images/newphone.png) no-repeat; background-size: 100% auto; }
-.order-detail .zj-worker{ padding-bottom: 4px; padding-top: 9px; }
-.order-detail .money{ float: right; color: #666; }
-.order-detail .multiple{ font-size: 14px; color: #999; margin-left: 26px; }
-.order-detail .actual{ color: #ff5000; font-size: 18px; }
-.order-detail .spacing{ margin-bottom: 12px; color: #333; }
-/*.order-detail .zj-pay:before{ border-top: 0; }*/
-.order-detail .zj-pay{ padding-bottom: 10px; position: relative; }
-.order-detail .zj-pay:before{ left: 10px; }
-.order-detail .zj-pay:after{
-  content: " ";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  height: 1px;
-  border-bottom: 1px solid #cccccc;
-  color: #cccccc;
-  -webkit-transform-origin: 0 100%;
-  transform-origin: 0 100%;
-  -webkit-transform: scaleY(0.5);
-  transform: scaleY(0.5);
+// 对Date的扩展，将 Date 转化为指定格式的String
+// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符， 
+// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字) 
+// 例子： 
+// (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423 
+// (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18 
+Date.prototype.Format = function (fmt) { //author: meizz 
+    var o = {
+        "M+": this.getMonth() + 1, //月份 
+        "d+": this.getDate(), //日 
+        "h+": this.getHours(), //小时 
+        "m+": this.getMinutes(), //分 
+        "s+": this.getSeconds(), //秒 
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+        "S": this.getMilliseconds() //毫秒 
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
 }
 
-.order-detail .refund{ display: inline-block; }
-.order-detail .refund-complete{ color: #ff5000; float: right; }
-.order-detail .refund-money{ margin-left: 60px; color: #666; float: right; }
-.order-detail .refund-sum{ float: right; }
-.order-detail .refund-lost{ float: right; }
-.order-detail .refund-disc{ float: right; }
-.order-detail .refund-line{ margin-top: 12px; }
-.order-detail .refund-list{ float: right; }
-.order-detail .contacts{ margin-bottom: 11px; }
-.order-detail .order-time{ margin-bottom: 11px; }
-
-/*--弹窗输入样式--*/
-.order-detail .memo-text{ width: 100%; outline: none; }
-
-/*--正在进行的文字样式--*/
-.processing{ color: #3fbef9; }
-
-/*--订单已取消--*/
-.round{ width: 11px; height: 11px; border-radius: 50%; position: relative; top: -6px; left: 50%; }
-.round-complete{ background: #3fbef9; }
-.round-processing{ background: #3fbef9; width: 7px; height: 7px; border: 2px solid #88d7fc; }
-.round-undone{ background: #fff; width: 9px; height: 9px; border: 1px solid #88d7fc; }
-
-/*--最下面按钮状态--*/
-.order-detail .delete-order{ width: 100%; height: 48.5px; background: #fff; margin-top: 8.5px; position: fixed; bottom: 0px; }
-.order-detail .delete-order:before{
+export default {
+  name:"order_detail",
+  data(){
+    return {
+      od:{
+        Service:{
+          ServiceName:"",
+          Content:"",
+          AddressInfo:{
+            Address1:"",
+            Address2:""
+          }
+        },
+        ActivityNgs:{
+          ServiceTypeRules:[]
+        },
+        Refunds:[],
+        IsNegotiable:""
+      }, // 订单详情
+      isError:false,
+      errorMsg:"",
+      isLoading:false
+    }
+  },
+  mounted(){
+    // 获取订单详情
+    if(this.orderId){
+      axios.post(API.GetOrderInfoEx,qs.stringify({
+        "Token": this.Token,
+        "OrderId": this.orderId
+      }),{
+        headers: {'Content-Type':'application/x-www-form-urlencoded'}
+      }).then((res)=>{
+        console.log("获取订单详情",res.data);
+        if(res.data.Meta.ErrorCode === '0'){
+          this.od = res.data.Body.Order;
+        }else{
+          this.isDelete = false;
+          this.isError = true;
+          this.errorMsg = res.data.Meta.ErrorMsg;
+        }
+      }).catch(function (error) {
+        console.log(error);
+        this.isError = true;
+        this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+      });
+    }
+  },
+  methods:{
+    delOrder(){
+      this.isLoading = true;
+      if(this.orderId){
+        axios.post(API.RemoveOrderEx,qs.stringify({
+          "Token": this.Token,
+          "OrderId": this.orderId
+        }),{
+          headers: {'Content-Type':'application/x-www-form-urlencoded'}
+        }).then((res)=>{
+          this.isLoading = false;
+          console.log("删除订单",res.data);
+          if(res.data.Meta.ErrorCode === '0'){
+            this.$router.push({path:'/order_list'});
+          }else{
+            this.isDelete = false;
+            this.isError = true;
+            this.errorMsg = res.data.Meta.ErrorMsg;
+          }
+        }).catch(function (error) {
+          console.log(error);
+          this.isError = true;
+          this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+        });
+      }
+    },
+    cancelOrder(){
+      this.isLoading = true;
+      if(this.orderId){
+        axios.post(API.CancelOrderEx,qs.stringify({
+          "Token": this.Token,
+          "OrderId": this.orderId
+        }),{
+          headers: {'Content-Type':'application/x-www-form-urlencoded'}
+        }).then((res)=>{
+          this.isLoading = false;
+          console.log("取消订单",res.data);
+          if(res.data.Meta.ErrorCode === '0'){
+            this.$router.go(0)
+          }else{
+            this.isDelete = false;
+            this.isError = true;
+            this.errorMsg = res.data.Meta.ErrorMsg;
+          }
+        }).catch(function (error) {
+          console.log(error);
+          this.isError = true;
+          this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+        });
+      }
+    },
+    payOrder(){
+      if(this.orderId){
+        this.$router.push({path:'/pay'});
+      }
+    },
+    sureOrder(){
+      this.isLoading = true;
+      if(this.orderId){
+        axios.post(API.CompleteOrderEx,qs.stringify({
+          "Token": this.Token,
+          "OrderId": this.orderId
+        }),{
+          headers: {'Content-Type':'application/x-www-form-urlencoded'}
+        }).then((res)=>{
+          this.isLoading = false;
+          console.log("确认订单",res.data);
+          if(res.data.Meta.ErrorCode === '0'){
+            this.$router.go(0)
+          }else{
+            this.isDelete = false;
+            this.isError = true;
+            this.errorMsg = res.data.Meta.ErrorMsg;
+          }
+        }).catch(function (error) {
+          console.log(error);
+          this.isError = true;
+          this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+        });
+      }
+    }
+  },
+  computed:{
+    situation(){
+      // 订单提交 && 未付款 需要指派 订单已提交---待付款
+      if(this.od.OrderStatus === '1' && this.od.IsPayOff ==='0'){
+        return 10;
+      }
+      // 订单已提交---待付款
+      if(this.od.OrderStatus === '10' && this.od.IsPayOff ==='0'){
+        return 100;
+      }
+      // 订单已提交---已付款---待工人接单
+      if(this.od.OrderStatus === '10' && this.od.IsPayOff ==='1'){
+        return 101;
+      }
+      // 订单已提交---未付款---服务中
+      if(this.od.OrderStatus === '20' && this.od.IsPayOff ==='0'){
+        return 200;
+      }
+      // 订单已提交---已付款---服务中
+      if(this.od.OrderStatus === '20' && this.od.IsPayOff ==='1'){
+        return 201;
+      }
+      // 订单已提交---已付款---完成服务
+      if(this.od.OrderStatus === '30' && this.od.IsPayOff ==='1'){
+        return 301;
+      }
+      // 订单已提交---已付款---服务已完成
+      if(this.od.OrderStatus === '40' && this.od.IsPayOff ==='1'){
+        return 401;
+      }
+      // 订单已提交---订单取消
+      if(this.od.OrderStatus === '50' && this.od.Refunds.length === 0){
+        return 50;
+      }
+      // 订单已提交---退款中
+      if(this.od.IsPayOff ==='1' && this.od.Refunds.length > 0){
+        let status = this.od.Refunds.every((v,i,arry)=>{
+          return v.Status > 1
+        })
+        if(status){
+          return 5012
+        }else{
+          return 5011;
+        } 
+      }
+    },
+    payable(){
+      // 订单优惠后价格 应付价格 0 满减 ，1 满返
+      let discountList =[];
+      if(this.od.ActivityNgs.ServiceTypeRules && this.od.ActivityNgs.ServiceTypeRules.length > 0){
+        this.od.ActivityNgs.ServiceTypeRules.map((v)=>{
+          v.Details.map((x)=>{
+            if(x.ReturnType === '0'){
+              let rule = [];
+              x.Rules.map((y)=>{
+                if(parseFloat(this.od.TotalPrice) >= parseFloat(y.Upper)){
+                  rule.push(parseFloat(y.Minus));
+                }
+              })
+              let max = rule.reduce((x,y)=>{
+                return (x>y) ? x:y;
+              })
+              discountList.push(max);
+            }
+          })
+        })
+        this.discountSum = discountList.reduce((x,y)=>{
+          return x+y;
+        },0)
+        if(this.od.DiscountAmount){
+          return this.od.TotalPrice-this.discountSum-parseFloat(this.od.DiscountAmount);
+        }else{
+          return this.od.TotalPrice-this.discountSum;
+        } 
+      }
+    },
+    serviceTypeRules(){
+      // 活动规则
+      let discountList = [];
+      if(this.od.ActivityNgs.ServiceTypeRules && this.od.ActivityNgs.ServiceTypeRules.length > 0){
+        this.od.ActivityNgs.ServiceTypeRules.map((v,j,arr)=>{
+          v.Details.map((x,i,arry)=>{
+            let rule = [];
+            x.Rules.map((y)=>{
+              if(parseFloat(this.od.TotalPrice) >= parseFloat(y.Upper)){
+                rule.push(y);
+              }
+            })
+            let max = rule.reduce((x,y)=>{
+              return (parseFloat(x.Minus)> parseFloat(y.Minus)) ? x:y;
+            })
+            arry[i]['Rule'] = max;
+            discountList.push(x);
+          })
+        })      
+      }
+      return discountList;
+    },
+    orderCreateTime(){
+      // 订单创建时间
+      if(this.od.CreateTime){
+        let time = this.od.CreateTime + "000";
+        return new Date(parseInt(time,10)).Format("yyyy-MM-dd hh:mm:ss");
+      } 
+    },
+    payOverTime(){
+      // 订单支付时间
+      if(this.od.PayOffTime){
+        let time = this.od.PayOffTime + "000";
+        return new Date(parseInt(time,10)).Format("yyyy-MM-dd hh:mm:ss");
+      }
+    },
+    serviceStartTime(){
+      // 服务开始时间
+      if(this.od.Service.ServiceStartTime){
+        let time = this.od.Service.ServiceStartTime + "000";   
+        return new Date(parseInt(time,10)).Format("yyyy-MM-dd hh:mm:ss");
+      }
+    },
+    acceptTime(){
+      //接单时间
+      if(this.od.AcceptTime){
+        let time = this.od.AcceptTime + "000";   
+        return new Date(parseInt(time,10)).Format("yyyy-MM-dd hh:mm:ss");
+      }
+    },
+    cancelTime(){
+      // 取消时间
+      if(this.od.CancelTime){
+        let time = this.od.CancelTime + "000";   
+        return new Date(parseInt(time,10)).Format("yyyy-MM-dd hh:mm:ss");
+      }
+    },
+    wkPhoneNumber(){
+      if(this.od.Worker){
+        return "tel:"+ this.od.Worker.PhoneNumber;
+      } 
+    },
+    ...mapState(['Token','orderId'])
+  }
+}  
+</script>
+<style scoped>
+.red {
+  color:#f43530;
+}
+.f16 {
+  font-size: 16px;
+}
+.fc9 {
+  color:#999;
+}
+.weui-cells {
+  margin-top: 10px;
+}
+.weui-cell {
+  font-size:14px;
+  line-height:1.75em;
+} 
+.weui-panel {
+  margin-top: 0;
+  font-size:14px;
+  padding:5px 0;
+}
+.weui-media-box {
+  padding:5px 15px 5px 15px;
+}
+.weui-panel__hd {
+  padding:5px 15px 10px;
+  font-size:14px;
+  color:#000;
+}
+.weui-media-box__desc {
+  line-height:1.8em;
+}
+.vue-btn {
+  position:relative;
+  display: inline-block;
+  width:120px;
+  padding-left: 14px;
+  padding-right:14px;
+  box-sizing: border-box;
+  font-size:14px;
+  line-height:2.5em; 
+  text-align: center;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  overflow: hidden;
+  text-decoration: none;
+  background:#fff;
+  outline: 0;
+  border:1px solid transparent;
+}
+.vue-btn:after {
   content: " ";
+  width: 200%;
+  height: 200%;
   position: absolute;
-  left: 0;
   top: 0;
-  right: 0;
-  height: 1px;
-  border-top: 1px solid #aaaaaa;
-  color: #aaaaaa;
+  left: 0;
+  border: 1px solid #000;
+  -webkit-transform: scale(0.5);
+  transform: scale(0.5);
   -webkit-transform-origin: 0 0;
   transform-origin: 0 0;
-  -webkit-transform: scaleY(0.5);
-  transform: scaleY(0.5);
+  box-sizing: border-box;
+  border-radius: 5px;
 }
-.order-detail .delete-btn{ color: #333; border: 1px #999 solid; font-size: 13px; border-radius: 3px; }
-.order-detail .pay-btn{ border: 1px #51d862 solid; background: #51d862; color: #fff; font-size: 13px; border-radius: 3px; }
-.order-detail .confirm-btn{ border: 1px #3fbef9 solid; color: #3fbef9; font-size: 13px; border-radius: 3px; }
-.order-detail .left-btn{ width: 85px; height: 29px; line-height: 30px; text-align: center; display: inline-block; position: relative; left: 174px; top: 8.5px; }
-.order-detail .right-btn{ width: 85px; height: 29px; line-height: 30px; text-align: center; display: inline-block; position: relative; left: 277px; top: 8.5px; }
-.order-detail .left-btnfr{ width: 85px; height: 29px; line-height: 30px; text-align: center; float: right; margin-top: 8.5px; margin-right: 14px; }
-.order-detail .right-btnfr{ width: 85px; height: 29px; line-height: 30px; text-align: center; float: right; margin-top: 8.5px; margin-right: 10px; }
-
-/*--弹出框样式--*/
-.order-detail .weui_dialog_confirm .zj-align{ text-align: center; }
-.order-detail .zj-bluecol{ color: #0687ff; }
-.weui_dialog_alert .zj-alert-word{ font-size: 14px; color: #333; }
-.weui_dialog_confirm .zj-confirm-word{ font-size: 14px; color: #333; }
-
-/*--待接单，点击支付--*/
-.zj-prompt{ width: 180px; height: 54px; color: white; opacity: 0; background: rgba(0,0,0,0.5); text-align: center; border-radius: 9px; font-size: 15px; position: absolute; top: 348px; left: 50%; margin-left: -90px; }
-.zj-prompt .prompt-news{ margin: 10px 13px 0; line-height: 1.2; }
-.prompt-animation
-{ 
-  animation: prompts 3s;
-  -moz-animation: prompts 3s;
-  -webkit-animation: prompts 3s;
-  -o-animation: prompts 3s;
+.vue-btn_plain-primary.vue-btn:after {
+  border: 1px solid #f43530;
 }
-@keyframes prompts
-{
-  0% { opacity: 1; }
-  100% { opacity: 0; }
+.vue-btn_plain-primary {
+  color:#f43530;
 }
-@-moz-keyframes prompts
-{
-  0% { opacity: 1; }
-  100% { opacity: 0; }
+.vue-btn_plain-success {
+  color:#27b8f3;
 }
-@-webkit-keyframes prompts
-{
-  0% { opacity: 1; }
-  100% { opacity: 0; }
+.vue-btn_plain-success.vue-btn:after {
+  border: 1px solid #27b8f3;
 }
-@-o-keyframes prompts
-{
-  0% { opacity: 1; }
-  100% { opacity: 0; }
+.weui-btn_primary:not(.weui-btn_disabled):active {
+  color: rgba(255, 255, 255, 0.6);
+  background-color: #27b8f3;
 }
-.swiper-container {
-        width: 100%;
-        height: 100%;
-    }
-.swiper-slide {
-    text-align: center;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    -webkit-justify-content: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    align-items: center;
+.weui-btn_primary {
+  background-color: #27b8f3;
 }
-.black_overlay{
- display: none;
- position: absolute;
- top: 0%;
- left: 0%;
- width: 100%;
- height: 100%;
- background-color: black;
- z-index:1001;
- -moz-opacity: 0.6;
- opacity:.60;
- filter: alpha(opacity=60);
-}
-.white_content {
- display: none;
- position: absolute;
- top: 15%;
- left: 0;
- width: 100%;
- z-index:1002;
- overflow: auto;
-}
-
-/*--新增加的按钮--*/
-.refresh-btn{
-  position: fixed;
-  bottom: 23%;
-  right: 15px;
-  width: 40px;
-  height: 40px;
-  z-index: 1000;
-}
-.backhome-btn{
-  position: fixed;
-  bottom: 13%;
-  right: 15px;
-  width: 40px;
-  height: 40px;
-  z-index:1000;
-}
-
-/*后加*/
-
-.notice-info{
-  width: 66%;
-  margin: auto;
-  padding: 8% 0 8% 0;
-}
-.info{
-    float: left;
-    margin-top: -10px;
-    margin-left: 8px;
-}
-.notice-info img{
-  float: left;
-}
-.info-state{
-  font-size: 18px;
-  color: #3ebff8;
-}
-.score{
-  position: relative;
-
-}
-.score:before {
-    content: '';
-    position: absolute;
-    width: 200%;
-    height: 1px;
-    bottom: 0;
-    border-bottom: 1px dashed #e4e4e4;
-    border-top:1px dashed #e4e4e4;
-    -webkit-transform-origin: 0 0;
-    transform-origin: 0 0;
-    -webkit-transform: scale(.5,.5);
-    transform: scale(.5,.5);
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-.status-line li{
-  color: #676767;
-  float: left;
-  width: 25%;
-  text-align: center;
-  padding: 10px 0;
-}
-#step{
-  width: 100%;
-}
-.step_ac{
-  color:#40bdfd !important;
+.weui-icon-success {
+  color:#27b8f3;
+} 
+.weui-dialog__btn_primary{
+  color: #27b8f3
 }
 </style>

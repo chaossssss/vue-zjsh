@@ -1,5 +1,5 @@
 <template>
-	<div id="app" style="height:100%;">
+	<div id="app">
 
   	<transition name="bounce">
 			<router-view></router-view>
@@ -37,11 +37,14 @@ export default {
   },
   created(){
 
+    // 是否是微信端打开
     if(is_weixn()){
       this.setCode(getvl("code"));
     }else{
-      console.log("不是微信浏览器");
+      // console.log("不是微信浏览器");
     }
+
+    // 翻转检测
 
     // 初始化项目获取token
     if(!this.Token){
@@ -56,6 +59,24 @@ export default {
       if(this.getSession('OrderId')){
         this.$store.dispatch('setOrderId',{
           txt: this.getSession('OrderId')
+        })
+      }
+    }
+
+    // 初始化获取 指定下单信息
+    if(!this.pointShop.ObjectId){
+      if(this.getSession('PointShop')){
+        this.$store.dispatch('setPointShop',{
+          txt: JSON.parse(this.getSession('PointShop'))
+        })
+      }
+    }
+
+    // 初始化获取 一件下单信息 (永久保存，下次一键下单需要显示)
+    if(!this.quickShop.ServiceTypeId){
+      if(this.getLocal('QuickShop')){
+        this.$store.dispatch('setQuickShop',{
+          txt: JSON.parse(this.getLocal('QuickShop'))
         })
       }
     }
@@ -88,6 +109,16 @@ export default {
       // Do something with response error
       return Promise.reject(error);
     });
+
+    // 微信分享
+    // wx.config({
+    //   debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+    //   appId: '', // 必填，公众号的唯一标识
+    //   timestamp: , // 必填，生成签名的时间戳
+    //   nonceStr: '', // 必填，生成签名的随机串
+    //   signature: '',// 必填，签名，见附录1
+    //   jsApiList: [] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    // });
   },
   methods:{
     getCookie(name){
@@ -101,13 +132,16 @@ export default {
     getSession(name){
       return sessionStorage.getItem(name);
     },
+    getLocal(name){
+      return localStorage.getItem(name);
+    },
     setCode(item){
       this.$store.dispatch('setCode',{
         txt:item
       })
     }
   },
-  computed:mapState(['Token','Code','orderId','userInfo','coupon'])
+  computed:mapState(['Token','Code','orderId','userInfo','coupon','pointShop','quickShop'])
 }
 </script>
 
@@ -121,15 +155,15 @@ body {
   font-size:14px;
 }
   /*CSS reset*/
-a,img,button,input,textarea,ul,li,div{-webkit-tap-highlight-color:rgba(255,255,255,0);}
-/*  html::-webkit-scrollbar,
+a,img,button,input,textarea,ul,li,div{-webkit-tap-highlight-color:rgba(255,255,255,0.6);}
+html::-webkit-scrollbar,
 body::-webkit-scrollbar{
   width:0;
   height:0;
-}*/
-  #app {
-    height: 100%;
-  }
+}
+#app {
+  height: 100%;
+}
 
 	.bounce-enter-active {
     animation: bounce-in .3s;

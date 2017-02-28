@@ -58,7 +58,18 @@ export default {
   },
   methods:{
     routeToOrder(){
+      // 首页进入重置数据
+      for(var i in this.pointShop){
+        if(this.pointShop[i] === "Total"){
+          this.pointShop[i] = "1";
+        }else{
+          this.pointShop[i] = "";
+        } 
+      }
       this.pointShop.ObjectId = this.msg.Id;
+      this.pointShop.ObjectName = this.msg.Name;
+      this.pointShop.ObjectPhoto = this.msg.Photo;
+      this.pointShop.ObjectPhone = this.msg.PhoneNumber;
       if(this.msg.Belong === 1){
         this.pointShop.ObjectType = '3';
       }

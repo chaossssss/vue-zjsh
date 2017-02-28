@@ -314,7 +314,6 @@ export default {
 	  	})
 	  	return newArry;
 	  }
-
 	  axios.post(API.InfoListEx,qs.stringify({
     }),{
       headers: {'Content-Type':'application/x-www-form-urlencoded'}

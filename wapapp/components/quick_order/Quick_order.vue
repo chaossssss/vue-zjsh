@@ -72,19 +72,19 @@
         </select>
       </div>
     </a>
-    <div class="weui-cell" :class="{'weui-cell_access':ct}"  v-show="sv.IsNegotiable ==='0'">
+    <div class="weui-cell" :class="{'weui-cell_access':(JSON.stringify(ct) !== '{}')}"  v-show="sv.IsNegotiable ==='0'">
       <div class="weui-cell__hd">
         <img src="../../static/images/pic-count.png" alt="" style="width:20px;margin-right:10px;display:block">
       </div>
       <div class="weui-cell__bd weui-cell_primary">
         <p>服务数量</p>
       </div>
-      <div class="weui-cell__ft" style="text-align:right;" v-if="ct">
+      <div class="weui-cell__ft flex1" style="text-align:right;" v-if="JSON.stringify(ct) !== '{}'">
         <select class="vue-select rtl fc8" name="" id="" v-model="quickShop.Total">
           <option :value="item" v-for="item in ct">{{item}}{{sv.UnitName}}</option>
         </select>
       </div>
-      <div class="zj_cell_right" v-if="!ct">
+      <div class="zj_cell_right" v-if="JSON.stringify(ct) === '{}'">
         <div class="zj_select_plus">
           <i class="zj_select_sub" @click="quickShop.Total--"></i>
           <input class="zj_select_num" type="number" maxlength="4" v-model="quickShop.Total">
@@ -107,31 +107,29 @@
   </div>
 
   <!-- 活动 -->
-  <div class="weui-cells" style="padding:10px 15px 0px 15px;" v-if="JSON.stringify(gt) !== '{}' && (gt.PromotionRule || gt.SpecialRule) && (gt.PromotionRule.length > 0 ||  gt.SpecialRule.length > 0)">
-    <div class="webkit_box pb10" v-show="gt.PromotionRule.length > 0" v-for="item in gt.PromotionRule" >
+  <div class="weui-cells" style="padding:10px 15px 0px 15px;" v-if="serviceTypeRules.length > 0 && sv.IsNegotiable ==='0'">
+    <div class="webkit_box pb10" v-show="item.ReturnType === '1'" v-for="item in serviceTypeRules" >
       <div class="weui-cell__hd">
         <img src="../../static/images/pic-orange-back.png" alt="" style="width:14px;margin-right:5px;display:block;">
       </div>
       <div class="weui-cell__bd weui-cell_primary">
-        <span class="f14 fc8">{{item.Ads}}</span>
-        <!-- <img src="../../static/images/pic-help.png" alt="" style="width:18px;vertical-align:text-top;"> -->
+        <span class="f14 fc8">{{item.Title}}</span>
       </div>
       <div class="zj_cell_ft">
-        <img v-show="item.Upper <= bill" style="width:16px;" src="../../static/images/pic-new-choose.png">
-        <img v-show="item.Upper > bill" style="width:16px;" src="../../static/images/pic-new-unchoose.png">
+        <img style="width:16px;" src="../../static/images/pic-new-choose.png">
+        <!-- <img v-show="item.Upper > bill" style="width:16px;" src="../../static/images/pic-new-unchoose.png"> -->
       </div>
     </div>
-    <div class="webkit_box pb10" v-show="gt.SpecialRule.length > 0" v-for="item in gt.SpecialRule">
+    <div class="webkit_box pb10" v-show="item.ReturnType === '0'" v-for="item in serviceTypeRules">
       <div class="weui-cell__hd">
         <img src="../../static/images/pic-red-cut.png" alt="" style="width:14px;margin-right:5px;display:block;">
       </div>
       <div class="weui-cell__bd weui-cell_primary">
-        <span class="f14 fc8">{{item.Ads}}</span>
-        <!-- <img src="../../static/images/pic-help.png" alt="" style="width:18px;vertical-align:text-top;"> -->
+        <span class="f14 fc8">{{item.Title}}</span>
       </div>
       <div class="zj_cell_ft">
-        <img v-show="item.Upper <= bill" style="width:16px;" src="../../static/images/pic-new-choose.png">
-        <img v-show="item.Upper > bill" style="width:16px;" src="../../static/images/pic-new-unchoose.png">
+        <img style="width:16px;" src="../../static/images/pic-new-choose.png">
+        <!-- <img v-show="item.Upper > bill" style="width:16px;" src="../../static/images/pic-new-unchoose.png"> -->
       </div>
     </div>
   </div>
@@ -147,11 +145,11 @@
         </span>
       </div>
     </div>
-    <div class="weui-panel__bd" v-show="gt.SpecialRule.length > 0" v-for="item in gt.SpecialRule">
+    <div class="weui-panel__bd" v-show="serviceTypeRules.length > 0 && item.ReturnType === '0'" v-for="item in serviceTypeRules">
       <div class="weui-media-box weui-media-box_text">
-        <span class="f14">{{item.Ads}}</span>
+        <span class="f14">{{item.Title}}</span>
         <span style="float:right;font-size:14px;color:#888">
-          <span>-¥{{item.Minus}}</span>
+          <span>-¥{{item.Rule.Minus}}</span>
         </span>
       </div>
     </div>
@@ -207,11 +205,8 @@
   <!-- 服务说明-->
   <div class="weui-cell bgf mb49 fc8 lh30">
     <div class="weui-cell__bd weui-cell_primary">
-      <p class="f15">服务说明</p>
-      <!-- <p class="f15" ng-bind="fw.Description"></p> -->
-      <p class="f13 lh24">
-        <span ng-bind="item"></span>
-      </p>
+      <p class="f14">服务说明</p>
+      <p class="f13" style="line-height:1.8em;" v-for="item in fw">{{item}}</p>
     </div>
   </div>
   
@@ -346,7 +341,7 @@ export default {
           if(res.data.Body.IsNegotiable === '0'){
             this.quickShop.ServicePrice = res.data.Body.PriceList[0];
           }else{
-            this.pointShop.ServicePrice = res.data.Body.StartingPrice;
+            this.quickShop.ServicePrice = res.data.Body.StartingPrice;
           }
         }else{
           this.isDelete = false;
@@ -409,7 +404,7 @@ export default {
 
     // 获取当前可参与的活动
     if(this.quickShop.ServiceTypeId){
-      axios.post(API.GetActivity,qs.stringify({
+      axios.post(API.GetActivityEx,qs.stringify({
         "Token": this.Token,
         "ServiceTypeId": this.quickShop.ServiceTypeId
       }),{
@@ -440,7 +435,9 @@ export default {
       }).then((res)=>{
         console.log("服务说明",res.data);
         if(res.data.Meta.ErrorCode === '0'){
-          
+          if(res.data.Body && res.data.Body.Description){
+            this.fw = this.regDec(res.data.Body.Description);
+          } 
         }else{
           this.isDelete = false;
           this.isError = true;
@@ -494,6 +491,7 @@ export default {
           if(res.data.Meta.ErrorCode === '0'){
             let orderId = res.data.Body.OrderId;
             this.setOrderId(orderId);
+            localStorage.setItem("QuickShop",JSON.stringify(this.quickShop));
             //0 定价去支付页面，1 面议去订单详情页面
             if(this.sv.IsNegotiable === '0'){
               this.$router.push({path:'/pay'});
@@ -531,6 +529,11 @@ export default {
       this.$store.dispatch('setOrderId',{
         txt:item
       })
+    },
+    regDec(string){
+      let content = string.replace(/\n/g,'|');
+      let arry = content.split('|');
+      return arry;
     }
   },
   computed:{
@@ -538,17 +541,51 @@ export default {
       return parseFloat(this.quickShop.ServicePrice)*parseFloat(this.quickShop.Total);
     },
     payable(){
-      if(this.gt.SpecialRule && this.gt.SpecialRule.length > 0){
-        let discountList = this.gt.SpecialRule.map((v,i,arry)=>{
-          if(parseFloat(this.bill) > parseFloat(v.Upper)){
-            return parseFloat(v.Minus);
-          }
+      // 订单优惠后价格 应付价格 0 满减 ，1 满返
+      let discountList =[];
+      if(this.gt.ServiceTypeRules && this.gt.ServiceTypeRules.length > 0){
+        this.gt.ServiceTypeRules.map((v)=>{
+          v.Details.map((x)=>{
+            if(x.ReturnType === '0'){
+              let rule = [];
+              x.Rules.map((y)=>{
+                if(parseFloat(this.bill) >= parseFloat(y.Upper)){
+                  rule.push(parseFloat(y.Minus));
+                }
+              })
+              let max = rule.reduce((x,y)=>{
+                return (x>y) ? x:y;
+              })
+              discountList.push(max);
+            }
+          })
         })
         this.discountSum = discountList.reduce((x,y)=>{
           return x+y;
         },0)
         return this.bill-this.discountSum;
       }
+    },
+    serviceTypeRules(){
+      let discountList = [];
+      if(this.gt.ServiceTypeRules && this.gt.ServiceTypeRules.length > 0){
+        this.gt.ServiceTypeRules.map((v,j,arr)=>{
+          v.Details.map((x,i,arry)=>{
+            let rule = [];
+            x.Rules.map((y)=>{
+              if(parseFloat(this.bill) >= parseFloat(y.Upper)){
+                rule.push(y);
+              }
+            })
+            let max = rule.reduce((x,y)=>{
+              return (parseFloat(x.Minus)> parseFloat(y.Minus)) ? x:y;
+            })
+            arry[i]['Rule'] = max;
+            discountList.push(x);
+          })
+        })      
+      }
+      return discountList;
     },
     Token(){
       return this.$store.state.Token;

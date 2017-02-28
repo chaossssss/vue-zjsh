@@ -70,7 +70,7 @@ export default {
 }
 
 .setTopLine(@c: #C7C7C7) {
-    content: " ";
+    content: "";
     position: absolute;
     left: 0;
     top: 0;
@@ -87,13 +87,14 @@ export default {
   height:100%;
 }
 .vue-tab__panel {
+  background-color:#fff;
   box-sizing:border-box;
   height:100%;
-  padding-bottom:60px;
   overflow:auto;
   -webkit-overflow-scrolling:touch;
 }
 .vue-tabbar {
+  display:-webkit-box;
   display:flex;
   position:absolute;
   z-index:500;
@@ -103,7 +104,7 @@ export default {
   box-shadow:0 0 10px 0px rgba(34,48,59,0.33);
 
   &:before {
-    content: " ";
+    content:"";
     position: absolute;
     left: 0;
     top: 0;
@@ -111,7 +112,9 @@ export default {
     height: 1px;
     border-top: 1px solid #C0BFC4;
     color: #C0BFC4;
+    -webkit-transform-origin:0 0;
     transform-origin: 0 0;
+    -webkit-transform:scaleY(0.5);
     transform: scaleY(0.5);
   }
 }

@@ -785,9 +785,9 @@ export default {
                     // console.log(this.swiperList);
                     // console.log(swiper.activeIndex);
                     // console.log("第几个",this.swiperList[swiper.activeIndex]);
-                    var lat = this.swiperList[swiper.activeIndex].Latitude;
-                    var lng = this.swiperList[swiper.activeIndex].Longitude;
-                    var point = new BMap.Point(lng, lat); 
+                    let lat = this.swiperList[swiper.activeIndex].Latitude;
+                    let lng = this.swiperList[swiper.activeIndex].Longitude;
+                    let point = new BMap.Point(lng, lat); 
                     clear_active(this.map,point);
                   }
                 }) 
@@ -861,21 +861,19 @@ export default {
 }
 </script>
 <style scoped>
-.vue-tab__panel {
-  overflow:hidden;
-}
 #map-container {
     font-size:14px;
     width:100%;
     box-sizing: border-box;
-    height:calc(100vh - 111px);
+    height:calc(100% - 111px);
 }
 </style>
 <style lang="less" scoped>
 .page {
   position: relative;
-  height: 100%;
+  height:100%;
   font-size:14px;
+  overflow:hidden;
 }
 .vue-topnav {
   position:absolute;
@@ -937,7 +935,7 @@ export default {
 }
 .vue-swiper {
   position:absolute;
-  bottom:20px;
+  bottom:75px;
   left:0;
   height:152px;
 }

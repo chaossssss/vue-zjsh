@@ -1,6 +1,6 @@
 <template>
 	<div class="page__bd">
-    <img style="width:35px;margin-left:8px;" src="../../static/images/pic-scan.png" alt="">
+    <img style="width:30px;margin-left:8px;" src="../../static/images/pic-scan.png" alt="">
     <div style="flex:2">
       <router-link to="/search" class="vue-search-bar">
         <form class="vue-search-bar__form" action="javascript:return true;">
@@ -16,7 +16,7 @@
         </form>
       </router-link>
     </div>
-    <img style="width:35px;margin-right:8px;" src="../../static/images/pic-news.png" alt="">
+    <img style="width:30px;margin-right:8px;" src="../../static/images/pic-news.png" alt="">
 </div> 
 </template>
 

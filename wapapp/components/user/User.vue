@@ -160,7 +160,7 @@ export default {
     margin-top: 3px;
 }
 .list-item{
-    padding: 13px 15px;
+    padding: 15px 15px;
     position: relative;
     display: -webkit-box;
     display: -webkit-flex;

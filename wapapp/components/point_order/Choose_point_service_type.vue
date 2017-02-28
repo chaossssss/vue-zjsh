@@ -1,7 +1,7 @@
 <template>
 <div style="position:relative;background-color: #fff;">
 	<div class="vue-cells__title">
-		为您提供以下服务
+		{{pointShop.ObjectName}}&nbsp;为您提供以下服务
 	</div>
 	<div class="vue-cells">
 		<div @click="routeToOrder(item)" class="vue-cell" :class="{'blue':item.ServiceTypeId === pointShop.ServiceTypeId}" v-for="item in serviceTypeList">
@@ -12,7 +12,7 @@
         {{item.Price}}/{{item.UnitName}}
       </div>
 			<div class="vue-cell__ft" v-if="item.IsNegotiable === '1'">
-				{{item.StartingPrice}}/{{item.UnitName}}
+				{{item.StartingPrice}}元起
 			</div>
 		</div>
 	</div>
@@ -85,7 +85,7 @@ export default {
       this.pointShop.UnitName = item.UnitName;
       if(item.IsNegotiable === '0'){
         this.pointShop.ServicePrice = item.Price;
-      }else{
+      }else if(item.IsNegotiable === '1'){
         this.pointShop.ServicePrice = item.StartingPrice;
       }
   		this.$store.dispatch('setPointShop',{
@@ -113,7 +113,7 @@ export default {
 }
 .vue-cell {
 	position: relative;
-	padding:10px 15px 10px 0;
+	padding:13px 15px 13px 0;
 	display: -webkit-box;
 	display:-webkit-flex;
 	display: flex;

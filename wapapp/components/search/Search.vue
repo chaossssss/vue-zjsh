@@ -1,10 +1,10 @@
 <template>
-<div style="height:100%;">
+<div>
 	<div class="vue-search-bar">
 	    <form class="vue-search-bar__form" action="javascript:return true;">
 	        <div class="vue-search-bar__box">
 	            <i class="weui-icon-search"></i>
-	            <input type="search" class="vue-search-bar__input" v-model="localSearchInput" v-focus placeholder="搜服务/工人/商户" required="" autofocus>
+	            <input type="search" class="vue-search-bar__input" v-model="localSearchInput" placeholder="搜服务/工人/商户" required="">
 	            <a href="javascript:;" class="weui-icon-clear" @click="searchClear"></a>
 	        </div>
 <!-- 	        <label class="vue-search-bar__label">
@@ -261,9 +261,9 @@ export default {
 	},
 	directives:{
 		focus:{
-			inserted:function(el){
-				el.focus();
-			}
+			// inserted:function(el){
+			// 	el.focus();
+			// }
 		}
 	}
 }
@@ -327,7 +327,7 @@ export default {
 	position:fixed;
 	top:0;
 	width:100%;
-	z-index:100;
+	z-index:1;
 	padding:10px 12px;
 	display:flex;
 	box-sizing:border-box;
@@ -432,7 +432,7 @@ export default {
 
 .vue-search-bar__cancel-btn {
 	display:block;
-	margin-left:12px;
+	padding-left:12px;
 	line-height:36px;
 	color:#666 ;
 	white-space:nowarp;
