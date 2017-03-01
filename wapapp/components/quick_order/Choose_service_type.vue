@@ -381,7 +381,9 @@ export default {
 			}else{
 				this.quickShop.ServiceTypeId = item.TypeId;
 				this.quickShop.ServiceTypeName = item.TypeName;
-				this.quickShop.Total = '1';
+				this.quickShop.Total = '1'; 
+				this.quickShop.ServiceStartAt = "";
+				this.quickShop.ServicePrice = "";
 				this.setQuickShop();
 				this.$router.push({path:'/quick_order'});
 			}	

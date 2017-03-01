@@ -105,7 +105,7 @@
         <div class="weui-media-box weui-media-box_text">
           <span class="f14">服务价格</span>
           <span style="float:right;font-size:14px;color:#888">
-            <span>¥{{od.Price}}元起</span>
+            <span>¥{{od.StartingPrice}}元&nbsp;起</span>
           </span>
         </div>
       </div>
@@ -429,16 +429,20 @@ export default {
                   rule.push(parseFloat(y.Minus));
                 }
               })
-              let max = rule.reduce((x,y)=>{
-                return (x>y) ? x:y;
-              })
-              discountList.push(max);
+              if(rule.length > 0){
+                let max = rule.reduce((x,y)=>{
+                  return (x>y) ? x:y;
+                })
+                discountList.push(max);
+              }
             }
           })
         })
-        this.discountSum = discountList.reduce((x,y)=>{
-          return x+y;
-        },0)
+        if(discountList.length > 0){
+          this.discountSum = discountList.reduce((x,y)=>{
+            return x+y;
+          },0)
+        }     
         if(this.od.DiscountAmount){
           return this.od.TotalPrice-this.discountSum-parseFloat(this.od.DiscountAmount);
         }else{
@@ -458,11 +462,13 @@ export default {
                 rule.push(y);
               }
             })
-            let max = rule.reduce((x,y)=>{
-              return (parseFloat(x.Minus)> parseFloat(y.Minus)) ? x:y;
-            })
-            arry[i]['Rule'] = max;
-            discountList.push(x);
+            if(rule.length > 0){
+              let max = rule.reduce((x,y)=>{
+                return (parseFloat(x.Minus)> parseFloat(y.Minus)) ? x:y;
+              })
+              arry[i]['Rule'] = max;
+              discountList.push(x);
+            }
           })
         })      
       }

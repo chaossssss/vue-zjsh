@@ -460,7 +460,10 @@ export default {
       }   
     },
     submit(){
-      if(this.Token && this.quickShop.ServiceTypeId && this.quickShop.ServiceStartAt && this.quickShop.ServiceAddressId && this.quickShop.ServicePrice){
+      if(this.Token && this.quickShop.ServiceTypeId && this.quickShop.ServiceStartAt && this.quickShop.ServiceAddressId){
+        if(this.sv.IsNegotiable === '1'){
+          this.quickShop.ServicePrice = "";
+        }
         this.isLoading = true;
         let Json_data = {
           "Token": this.Token,
@@ -553,17 +556,23 @@ export default {
                   rule.push(parseFloat(y.Minus));
                 }
               })
-              let max = rule.reduce((x,y)=>{
-                return (x>y) ? x:y;
-              })
-              discountList.push(max);
+              if(rule.length > 0){
+                let max = rule.reduce((x,y)=>{
+                  return (x>y) ? x:y;
+                })
+                discountList.push(max);
+              }  
             }
           })
         })
-        this.discountSum = discountList.reduce((x,y)=>{
-          return x+y;
-        },0)
+        if(discountList.length > 0){
+          this.discountSum = discountList.reduce((x,y)=>{
+            return x+y;
+          },0)
+        } 
         return this.bill-this.discountSum;
+      }else{
+        return null;
       }
     },
     serviceTypeRules(){
@@ -577,11 +586,13 @@ export default {
                 rule.push(y);
               }
             })
-            let max = rule.reduce((x,y)=>{
-              return (parseFloat(x.Minus)> parseFloat(y.Minus)) ? x:y;
-            })
-            arry[i]['Rule'] = max;
-            discountList.push(x);
+            if(rule.length > 0){
+              let max = rule.reduce((x,y)=>{
+                return (parseFloat(x.Minus)> parseFloat(y.Minus)) ? x:y;
+              })
+              arry[i]['Rule'] = max;
+              discountList.push(x);
+            }    
           })
         })      
       }

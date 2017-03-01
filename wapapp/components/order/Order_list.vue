@@ -39,7 +39,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="vue-panel__bd" @click="">		
+				<div class="vue-panel__bd" @click="routerTo(item.OrderId)">		
 						<div class="vue-cell" style="padding:0 15px 5px;" v-if="item.Worker">
 							<div class="vue-cell__hd">
 								<img :src="item.Worker.Icon" alt="" style="width:25px;height:25px;margin-right:10px;display:block;border-radius:50%;">	
@@ -76,6 +76,9 @@
 							<div class="vue-cell__ft" v-show="!item.Price && !item.StartingPrice">
 								面议
 							</div>
+							<div class="vue-cell__ft" v-show="!item.Price && item.StartingPrice">
+								¥{{item.StartingPrice}}元&nbsp;起
+							</div>
 						</div>
 						<div class="vue-cell" style="padding-top:5px;" v-show="item.situation === 100 || item.situation === 200">
 							<div class="vue-cell__bd"></div>
@@ -96,10 +99,10 @@
 					<div class="vue-cell" style="padding:5px 15px;">
 						<div class="vue-cell__bd"></div>
 						<div class="vue-cell_ft">
-							<button @click="delOrder" v-show="item.situation === 50" class="vue-btn vue-btn_plain-default">删除订单</button>
-			        <button @click="cancelOrder" v-show="parseInt(item.OrderStatus)<=14" class="vue-btn vue-btn_plain-default">取消订单</button>
-			        <button @click="payOrder" v-show="item.situation === 100 || item.situation === 200" class="vue-btn vue-btn_plain-primary">支付</button>
-			        <button @click="sureOrder" v-show="item.situation === 401" class="vue-btn vue-btn_plain-success">确认服务完成</button>
+							<button @click="delOrder(item.OrderId)" v-show="item.situation === 50" class="vue-btn vue-btn_plain-default">删除订单</button>
+			        <button @click="cancelOrder(item.OrderId)" v-show="parseInt(item.OrderStatus)<=14" class="vue-btn vue-btn_plain-default">取消订单</button>
+			        <button @click="payOrder(item.OrderId)" v-show="item.situation === 100 || item.situation === 200" class="vue-btn vue-btn_plain-primary">支付</button>
+			        <button @click="sureOrder(item.OrderId)" v-show="item.situation === 401" class="vue-btn vue-btn_plain-success">确认服务完成</button>
 						</div>
 					</div>
 				</div>
@@ -111,13 +114,33 @@
 		</div>
 
 	</div>
-	
+
+<!-- 错误提示 -->
+  <div class="js_dialog" id="iosDialog2" v-show="isError">
+      <div class="weui-mask"></div>
+      <div class="weui-dialog">
+          <div class="weui-dialog__bd">{{errorMsg}}</div>
+          <div class="weui-dialog__ft">
+              <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" @click="isError = false">朕 知道了!</a>
+          </div>
+      </div>
+  </div>  
+
+<!-- 正在提交提示 -->
+  <div id="loadingToast" v-show="isLoading">
+      <div class="weui-mask_transparent"></div>
+      <div class="weui-toast">
+          <i class="weui-loading weui-icon_toast"></i>
+          <p class="weui-toast__content">正在提交...</p>
+      </div>
+  </div>
     
 </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
 import API from '../../config/backend';
 import axios from 'axios';
@@ -191,83 +214,86 @@ export default {
     },
     delOrder(orderId){
       this.isLoading = true;
-      // if(this.orderId){
-      //   axios.post(API.RemoveOrderEx,qs.stringify({
-      //     "Token": this.Token,
-      //     "OrderId": this.orderId
-      //   }),{
-      //     headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      //   }).then((res)=>{
-      //     this.isLoading = false;
-      //     console.log("删除订单",res.data);
-      //     if(res.data.Meta.ErrorCode === '0'){
-      //       this.$router.push({path:'/order_list'});
-      //     }else{
-      //       this.isDelete = false;
-      //       this.isError = true;
-      //       this.errorMsg = res.data.Meta.ErrorMsg;
-      //     }
-      //   }).catch(function (error) {
-      //     console.log(error);
-      //     this.isError = true;
-      //     this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
-      //   });
-      // }
+      if(orderId){
+        axios.post(API.RemoveOrderEx,qs.stringify({
+          "Token": this.Token,
+          "OrderId": orderId
+        }),{
+          headers: {'Content-Type':'application/x-www-form-urlencoded'}
+        }).then((res)=>{
+          this.isLoading = false;
+          console.log("删除订单",res.data);
+          if(res.data.Meta.ErrorCode === '0'){
+            this.$router.go(0);
+          }else{
+            this.isDelete = false;
+            this.isError = true;
+            this.errorMsg = res.data.Meta.ErrorMsg;
+          }
+        }).catch(function (error) {
+          console.log(error);
+          this.isError = true;
+          this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+        });
+      }
     },
     cancelOrder(orderId){
       this.isLoading = true;
-      // if(this.orderId){
-      //   axios.post(API.CancelOrderEx,qs.stringify({
-      //     "Token": this.Token,
-      //     "OrderId": this.orderId
-      //   }),{
-      //     headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      //   }).then((res)=>{
-      //     this.isLoading = false;
-      //     console.log("取消订单",res.data);
-      //     if(res.data.Meta.ErrorCode === '0'){
-      //       this.$router.go(0)
-      //     }else{
-      //       this.isDelete = false;
-      //       this.isError = true;
-      //       this.errorMsg = res.data.Meta.ErrorMsg;
-      //     }
-      //   }).catch(function (error) {
-      //     console.log(error);
-      //     this.isError = true;
-      //     this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
-      //   });
-      // }
+      if(orderId){
+        axios.post(API.CancelOrderEx,qs.stringify({
+          "Token": this.Token,
+          "OrderId": orderId
+        }),{
+          headers: {'Content-Type':'application/x-www-form-urlencoded'}
+        }).then((res)=>{
+          this.isLoading = false;
+          console.log("取消订单",res.data);
+          if(res.data.Meta.ErrorCode === '0'){
+            this.$router.go(0)
+          }else{
+            this.isDelete = false;
+            this.isError = true;
+            this.errorMsg = res.data.Meta.ErrorMsg;
+          }
+        }).catch(function (error) {
+          console.log(error);
+          this.isError = true;
+          this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+        });
+      }
     },
     payOrder(orderId){
-      // if(this.orderId){
-      //   this.$router.push({path:'/pay'});
-      // }
+      if(orderId){
+      	this.$store.dispatch('setOrderId',{
+      		txt:orderId
+      	});
+        this.$router.push({path:'/pay'});
+      }
     },
     sureOrder(orderId){
-      // this.isLoading = true;
-      // if(this.orderId){
-      //   axios.post(API.CompleteOrderEx,qs.stringify({
-      //     "Token": this.Token,
-      //     "OrderId": this.orderId
-      //   }),{
-      //     headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      //   }).then((res)=>{
-      //     this.isLoading = false;
-      //     console.log("确认订单",res.data);
-      //     if(res.data.Meta.ErrorCode === '0'){
-      //       this.$router.go(0)
-      //     }else{
-      //       this.isDelete = false;
-      //       this.isError = true;
-      //       this.errorMsg = res.data.Meta.ErrorMsg;
-      //     }
-      //   }).catch(function (error) {
-      //     console.log(error);
-      //     this.isError = true;
-      //     this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
-      //   });
-      // }
+      this.isLoading = true;
+      if(orderId){
+        axios.post(API.CompleteOrderEx,qs.stringify({
+          "Token": this.Token,
+          "OrderId": orderId
+        }),{
+          headers: {'Content-Type':'application/x-www-form-urlencoded'}
+        }).then((res)=>{
+          this.isLoading = false;
+          console.log("确认订单",res.data);
+          if(res.data.Meta.ErrorCode === '0'){
+            this.$router.go(0)
+          }else{
+            this.isDelete = false;
+            this.isError = true;
+            this.errorMsg = res.data.Meta.ErrorMsg;
+          }
+        }).catch(function (error) {
+          console.log(error);
+          this.isError = true;
+          this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+        });
+      }
     },
     situation(orderStatus,isPayOff,refundStatus){
     	// 传入订单状态，是否支付，是否退款
@@ -327,16 +353,20 @@ export default {
                   rule.push(parseFloat(y.Minus));
                 }
               })
-              let max = rule.reduce((x,y)=>{
-                return (x>y) ? x:y;
-              })
-              discountList.push(max);
+              if(rule.length > 0){
+              	let max = rule.reduce((x,y)=>{
+	                return (x>y) ? x:y;
+	              })
+	              discountList.push(max);
+              }
             }
           })
         })
-        let discountSum = discountList.reduce((x,y)=>{
-          return x+y;
-        },0)
+        if(discountList.length > 0){
+					var discountSum = discountList.reduce((x,y)=>{
+	          return x+y;
+	        },0)
+      	}
         if(discountAmount){
           return totalPrice - discountSum - parseFloat(discountAmount);
         }else{
@@ -347,8 +377,13 @@ export default {
     formatTime(times){
   		let time = times + "000";
   		return new Date(parseInt(time,10)).Format("yyyy-MM-dd hh:mm:ss");
+    },
+    routerTo(orderId){
+    	this.$store.dispatch('setOrderId',{
+    		txt:orderId
+    	});
+    	this.$router.push({path:'/order_detail'});
     }
-
   },
   watch:{
   	type(){
