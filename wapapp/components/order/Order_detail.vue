@@ -100,12 +100,12 @@
     </div>
 
     <!-- 面议 || 未接单后 -->
-    <div class="weui-panel" v-show="od.IsNegotiable === '1'">
+    <div class="weui-panel" v-show="od.IsNegotiable === '1' && situation === 10">
       <div class="weui-panel__bd">
         <div class="weui-media-box weui-media-box_text">
           <span class="f14">服务价格</span>
           <span style="float:right;font-size:14px;color:#888">
-            <span>¥{{od.StartingPrice}}</span>
+            <span>¥{{od.Price}}元起</span>
           </span>
         </div>
       </div>
@@ -408,8 +408,10 @@ export default {
           return v.Status > 1
         })
         if(status){
+          //完成退款
           return 5012
         }else{
+          // 退款中
           return 5011;
         } 
       }

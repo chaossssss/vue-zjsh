@@ -755,6 +755,12 @@ better-npm-run:
     dotenv "^2.0.0"
     object-assign "^4.0.1"
 
+better-scroll:
+  version "0.1.14"
+  resolved "https://registry.yarnpkg.com/better-scroll/-/better-scroll-0.1.14.tgz#1edf216935fe274e35eeaaec3e52ebd436c327de"
+  dependencies:
+    babel-runtime "^6.0.0"
+
 big.js@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/big.js/-/big.js-3.1.3.tgz#4cada2193652eb3ca9ec8e55c9015669c9806978"
