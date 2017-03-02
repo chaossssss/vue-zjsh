@@ -158,7 +158,7 @@
 				<div class="info-list">
 					<div class="info-title score">工人照片</div>
 					<div class="worker-img">
-						<img src="" alt="">
+						<img v-for="item in avList" :src="item" alt="">
 					</div>
 				</div>
 			</div>
@@ -198,6 +198,7 @@ export default {
       	}
       },
       ac:null,	// 工人评价列表
+      avList:null, // 工人头像列表
       scroll:null,	// 滚动对象挂载
       svList:null,// 工人服务列表 
       isError:false,
@@ -225,7 +226,6 @@ export default {
 	      this.isError = true;
 	      this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
 	    });
-
 	    this.getServiceList();    
   	}
   },
@@ -300,6 +300,24 @@ export default {
   	},
   	getWorkerDetail(){
   		window.scrollTo(0,0);
+  		axios.post(API.Avatar,qs.stringify({
+		    "Type": '1',
+		    "Id": this.objectInfo.Id
+		  }),{
+		    headers: {'Content-Type':'application/x-www-form-urlencoded'}
+		  }).then((res)=>{
+		    console.log("工人头像列表",res.data);
+		    if(res.data.Meta.ErrorCode === '0'){
+					this.avList = res.data.Body.Avatars;
+		    }else{
+		      this.isError = true;
+		      this.errorMsg = res.data.Meta.ErrorMsg;
+		    }
+		  }).catch(function (error) {
+		    console.log(error);
+		    this.isError = true;
+		    this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+		  });
   	}
   },
   computed:{
