@@ -70,13 +70,19 @@ const api = {
 	"CreateOrderEx": app + "OrderInfo/CreateOrderEx",
 
 	// 根据类型和id查找工人
-	"Detail": app + "Provider/Detail",
+	"DetailEx": app + "Provider/DetailEx",
 
 	// 根据工人ID 获取服务列表
 	"GetWorkerServiceListEx": app + "ClientInfo/GetWorkerServiceListEx",
 
 	// 根据商户ID 获取服务列表
 	"GetMerchantServiceListEx": app + "ClientInfo/GetMerchantServiceListEx",
+
+	// 根据工人ID 获取服务列表
+	"GetWorkerServicePriceListEx": app + "ClientInfo/GetWorkerServicePriceListEx",
+
+	// 根据商户ID 获取服务列表
+	"GetMerchantServicePriceListEx": app + "ClientInfo/GetMerchantServicePriceListEx",
 
 	// 获取订单列表
 	"GetOrderListEx": app + "OrderInfo/GetOrderListEx",
@@ -108,6 +114,14 @@ const api = {
 	// 获取红包列表
 	"CouponList": app + "Coupon/CouponList",
 
+	// 获取工人／商户／全城商户详细信息 (接口已废)
+	// "GetDetails": app + "Search/GetDetails",
+
+	// 获取收藏工人列表
+	"WorkerList": app + "clientfavorites/WorkerList",
+
+	// 获取收藏商户列表
+	"BusinessList": app + "clientfavorites/BusinessList",
 
 }
 

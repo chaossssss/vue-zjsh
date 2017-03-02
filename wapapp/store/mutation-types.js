@@ -36,3 +36,6 @@ const SET_ORDER_ID = "SET_ORDER_ID";
 // 设置 红包缓存
 export
 const SET_COUPON = "SET_COUPON";
+// 设置 工人 商户信息
+export
+const SET_OBJECT_INFO = "SET_OBJECT_INFO";

@@ -2,7 +2,7 @@
 <div>
   <div class="vue-slider">
     <div class="vue-silder__box">
-      <div class="vue-slider__box_content">
+      <div class="vue-slider__box_content" @click="routerToDetail">
         <div class="vue-box__hd">
           <img style="width:85px;height:85px;position:relative;" :src="msg.Photo" alt="">  
         </div>
@@ -40,6 +40,8 @@
 </div>  
 </template>
 <script>
+import {mapState} from 'vuex';
+
 export default {
   name:"serviceCity",
   props: ['msg'],
@@ -52,34 +54,41 @@ export default {
     phoneNumber(){
       return "tel:"+this.msg.PhoneNumber;
     },
-    pointShop(){
-      return this.$store.state.pointShop;
-    }
+    ...mapState(['objectInfo','pointShop'])
   },
   methods:{
     routeToOrder(){
       // 首页进入重置数据
-      for(var i in this.pointShop){
-        if(this.pointShop[i] === "Total"){
-          this.pointShop[i] = "1";
-        }else{
-          this.pointShop[i] = "";
-        } 
-      }
-      this.pointShop.ObjectId = this.msg.Id;
-      this.pointShop.ObjectName = this.msg.Name;
-      this.pointShop.ObjectPhoto = this.msg.Photo;
-      this.pointShop.ObjectPhone = this.msg.PhoneNumber;
-      if(this.msg.Belong === 1){
-        this.pointShop.ObjectType = '3';
-      }
-      this.setPointShop();
-      this.$router.push({path:'/point_order'});
+      // for(var i in this.pointShop){
+      //   if(this.pointShop[i] === "Total"){
+      //     this.pointShop[i] = "1";
+      //   }else{
+      //     this.pointShop[i] = "";
+      //   } 
+      // }
+      // this.pointShop.ObjectId = this.msg.Id;
+      // this.pointShop.ObjectName = this.msg.Name;
+      // this.pointShop.ObjectPhoto = this.msg.Photo;
+      // this.pointShop.ObjectPhone = this.msg.PhoneNumber;
+      // if(this.msg.Belong === 1){
+      //   this.pointShop.ObjectType = '3';
+      // }
+      // this.setPointShop();
+      // this.$router.push({path:'/point_order'});
     },
     setPointShop(){
       this.$store.dispatch('setPointShop',{
         txt:this.pointShop
       });
+    },
+    routerToDetail(){
+      let objectInfo = {};
+      objectInfo.Type = '2';
+      objectInfo.Id = this.msg.Id;
+      this.$store.dispatch('setObjectInfo',{
+        txt: objectInfo
+      })
+      this.$router.push({path:'/business'});
     }
   }
 }

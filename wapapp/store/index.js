@@ -17,6 +17,10 @@ default new Vuex.Store({
 		Token: "",
 		Code: "", // 微信支付凭证
 		userInfo: {}, // 用户信息
+		objectInfo: { // 获取工人，商户详细信息
+			Type: "", // 1 工人，2 商户
+			Id: ""
+		},
 		pointShop: {
 			ObjectType: "", // 2 工人，3 商户
 			ObjectId: "", //工人／商户 id
@@ -164,6 +168,15 @@ default new Vuex.Store({
 			commit(types.SET_COUPON, {
 				txt: data.txt
 			});
+		},
+		setObjectInfo({
+			commit
+		}, data) {
+			console.log(types.SET_OBJECT_INFO);
+			sessionStorage.setItem("ObjectInfo", JSON.stringify(data.txt));
+			commit(types.SET_OBJECT_INFO, {
+				txt: data.txt
+			});
 		}
 	},
 	mutations: {
@@ -236,6 +249,12 @@ default new Vuex.Store({
 		}) {
 			console.log(txt);
 			return state.Code = txt;
+		},
+		[types.SET_OBJECT_INFO](state, {
+			txt
+		}) {
+			console.log(txt);
+			return state.objectInfo = txt;
 		}
 	}
 })

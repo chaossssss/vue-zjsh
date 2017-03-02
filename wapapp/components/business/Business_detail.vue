@@ -202,28 +202,45 @@
 		</div>
 	</div>
 
+<!-- 错误提示 -->
+  <div class="js_dialog" id="iosDialog2" v-show="isError">
+      <div class="weui-mask"></div>
+      <div class="weui-dialog">
+          <div class="weui-dialog__bd">{{errorMsg}}</div>
+          <div class="weui-dialog__ft">
+              <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" @click="isError = false">朕 知道了!</a>
+          </div>
+      </div>
+  </div> 	
 	
 </div>	
 </template>
 
-
 <script>
-import $ from 'jquery';
-$(function(){
-	var hei=$(window).height()-$("header").innerHeight()-$(".tab").innerHeight();
-	$("#tab-fuwu").css("height",hei);
-})
+import { mapState } from 'vuex';
+import InfiniteLoading from 'vue-infinite-loading';
+import API from '../../config/backend';
+import axios from 'axios';
+import qs from 'qs';
+
 export default {
-    data(){
-        return{
-            tab:'aa',
-            flag:1,
-            Htab:1
-        }            
-    }
+	name:"business",
+  data(){
+    return{
+        tab:'aa',
+        flag:1,
+        Htab:1
+    }            
+  },
+  mounted(){
+  	if(this.objectInfo){
+  		
+  	}
+  },
+  computed:{
+  	...mapState(['Token','objectInfo'])
+  }
 }
-
-
 </script>
 
 <style scoped>
@@ -277,7 +294,8 @@ header{
     left: 0px;
     opacity: 0.8;
     z-index: 5;
-    background: #2381C3;
+    background: -webkit-linear-gradient(top,#2883dc,#2bc6dc);
+    background:linear-gradient(top,#2883dc,#2bc6dc);
 }
 .header-cont{
     position: relative;

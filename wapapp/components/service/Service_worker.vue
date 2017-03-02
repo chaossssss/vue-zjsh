@@ -2,7 +2,7 @@
 <div>
 	<div class="vue-slider">
     <div class="vue-silder__box">
-      <div class="vue-slider__box_content">
+      <div class="vue-slider__box_content" @click="routerToDetail">
         <div class="vue-box__hd"> 
           <img style="width:85px;height:85px;position:relative;" :src="msg.Photo" alt="">  
         </div>
@@ -51,6 +51,8 @@
 </div>	
 </template>
 <script>
+import {mapState} from 'vuex';
+
 export default {
 	name:"serviceWorker",
   props: ['msg'],
@@ -63,9 +65,7 @@ export default {
     phoneNumber(){
       return "tel:"+this.msg.PhoneNumber;
     },
-    pointShop(){
-      return this.$store.state.pointShop;
-    }
+    ...mapState(['objectInfo','pointShop'])
   },
   methods:{
     routeToOrder(){
@@ -92,6 +92,15 @@ export default {
       this.$store.dispatch('setPointShop',{
         txt:this.pointShop
       });
+    },
+    routerToDetail(){
+      let objectInfo = {};
+      objectInfo.Type = '1';
+      objectInfo.Id = this.msg.Id;
+      this.$store.dispatch('setObjectInfo',{
+        txt: objectInfo
+      })
+      this.$router.push({path:'/worker'});
     }
   }
 }

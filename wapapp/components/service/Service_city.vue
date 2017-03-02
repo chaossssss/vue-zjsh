@@ -2,7 +2,7 @@
 <div>
 	<div class="vue-slider">
     <div class="vue-silder__box">
-      <div class="vue-slider__box_content">
+      <div class="vue-slider__box_content" @click="routerToDetail">
         <div class="vue-box__hd">
           <img style="width:85px;height:85px;position:relative;" :src="msg.Photo" alt="">  
         </div>
@@ -40,6 +40,8 @@
 </div>	
 </template>
 <script>
+import {mapState} from 'vuex';
+
 export default {
 	name:"serviceCity",
   props: ['msg'],
@@ -52,32 +54,48 @@ export default {
     phoneNumber(){
       return "tel:"+this.msg.PhoneNumber;
     },
-    pointShop(){
-      return this.$store.state.pointShop;
-    }
+    ...mapState(['objectInfo','pointShop'])
   },
   methods:{
-    routeToOrder(){
-      // 首页进入重置数据
-      for(var i in this.pointShop){
-        if(this.pointShop[i] === "Total"){
-          this.pointShop[i] = "1";
-        }else{
-          this.pointShop[i] = "";
-        } 
-      }
-      this.pointShop.ObjectId = this.msg.Id;
-      this.pointShop.ObjectName = this.msg.Name;
-      this.pointShop.ObjectPhoto = this.msg.Photo;
-      this.pointShop.ObjectGender = this.msg.Gender;
-      this.pointShop.ObjectPhone = this.msg.PhoneNumber;
+    routeToOrder(){    
       if(this.msg.Belong === 3){
+        // 首页进入重置数据
+        for(var i in this.pointShop){
+          if(this.pointShop[i] === "Total"){
+            this.pointShop[i] = "1";
+          }else{
+            this.pointShop[i] = "";
+          } 
+        }
+        this.pointShop.ObjectId = this.msg.Id;
+        this.pointShop.ObjectName = this.msg.Name;
+        this.pointShop.ObjectPhoto = this.msg.Photo;
+        this.pointShop.ObjectGender = this.msg.Gender;
+        this.pointShop.ObjectPhone = this.msg.PhoneNumber;
+        // 2 工人，3 商户
         this.pointShop.ObjectType = '2';
+        this.setPointShop();
+        this.$router.push({path:'/point_order'});
       }else{
         this.pointShop.ObjectType = '3';
+      }    
+    },
+    routerToDetail(){
+      let objectInfo = {}; 
+      objectInfo.Id = this.msg.Id;
+      if(this.msg.Belong === 3){
+        objectInfo.Type = '1';
+        this.$store.dispatch('setObjectInfo',{
+          txt: objectInfo
+        })
+        this.$router.push({path:'/worker'});
+      }else{
+        objectInfo.Type = '2';
+        this.$store.dispatch('setObjectInfo',{
+          txt: objectInfo
+        })
+        this.$router.push({path:'/business'});
       }
-      this.setPointShop();
-      this.$router.push({path:'/point_order'});
     },
     setPointShop(){
       this.$store.dispatch('setPointShop',{

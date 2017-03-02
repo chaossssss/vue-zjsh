@@ -54,11 +54,21 @@ export default {
         })
       };
     }
+
     // 初始化获取 订单id
     if(!this.orderId){
       if(this.getSession('OrderId')){
         this.$store.dispatch('setOrderId',{
           txt: this.getSession('OrderId')
+        })
+      }
+    }
+
+    // 初始化获取 工人 商户 详情
+    if(!this.objectInfo.Id){
+      if(this.getSession('ObjectInfo')){
+        this.$store.dispatch('setObjectInfo',{
+          txt: JSON.parse(this.getSession('ObjectInfo'))
         })
       }
     }
@@ -141,7 +151,7 @@ export default {
       })
     }
   },
-  computed:mapState(['Token','Code','orderId','userInfo','coupon','pointShop','quickShop'])
+  computed:mapState(['Token','Code','orderId','userInfo','coupon','pointShop','quickShop','objectInfo'])
 }
 </script>
 

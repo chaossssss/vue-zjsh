@@ -19,23 +19,32 @@ import axios from 'axios';
 
 export default {
 	name:'activity',
-    data() {
-      return {
-        list: []
-      };
-    },
-    methods: {
-      async onInfinite() {
-        await axios.get(API.GetAds).then((res) => {
-          console.log(res.data.Body);
-          if(res.data.Body.Ads){
-            this.list = this.list.concat(res.data.Body.Ads);
-            this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
-          }
-        })
-      }
-    },
-    components:{InfiniteLoading}
+  data() {
+    return {
+      list: []
+    };
+  },
+  methods: {
+    async onInfinite() {
+      await axios.get(API.GetAds, JSON.stringify({}),{
+        headers: {'Content-Type':'application/json;charset=utf-8'}
+      }).then((res)=>{
+        console.log(res.data.Body);
+        if(res.data.Body && res.data.Body.Ads){
+          this.list = this.list.concat(res.data.Body.Ads);
+          this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
+        }
+      });
+      // await axios.get(API.GetAds).then((res) => {
+      //   console.log(res.data.Body);
+      //   if(res.data.Body && res.data.Body.Ads){
+      //     this.list = this.list.concat(res.data.Body.Ads);
+      //     this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
+      //   }
+      // })
+    }
+  },
+  components:{InfiniteLoading}
 }
 </script>
 

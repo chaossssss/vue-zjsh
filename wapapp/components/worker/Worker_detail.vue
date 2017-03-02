@@ -1,30 +1,31 @@
 <template>
 <div>
-	<header style="background-image: url(http://up.qqya.com/allimg/201710-t/17-101803_106599.jpg);">
+	<header :style="{'background-image':'url('+us.Photo+')'}">
 		<div class="shade"></div>
 		<div class="header-cont">
-			<img src="http://up.qqya.com/allimg/201710-t/17-101803_106599.jpg" alt="" class="head-img">
+			<img class="head-img" :src="us.Photo">
 			<div class="info f_left">
 				<div class="names">
 					<span class="qualification f_left">N项认证</span>
-					<span class="name f_left">商户主页</span>
+					<span class="name f_left">{{us.Name}}</span>
 				</div>
 				<div class="clear"></div>
-				<div class="grade">接单数:45/电话数:99/评分:5</div>
+				<div class="grade">接单数:{{us.OrderCount2}}&nbsp;/&nbsp;电话数:{{us.PhoneCount2}}&nbsp;/&nbsp;评分:{{us.Grade2}}</div>
 				<div class="servs">
-					<div class="ser-itel">充氟利昂</div>
-					<div class="ser-itel">充氟利昂</div>
-					<div class="ser-itel">小时工</div>
+					<p class="ser-itel" v-if="us.TagList.Count > 0" v-for="item in us.TagList.TagList">{{item.TagName}}</p>
 				</div>
 			</div>
-			<a href="tel:13148366695"><img src="../../static/images/call.png" alt="" class="img-call f_right"></a>
+			<a :href="'tel:'+us.PhoneNumber"><img src="../../static/images/call.png" alt="" class="img-call f_right"></a>
 			<div class="clear"></div>
-			<div class="activity-list">
+			<div class="activity-list" v-if="serviceTypeRules.length > 0">
 				<div class="items">
-					<div class="ac-item"><span class="ac-icon bg-o">减</span>在线支付满200减20</div>
-					<div class="ac-item"><span class="ac-icon bg-r">返</span>领取优惠券，满200减20</div>
+					<div class="ac-item" v-for="item in serviceTypeRules">
+						<span class="ac-icon bg-o" v-if="item.ReturnType === '0'">减</span>
+						<span class="ac-icon bg-r" v-if="item.ReturnType === '1'">返</span>
+						<span>{{item.Help}}</span>
+					</div>					
 				</div>
-				<div class="ac-nums f_right">2个活动</div>
+				<div class="ac-nums f_right">{{serviceTypeRules.length}}个活动</div>
 			</div>
 			<div class="clear"></div>
 		</div>
@@ -33,38 +34,41 @@
 	<div class="main">
 		<div class="tab">
 			<ul class="score">
-				<li :class="{'active':flag==1}" @click="tab='aa',flag=1">服务</li>
-				<li :class="{'active':flag==2}" @click="tab='bb',flag=2">评价</li>
-				<li :class="{'active':flag==3}" @click="tab='cc',flag=3">工人</li>		
+				<li :class="{'active':tab===0}" @click="chooseTab(0)">服务</li>
+				<li :class="{'active':tab===1}" @click="chooseTab(1)">评价</li>
+				<li :class="{'active':tab===2}" @click="chooseTab(2)">工人</li>		
 			</ul>
 			<div class="clear"></div>
 		</div>
-		<div v-show="tab==='aa'">
+		<div v-show="tab===0" v-if="svList">
 			<div class="ser-list">
-				<div class="ser-item score">
-					<div class="ser-title f_left">新房开荒旧房开心</div>
-					<div class="f_right" style="font-size:12px;"><span class="price">￥50</span>元/小时</div>
+				<div class="ser-item score" v-if="items.Child.length = 0" v-for="items in svList">
+					<div class="ser-title f_left">{{items.Name}}</div>
+					<div class="f_right" style="font-size:12px;"><span class="price">￥{{items.Price}}</span></div>
 					<div class="clear"></div>
-					<div class="ser-info f_left">新房开荒旧房开心新房开荒旧房开心</div>
+					<div class="ser-info f_left"></div>
 					<div class="btn-buy f_right">购买</div>
 					<div class="clear"></div>
 				</div>
-				<div class="ser-item score">
-					<div class="ser-title f_left">小时工</div>
+				<div class="ser-item score" v-if="items.Child.length > 0" v-for="items in svList">
+					<div class="ser-title f_left">{{items.Name}}</div>
 					<div class="btn-buy f_right mgtop0">购买</div>
 					<div class="clear"></div>
-					<div class="ser-info f_left">新房开荒旧房开心新房开荒旧房开心</div>
+					<div v-for="item in items.Child">
+						<div class="ser-info f_left">{{item.Name}}</div>
+						<div class="f_right mgtop8" style="font-size:12px;"><span class="price">￥{{item.Price}}</span></div>
+						<div class="clear"></div>
+					</div>
+
+<!-- 					<div class="ser-info f_left">新房开荒旧房开心新房开荒旧房开心</div>
 					<div class="f_right mgtop8" style="font-size:12px;"><span class="price">￥50</span>元/小时</div>
-					<div class="clear"></div>
-					<div class="ser-info f_left">新房开荒旧房开心新房开荒旧房开心</div>
-					<div class="f_right mgtop8" style="font-size:12px;"><span class="price">￥50</span>元/小时</div>
-					<div class="clear"></div>
+					<div class="clear"></div> -->
 				</div>
 					
 			</div>
 		</div>
-		<div v-show="tab==='bb'">
-			<div class="pingjia-list">
+		<div v-show="tab===1" >
+			<div class="pingjia-list" >
 				<!-- 没有评价要显示的 -->
 				<div class="no-pingjia">
 					<img src="../../static/images/no-pingjia.png" alt="">
@@ -118,7 +122,7 @@
 			</div>
 			<img src="../../static/images/write-cont.png" alt="" class="write-cont">
 		</div>
-		<div v-show="tab==='cc'">
+		<div v-show="tab===2">
 			<div class="detail-info">
 				<div class="line"></div>
 				<div class="info-list">
@@ -180,22 +184,110 @@
 		</div>
 	</div>
 
-	
+<!-- 错误提示 -->
+  <div class="js_dialog" id="iosDialog2" v-show="isError">
+      <div class="weui-mask"></div>
+      <div class="weui-dialog">
+          <div class="weui-dialog__bd">{{errorMsg}}</div>
+          <div class="weui-dialog__ft">
+              <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" @click="isError = false">朕 知道了!</a>
+          </div>
+      </div>
+  </div> 	
+
 </div>	
 </template>
 
-
 <script>
+import { mapState } from 'vuex';
+import InfiniteLoading from 'vue-infinite-loading';
+import API from '../../config/backend';
+import axios from 'axios';
+import qs from 'qs';
+
 export default {
-    data(){
-        return{
-            tab:'aa',
-            flag:1
-        }            
-    }
+	name:"worker",
+  data(){
+    return{
+      tab: 0,
+      us:{		// 工人详情
+      	TagList:{
+      		TagList:[]
+      	}
+      },
+      svList:null, // 工人服务列表
+      isError:false,
+      errorMsg:""
+    }            
+  },
+  mounted(){
+  	if(this.objectInfo.Id){
+  		axios.post(API.DetailEx,qs.stringify({
+	      "Token": this.Token,
+	      "Type": this.objectInfo.Type,
+	      "Id": this.objectInfo.Id
+	    }),{
+	      headers: {'Content-Type':'application/x-www-form-urlencoded'}
+	    }).then((res)=>{
+	      console.log("工人详情",res.data);
+	      if(res.data.Meta.ErrorCode === '0'){
+	        this.us =res.data.Body.Worker;
+	      }else{
+	        this.isError = true;
+	        this.errorMsg = res.data.Meta.ErrorMsg;
+	      }
+	    }).catch(function (error) {
+	      console.log(error);
+	      this.isError = true;
+	      this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+	    });
+
+	    axios.post(API.GetWorkerServicePriceListEx,qs.stringify({
+	      "Token": this.Token,
+	      "Id": this.objectInfo.Id
+	    }),{
+	      headers: {'Content-Type':'application/x-www-form-urlencoded'}
+	    }).then((res)=>{
+	      console.log("工人服务列表",res.data);
+	      if(res.data.Meta.ErrorCode === '0'){
+	        this.svList = res.data.Body.ServiceTypeList;
+	      }else{
+	        this.isError = true;
+	        this.errorMsg = res.data.Meta.ErrorMsg;
+	      }
+	    }).catch(function (error) {
+	      console.log(error);
+	      this.isError = true;
+	      this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+	    });
+  	}
+  },
+  methods:{
+  	chooseTab(index){
+  		// 0 服务 1 评价 2 工人
+  		this.tab = index;
+  		// switch index {
+  		// 	case 0 :
+
+  		// }
+  	}
+  },
+  computed:{
+  	serviceTypeRules(){
+  		// 二维数组扁平化
+  		let list = [];
+  		if(this.us.hasOwnProperty('ActivityNgs')){
+  			this.us.ActivityNgs.ServiceTypeRules.map((v,i,arry)=>{
+	  			v.Details.map((x)=>{
+	  				list.push(x);
+	  			})
+	  		}) 		
+  		} 	
+  		return list;	
+  	},
+  	...mapState(['Token','objectInfo'])
+  }
 }
-
-
 </script>
 
 <style scoped>
@@ -247,7 +339,8 @@ header{
     left: 0px;
     opacity: 0.8;
     z-index: 5;
-    background: #2381C3;
+    background: -webkit-linear-gradient(top,#2883dc,#2bc6dc);
+    background:linear-gradient(top,#2883dc,#2bc6dc);
 }
 .header-cont{
     position: relative;
@@ -308,12 +401,16 @@ header{
 	color:#fff;
 	font-size: 12px;
 }
-.ac-item,.ac-nums{
-    margin-top: 12px;
+.ac-item,
+.ac-nums{
+	position: relative;
+  margin-top: 12px;
 }
 .items{
     width: 80%;
     float: left;
+    max-height:62px;
+    overflow: hidden;
 }
 .ac-icon{
     padding: 2px;
