@@ -123,6 +123,12 @@ const api = {
 	// 获取收藏商户列表
 	"BusinessList": app + "clientfavorites/BusinessList",
 
+	// 获取工人评价
+	"GetWorkerEvaluationList": app + "ClientEvaluation/GetWorkerEvaluationList",
+
+	// 获取商户评价
+	"GetMerchantEvaluationList": app + "ClientEvaluation/GetMerchantEvaluationList",
+
 }
 
 export

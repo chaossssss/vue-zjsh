@@ -1,6 +1,6 @@
 <template>
 <div>
-	<header :style="{'background-image':'url('+us.Photo+')'}">
+	<header :style="{'background-image':'url('+us.Photo+')'}" style="position:fixed;top:0;left:0;z-index:3;background-color:#fff;">
 		<div class="shade"></div>
 		<div class="header-cont">
 			<img class="head-img" :src="us.Photo">
@@ -31,8 +31,8 @@
 		</div>
 		<div class="clear"></div>
 	</header>
-	<div class="main">
-		<div class="tab">
+	<div class="main" style="padding-top:160px;">
+		<div class="tab" >
 			<ul class="score">
 				<li :class="{'active':tab===0}" @click="chooseTab(0)">服务</li>
 				<li :class="{'active':tab===1}" @click="chooseTab(1)">评价</li>
@@ -40,17 +40,9 @@
 			</ul>
 			<div class="clear"></div>
 		</div>
-		<div v-show="tab===0" v-if="svList">
-			<div class="ser-list">
-				<div class="ser-item score" v-if="items.Child.length = 0" v-for="items in svList">
-					<div class="ser-title f_left">{{items.Name}}</div>
-					<div class="f_right" style="font-size:12px;"><span class="price">￥{{items.Price}}</span></div>
-					<div class="clear"></div>
-					<div class="ser-info f_left"></div>
-					<div class="btn-buy f_right">购买</div>
-					<div class="clear"></div>
-				</div>
-				<div class="ser-item score" v-if="items.Child.length > 0" v-for="items in svList">
+		<div v-show="tab===0" id="wrapper0"  v-if="svList" style="margin-top:45px;height:calc(100vh - 205px);">
+			<div class="ser-list" >
+				<div class="ser-item score" v-show="items.Child.length > 0" v-for="items in svList">
 					<div class="ser-title f_left">{{items.Name}}</div>
 					<div class="btn-buy f_right mgtop0">购买</div>
 					<div class="clear"></div>
@@ -58,24 +50,27 @@
 						<div class="ser-info f_left">{{item.Name}}</div>
 						<div class="f_right mgtop8" style="font-size:12px;"><span class="price">￥{{item.Price}}</span></div>
 						<div class="clear"></div>
-					</div>
-
-<!-- 					<div class="ser-info f_left">新房开荒旧房开心新房开荒旧房开心</div>
-					<div class="f_right mgtop8" style="font-size:12px;"><span class="price">￥50</span>元/小时</div>
-					<div class="clear"></div> -->
-				</div>
-					
+					</div>	
+				</div>	
+				<div class="ser-item score" v-show="items.Child.length === 0" v-for="items in svList">
+					<div class="ser-title f_left">{{items.Name}}</div>
+					<div class="f_right" style="font-size:12px;"><span class="price">￥{{items.Price}}</span></div>
+					<div class="clear"></div>
+					<div class="ser-info f_left"></div>
+					<div class="btn-buy f_right">购买</div>
+					<div class="clear"></div>
+				</div>				
 			</div>
 		</div>
-		<div v-show="tab===1" >
-			<div class="pingjia-list" >
+		<div v-show="tab===1" id="wrapper1" style="margin-top:45px;height:calc(100vh - 205px);">
+			<div class="pingjia-list">
 				<!-- 没有评价要显示的 -->
 				<div class="no-pingjia">
 					<img src="../../static/images/no-pingjia.png" alt="">
 					<div class="no-title">暂无评价</div>
 				</div>
 				<!-- 有评价要显示的 -->
-				<div class="pingjia-item score">
+				<!-- <div class="pingjia-item score" v-if="ac">
 					<img src="http://up.qqya.com/allimg/201710-t/17-101803_106599.jpg" alt="" class="img-pingjia f_left">
 					<div class="pingjia-info f_left">
 						<div class="phone">
@@ -118,66 +113,52 @@
 						</div>
 					</div>
 					<div class="clear"></div>
-				</div>
+				</div> -->
 			</div>
-			<img src="../../static/images/write-cont.png" alt="" class="write-cont">
+			<!-- <img src="../../static/images/write-cont.png" alt="" class="write-cont"> -->
 		</div>
-		<div v-show="tab===2">
+		<div v-show="tab===2" id="wrapper2" style="margin-top:45px;height:calc(100vh - 205px);">
 			<div class="detail-info">
 				<div class="line"></div>
 				<div class="info-list">
 					<div class="info-title score">服务信息</div>
-					<div class="info-cont score">服务时间：10:00-12:00</div>
-					<div class="info-cont score">工人地址：延安里延安里延安里延安里里延安里</div>
-					<div class="info-cont score">服务范围：小时工 月嫂</div>
-					<div class="info-cont score">标签：
+					<div class="info-cont score">服务时间：{{us.ServiceTime}}</div>
+					<div class="info-cont score">服务地址：{{us.Address}}</div>
+					<div class="info-cont score">服务范围：{{us.ServiceScope}}</div>
+					<div class="info-cont score" v-if="us.TagList.Count > 0">标签：
 						<div class="info-tags f_right">
-							<span class="info-tag">人美</span>
-							<span class="info-tag">善良</span>
-							<span class="info-tag">金针菇</span>
-							<span class="info-tag">金针菇</span>
-							<span class="info-tag">金针菇</span>
-							<span class="info-tag">金针菇</span>
-							<span class="info-tag">金针菇</span>
-							<span class="info-tag">金针</span>
+							<span class="info-tag" v-for="item in us.TagList.TagList">{{item}}</span>
 						</div>
 						<div class="clear"></div>
 					</div>
 					<div class="info-cont">认证：
-						<img src="http://up.qqya.com/allimg/201710-t/17-101803_106599.jpg" alt="" class="img-rz">
-						<img src="http://up.qqya.com/allimg/201710-t/17-101803_106599.jpg" alt="" class="img-rz">
-						<img src="http://up.qqya.com/allimg/201710-t/17-101803_106599.jpg" alt="" class="img-rz">
-						<img src="http://up.qqya.com/allimg/201710-t/17-101803_106599.jpg" alt="" class="img-rz">
+						<img v-for="item in us.SystemCertification" :src="item.Image" alt="" class="img-rz">
 					</div>
 				</div>
 				<div class="line"></div>
 				<div class="info-list">
 					<div class="info-title score">工人信息</div>
 					<div class="worker-info f_left score-right">	
-						<div class="worker-cont">籍贯：浙江</div>
-						<div class="worker-cont">学历：大专</div>
-						<div class="worker-cont">身高：190cm</div>
-						<div class="worker-cont">血腥：B</div>
+						<div class="worker-cont">籍贯：{{us.NativeAddress}}</div>
+						<div class="worker-cont">学历：{{us.Education}}</div>
+						<div class="worker-cont">身高：{{us.Stature}}</div>
+						<div class="worker-cont">血型：{{us.BloodType}}</div>
 					</div>
 					<div class="worker-info f_right">
-						<div class="worker-cont">工作年限：3年</div>
-						<div class="worker-cont">星　　座：处女座</div>
+						<div class="worker-cont">工作年限：{{us.WorkingYears}}</div>
+						<div class="worker-cont">星　　座：{{us.Constellation}}</div>
 					</div>
 					<div class="clear"></div>
 					<div class="info-sign">
-						<div class="signature score">个性说明：我是帅哥帅哥帅哥帅哥帅哥帅哥帅哥帅哥帅哥帅哥帅哥帅哥</div>
-						<div class="signature">商户介绍：我是帅哥帅哥帅哥帅哥帅哥帅哥帅哥帅哥帅哥帅哥帅哥帅哥</div>
+						<div class="signature score">个性说明：{{us.Signature}}</div>
+						<div class="signature">商户介绍：{{us.Intro}}</div>
 					</div>
 				</div>
 				<div class="line"></div>
 				<div class="info-list">
 					<div class="info-title score">工人照片</div>
 					<div class="worker-img">
-						<img src="http://up.qqya.com/allimg/201710-t/17-101803_106599.jpg" alt="">
-						<img src="http://up.qqya.com/allimg/201710-t/17-101803_106599.jpg" alt="">
-						<img src="http://up.qqya.com/allimg/201710-t/17-101803_106599.jpg" alt="">
-						<img src="http://up.qqya.com/allimg/201710-t/17-101803_106599.jpg" alt="">
-						<img src="http://up.qqya.com/allimg/201710-t/17-101803_106599.jpg" alt="">
+						<img src="" alt="">
 					</div>
 				</div>
 			</div>
@@ -200,6 +181,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import BScroll from 'better-scroll';
 import InfiniteLoading from 'vue-infinite-loading';
 import API from '../../config/backend';
 import axios from 'axios';
@@ -215,7 +197,9 @@ export default {
       		TagList:[]
       	}
       },
-      svList:null, // 工人服务列表
+      ac:null,	// 工人评价列表
+      scroll:null,	// 滚动对象挂载
+      svList:null,// 工人服务列表 
       isError:false,
       errorMsg:""
     }            
@@ -242,34 +226,80 @@ export default {
 	      this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
 	    });
 
-	    axios.post(API.GetWorkerServicePriceListEx,qs.stringify({
-	      "Token": this.Token,
-	      "Id": this.objectInfo.Id
-	    }),{
-	      headers: {'Content-Type':'application/x-www-form-urlencoded'}
-	    }).then((res)=>{
-	      console.log("工人服务列表",res.data);
-	      if(res.data.Meta.ErrorCode === '0'){
-	        this.svList = res.data.Body.ServiceTypeList;
-	      }else{
-	        this.isError = true;
-	        this.errorMsg = res.data.Meta.ErrorMsg;
-	      }
-	    }).catch(function (error) {
-	      console.log(error);
-	      this.isError = true;
-	      this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
-	    });
+	    this.getServiceList();    
   	}
   },
   methods:{
   	chooseTab(index){
   		// 0 服务 1 评价 2 工人
   		this.tab = index;
-  		// switch index {
-  		// 	case 0 :
-
-  		// }
+  		switch (index) {
+  			case 0 :
+  				this.getServiceList();
+  				break;
+  			case 1 :
+  				this.getAssess();
+  				break;
+  			case 2 :
+  				this.getWorkerDetail();
+  				break;
+  			default :
+  				break;
+  		}
+  	},
+  	getServiceList(){
+  		window.scrollTo(0,0);
+			axios.post(API.GetWorkerServicePriceListEx,qs.stringify({
+		    "Token": this.Token,
+		    "Id": this.objectInfo.Id
+		  }),{
+		    headers: {'Content-Type':'application/x-www-form-urlencoded'}
+		  }).then((res)=>{
+		    console.log("工人服务列表",res.data);
+		    if(res.data.Meta.ErrorCode === '0'){
+		      this.svList = res.data.Body.ServiceTypeList;
+		      this.scroll = new BScroll(document.getElementById('wrapper0'), {
+					  startX: 0,
+					  startY: 0
+					})					
+		    }else{
+		      this.isError = true;
+		      this.errorMsg = res.data.Meta.ErrorMsg;
+		    }
+		  }).catch(function (error) {
+		    console.log(error);
+		    this.isError = true;
+		    this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+		  });
+  	},
+  	getAssess(){
+  		window.scrollTo(0,0);
+  		// axios.post(API.GetWorkerEvaluationList,qs.stringify({
+		  //   "ID": this.objectInfo.Id,
+		  //   "PageIndex": "10",
+		  //   "PageSize": "1"
+		  // }),{
+		  //   headers: {'Content-Type':'application/x-www-form-urlencoded'}
+		  // }).then((res)=>{
+		  //   console.log("工人评价列表",res.data);
+		  //   if(res.data.Meta.ErrorCode === '0'){
+		  //     this.ac = res.data.Body.EvaluationList;
+		  //     this.scroll = new BScroll(document.getElementById('wrapper0'), {
+				// 	  startX: 0,
+				// 	  startY: 0
+				// 	})					
+		  //   }else{
+		  //     this.isError = true;
+		  //     this.errorMsg = res.data.Meta.ErrorMsg;
+		  //   }
+		  // }).catch(function (error) {
+		  //   console.log(error);
+		  //   this.isError = true;
+		  //   this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+		  // });
+  	},
+  	getWorkerDetail(){
+  		window.scrollTo(0,0);
   	}
   },
   computed:{
@@ -423,8 +453,14 @@ header{
 .bg-r{
 	background: #eb6876;
 }
-
 /*tab框切换*/
+.tab {
+	position: fixed;
+  background: #fff;
+  top: 160px;
+  width: 100%;
+  z-index:3;
+}
 .tab ul{
 	height: 45px;
 }
@@ -508,10 +544,9 @@ header{
 	margin-top: 10px;
 }
 .no-pingjia{
-	display: none;
 	text-align: center;
-    color: #989898;
-    margin-top: 15%;
+  color: #989898;
+	margin-top: 30%;
 }
 .no-pingjia img{
 	width: 30%;
@@ -541,6 +576,8 @@ header{
 }
 .img-rz{
 	width: 17px;
+	height:17px;
+	margin-right: 6px;
 	vertical-align: text-bottom;
 	border-radius: 3px;
 }
