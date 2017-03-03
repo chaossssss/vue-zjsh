@@ -294,7 +294,7 @@ export default {
 		  //     this.scroll = new BScroll(document.getElementById('wrapper0'), {
 				// 	  startX: 0,
 				// 	  startY: 0
-				// 	})					
+				// 	})
 		  //   }else{
 		  //     this.isError = true;
 		  //     this.errorMsg = res.data.Meta.ErrorMsg;

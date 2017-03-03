@@ -1,7 +1,7 @@
 <template>
   <div class="vue-tab">
       <div class="vue-tab__panel">
-      
+
       <router-view></router-view>
 
       </div>
@@ -17,12 +17,12 @@
               <span style="display: inline-block;position: relative;">
                   <span class="vue-tabbar__icon vue-tabbar__activity"></span>
 
-              </span>      
+              </span>
               <p class="vue-tabbar__label">活动</p>
           </router-link>
           <router-link to="/quick_order" class="vue-tabbar__item" active-class="vue-bar__item_on">
               <span class="vue-bar__circle" >
-                <span class="vue-tabbar__icon vue-tabbar__quickorder"></span>     
+                <span class="vue-tabbar__icon vue-tabbar__quickorder"></span>
 
               </span>
               <p class="vue-tabbar__label vue-tabbar__circle_label">一键下单</p>
@@ -30,7 +30,6 @@
           <router-link to="/menu/order_list" class="vue-tabbar__item" active-class="vue-bar__item_on">
               <span style="display: inline-block;position: relative;">
                   <span class="vue-tabbar__icon vue-tabbar__orderlist"></span>
-                
               </span>
               <p class="vue-tabbar__label">订单</p>
           </router-link>
@@ -38,7 +37,7 @@
               <span style="display: inline-block;position: relative;">
                 <span class="vue-tabbar__icon vue-tabbar__user"></span>
               </span>
-              
+
               <p class="vue-tabbar__label">我的</p>
           </router-link>
       </div>
@@ -108,7 +107,7 @@ export default {
     position: absolute;
     left: 0;
     top: 0;
-    right: 0; 
+    right: 0;
     height: 1px;
     border-top: 1px solid #C0BFC4;
     color: #C0BFC4;
@@ -129,7 +128,7 @@ export default {
   .setTapColor();
 
   &.vue-bar__item_on {
-    .vue-tabbar__service {   
+    .vue-tabbar__service {
       background:url('../../static/images/menu-service-on.png') no-repeat;
       background-size:100%;
     }
@@ -177,7 +176,7 @@ export default {
       top:50%;
       left:50%;
       transform:translate(-50%,-50%);
-    }  
+    }
   }
 }
 

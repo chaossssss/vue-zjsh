@@ -16,7 +16,7 @@
             </div>
         </router-link>
     </div>
-    
+
     <div class="weui-cells" style="padding: 12px;margin-top: 0.5em;">
         <div class="weui-flex">
             <div class="weui-flex__item score">
@@ -25,14 +25,14 @@
                     <div class="item-name">我的帐户</div>
                 </router-link>
             </div>
-            
+
             <div class="weui-flex__item score">
                 <router-link to="/user_discount">
                     <div class="placeholder"><img src="../../static/images/my_red_packet.png" alt=""></div>
                     <div class="item-name">我的红包</div>
                 </router-link>
             </div>
-            
+
             <div class="weui-flex__item">
                 <router-link to="/user_collect">
                     <div class="placeholder"><img src="../../static/images/my_collect.png" alt=""></div>
@@ -79,7 +79,6 @@
         <p class="tel">客服电话：<a href="tel:4008-026-056" style="color:#26b8f3;">4008-026-056</a></p>
         <p class="ser-time">服务时间：每天9:00-21:00</p>
     </div>
-    
 </div>
 </template>
 
@@ -91,11 +90,11 @@ import axios from 'axios';
 import qs from 'qs';
 
 export default {
-	name:"user",
+  name:"user",
   data(){
     return {
 
-    }   
+    }
   },
   mounted(){
     if(!this.userInfo){

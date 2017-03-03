@@ -19,14 +19,14 @@ function getvl(name) {
   return "";
 }
 // 是否是微信浏览器
-function is_weixn(){  
-  var ua = navigator.userAgent.toLowerCase();  
-  if(ua.match(/MicroMessenger/i)=="micromessenger") {  
-      return true;  
-  } else {  
-      return false;  
-  }  
-}  
+function is_weixn(){
+  var ua = navigator.userAgent.toLowerCase();
+  if(ua.match(/MicroMessenger/i)=="micromessenger") {
+      return true;
+  } else {
+      return false;
+  }
+}
 
 export default {
   name:"app",
