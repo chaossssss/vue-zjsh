@@ -25,12 +25,12 @@
 
         <div class="weui-cell__bd">
           <!-- 工人相关 -->
-          <div class="worker-about clr">
+          <div class="worker-about">
             <!-- 工人姓名 -->
-            <span class="worker-name f-left">{{ data.Name }}</span>
+            <span class="worker-name">{{ data.Name }}</span>
 
             <!-- 评价列表 -->
-            <div class="worker-evaluate f-left">
+            <div class="worker-evaluate">
               <!-- 点赞 -->
               <img class="like-icon" v-show="data.IsPraise==1" src="../../static/images/dianzan.png" alt="">
               <img class="like-icon" v-show="data.IsPraise==0" src="../../static/images/hand.png" alt="">
@@ -48,17 +48,19 @@
 
           <!-- 工人信息 -->
           <div class="worker-info">
-            <!-- 工作类型 -->
-            <span class="info-type">{{ data.Services.DefaultServiceType.Name }}</span>
+            <div class="info-detail">
+              <!-- 工作类型 -->
+              <span class="info-type">{{ data.Services.DefaultServiceType.Name }}</span>
 
-            <!-- 籍贯 -->
-            <span class="info-address">{{ data.NativePlace }}</span>
+              <!-- 籍贯 -->
+              <span class="info-address">{{ data.NativePlace }}</span>
 
-            <!-- 工作年限 -->
-            <span class="info-year">{{ data.DisplayAttribute }}</span>
+              <!-- 工作年限 -->
+              <span class="info-year">{{ data.DisplayAttribute }}</span>
+            </div>
 
             <!-- 详情图标 -->
-            <img class="right_gray f-right" src="../../static/images/right_gray.png" alt="">
+            <img class="right_gray" src="../../static/images/right_gray.png" alt="">
           </div>
 
           <!-- 认证图标 -->
@@ -93,15 +95,12 @@
           </div>
 
           <!-- 商家信息 -->
-          <div class="business-info clr">
+          <div class="business-info">
             <!-- 服务类型 -->
-            <span class="business-type f-left">{{ data.Services.DefaultServiceType.Name }}</span>
-
-            <!-- 详情图标 -->
-            <img class="right_gray f-right" src="../../static/images/right_gray.png" alt="">
+            <span class="business-type">{{ data.Services.DefaultServiceType.Name }}</span>
 
             <!-- 商家评价 -->
-            <div class="business-evaluate f-right">
+            <div class="business-evaluate">
               <!-- 点赞 -->
               <img class="like-icon" v-show="data.IsPraise==1" src="../../static/images/dianzan.png" alt="">
               <img class="like-icon" v-show="data.IsPraise==0" src="../../static/images/hand.png" alt="">
@@ -115,6 +114,9 @@
               <img class="grade-icon" src="../../static/images/pingfen.png" alt="">
               <span class="grade">{{ data.Grade2 }}</span>
             </div>
+
+            <!-- 详情图标 -->
+            <img class="right_gray" src="../../static/images/right_gray.png" alt="">
           </div>
 
           <!-- 认证图标 -->
@@ -213,17 +215,6 @@ export default {
 <style scoped>
 /* common style */
 
-.f-left
-{
-  float: left;
-}
-
-.f-right
-{
-  float: right;
-}
-
-/* 清除浮动 */
 .clr::before,
 .clr::after
 {
@@ -231,11 +222,6 @@ export default {
   display: block;
 
   clear: both;
-}
-
-.right_gray
-{
-  width: 8px;
 }
 
 /* common style end */
@@ -387,9 +373,20 @@ header .tab-nav > li:last-child
 }
 
 .like,
-.star,
+.star
+{
+  display: inline-block;
+
+  width: 35px;
+
+  text-align: left;
+  font-size: 12px;
+  color: #8c8a9f;
+}
+
 .grade
 {
+  text-align: left;
   font-size: 12px;
   color: #8c8a9f;
 }
@@ -399,8 +396,8 @@ header .tab-nav > li:last-child
 .grade-icon
 {
   width: 12px;
-
-  margin-left: 15px;
+  height: 12px;
+  margin-right: 1px;
 }
 
 .like-icon
@@ -408,9 +405,37 @@ header .tab-nav > li:last-child
   margin-left: 0;
 }
 
-/* worker-list&businesss-list common style */
+/* 评价样式（点赞、收藏、评分） */
+.worker-about .worker-evaluate,
+.business-info .business-evaluate
+{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  box-sizing: border-box;
+
+  width: 145px;
+  padding: 0 6px;
+
+  text-align: right;
+}
+
+.right_gray
+{
+  width: 6px;
+  height: 12px;
+}
+
+/* worker-list&businesss-list common style end */
 
 /* worker list style */
+
+.worker-about
+{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
 
 .worker-about .worker-name
 {
@@ -423,22 +448,31 @@ header .tab-nav > li:last-child
   white-space: nowrap;
 }
 
-.worker-about .worker-evaluate
-{
-  margin-left: 16px;
-}
-
 .worker-info
 {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+
   font-size: 12px;
   color:#3f3e48;
 }
 
-.worker-info .info-type,
-.worker-info .info-address,
-.worker-info .info-year
+.worker-info .info-detail
 {
-  margin-right: 5px;
+  display: flex;
+  flex-wrap: nowrap;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.info-detail .info-type,
+.info-detail .info-address,
+.info-detail .info-year
+{
+  margin-right: 16px;
 }
 
 /* worker list style end */
@@ -460,22 +494,21 @@ header .tab-nav > li:last-child
 
 .business-info
 {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+
   font-size: 12px;
   color:#3f3e48;
 }
 
 .business-info .business-type
 {
-  width: 40%;
+  width: 150px;
 
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.business-info .business-evaluate
-{
-  margin-right: 12px;
 }
 
 /* business list style end */
@@ -497,11 +530,6 @@ header .tab-nav > li:last-child
   .worker-about .worker-evaluate
   {
     margin-left: 8px;
-  }
-
-  .business-info .business-type
-  {
-    width: 25%;
   }
 }
 

@@ -84,7 +84,7 @@ export default new VueRouter({
 			path: 'order_list',
 			component: OrderList
 		}, {
-			// 我的 
+			// 我的
 			path: 'user',
 			component: User
 		}]
