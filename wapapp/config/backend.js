@@ -131,9 +131,6 @@ const api = {
 
 	// 获取工人／商户头像列表
 	"Avatar": app + "Provider/Avatar",
-
-
-
 }
 
 export

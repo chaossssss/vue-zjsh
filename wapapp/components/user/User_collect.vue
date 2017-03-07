@@ -158,8 +158,8 @@ import qs from 'qs';
 
 export default {
   name: 'userCollect',
-  data(){
-    return{
+  data() {
+    return {
         flag: 1,
         workerCollList: [],
         workerCollNum: 0,
@@ -170,7 +170,7 @@ export default {
         isLoading: true
     }
   },
-  computed:mapState(['Token']),
+  computed: mapState(['Token']),
   methods: {
     getWorkerCollect() {
       axios.post(API.WorkerList, qs.stringify({
@@ -439,7 +439,7 @@ header .tab-nav > li:last-child
 
 .worker-about .worker-name
 {
-  width: 90px;
+  width: 100px;
 
   font-size: 14px;
   color:#3f3e48;
@@ -512,25 +512,5 @@ header .tab-nav > li:last-child
 }
 
 /* business list style end */
-
-@media screen and (max-width: 320px)
-{
-  .weui-cell__hd
-  {
-    margin-right: 10px;
-  }
-
-  .like-icon,
-  .star-icon,
-  .grade-icon
-  {
-    margin-left: 4px;
-  }
-
-  .worker-about .worker-evaluate
-  {
-    margin-left: 8px;
-  }
-}
 
 </style>
