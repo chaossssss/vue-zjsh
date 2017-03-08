@@ -2,7 +2,7 @@
 <div class="full">
   <div class="account-balance">
     <span class="balance-title">账户余额（元）</span>
-    <span class="balance-amount">0.00</span>
+    <span class="balance-amount">{{ balanceAmount }}</span>
   </div>
 
   <div class="wrapper">
@@ -23,16 +23,32 @@
 
 <script>
 import { mapState } from 'vuex';
+import API from '../../config/backend';
+import axios from 'axios';
+import qs from 'qs';
 
 export default {
   name: 'userWallet',
   data() {
-    return {}
+    return {
+      balanceAmount: 0
+    }
   },
-  computed: mapState(['userInfo']),
-  methods: {},
+  computed: mapState(['userInfo', 'Token']),
   mounted() {
-    console.log('userInfo', this.userInfo)
+    axios.post(API.MySettlement, qs.stringify({
+      "Token": this.Token
+    }), {
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }).then((res) => {
+      this.balanceAmount = res.data.Body.SettlementBalance;
+    }).catch(function(error) {
+      console.log(error);
+      this.isError = true;
+      this.errorMsg = "获取工人收藏失败，请检查网络是否正常!";
+    });
   }
 }
 </script>

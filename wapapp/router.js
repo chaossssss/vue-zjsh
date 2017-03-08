@@ -67,7 +67,7 @@ export default new VueRouter({
 	// mode: 'history',
 	routes: [{
 		path: '/',
-		redirect: '/menu'
+		redirect: '/menu/service'
 	}, {
 		path: '/menu',
 		component: Menu,
