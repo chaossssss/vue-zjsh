@@ -16,7 +16,7 @@
     </div>
 
     <!-- 收藏 -->
-    <router-link to="" v-if="workerCollNum!=0" v-for="data in workerCollList">
+    <router-link to="" v-else v-for="data in workerCollList">
       <div class="weui-cell">
         <div class="weui-cell__hd">
           <!-- 工人头像 -->
@@ -60,7 +60,7 @@
             </div>
 
             <!-- 详情图标 -->
-            <img class="right_gray" src="../../static/images/right_gray.png" alt="">
+            <img class="right_gray" src="../../static/images/right-arrow.png" alt="">
           </div>
 
           <!-- 认证图标 -->
@@ -81,7 +81,7 @@
     </div>
 
     <!-- 收藏 -->
-    <router-link to="" v-if="businessCollNum!=0" v-for="data in businessCollList">
+    <router-link to="" v-else v-for="data in businessCollList">
       <div class="weui-cell">
         <div class="weui-cell__hd">
           <!-- 公司头像 -->
@@ -116,7 +116,7 @@
             </div>
 
             <!-- 详情图标 -->
-            <img class="right_gray" src="../../static/images/right_gray.png" alt="">
+            <img class="right_gray" src="../../static/images/right-arrow.png" alt="">
           </div>
 
           <!-- 认证图标 -->
@@ -214,6 +214,14 @@ export default {
 
 <style scoped>
 /* common style */
+
+a:link,
+a:visited,
+a:hover,
+a:active
+{
+  color: #fff;
+}
 
 .clr::before,
 .clr::after

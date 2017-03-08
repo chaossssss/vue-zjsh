@@ -4,7 +4,7 @@ const app = "http://192.168.1.191:3001/api/v3/";
 // const app = "http://copen.zhujiash.com/api/v3/";
 const api = {
 	// 登录
-	"Login": wap + "v1/Clientinfo/Login",
+	"Login": app + "wap/Login",
 
 	// 注册
 	"Register": wap + "v1/clientinfo/Register",

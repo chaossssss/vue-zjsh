@@ -2,9 +2,9 @@
 <div>
   <header>
     <ul class="tab-nav clr">
-      <li :class="{'active':flag==1}" @click="flag=1;">未使用</li>
-      <li :class="{'active':flag==2}" @click="flag=2;">已使用</li>
-      <li :class="{'active':flag==3}" @click="flag=3;">已过期</li>
+      <li :class="{'active': flag==1}" @click="flag=1;">未使用</li>
+      <li :class="{'active': flag==2}" @click="flag=2;">已使用</li>
+      <li :class="{'active': flag==3}" @click="flag=3;">已过期</li>
     </ul>
   </header>
 
@@ -180,7 +180,7 @@ export default {
       discountOverdueList: [],
       isError: false,
       errorMsg: '',
-      isLoading: false
+      isLoading: true
     }
   },
   computed: {
@@ -224,13 +224,12 @@ export default {
           }
         }
       });
+      this.isLoading = false;
     }).catch(function(error) {
       console.log(error);
       this.isError = true;
       this.errorMsg = "获取工人收藏失败，请检查网络是否正常!";
     })
-
-
   }
 }
 </script>

@@ -1,133 +1,136 @@
 <template>
-	<div style="background:#fbfbfb;width:100%;height:100%;position:absolute;">
-    <!-- <div v-if="showBroadcast" class="zj_broadcast">
-      <div class="news_broadcast">助家生活充值全部8.5折</div>
-      <div @click="closeBroadcast" class="close_broadcast"></div>
-    </div> -->
-    <div class="my_wallet">
-      <div class="balance_title">
-        账户余额(元)
-      </div>
-      <p class="balance_number">
-        {{userInfo.Balance}}
-      </p>
+<div class="full">
+  <div class="account-balance">
+    <span class="balance-title">账户余额（元）</span>
+    <span class="balance-amount">0.00</span>
+  </div>
+
+  <div class="wrapper">
+    <div class="wallet-recharge">
+      <router-link class="weui-btn btn-recharge" to="/User_recharge">充值</router-link>
     </div>
-    <!-- <div class="recharge_interface">
-      <router-link to="/user_recharge">
-        <div class="recharge_btn">充值</div>
-      </router-link>
-    </div> -->
-    <!-- <div class="weui-cells">
-      <router-link class="weui-cell weui-cell_access" to="/user_bill">
-        <div class="weui-cell__hd">
-          <img class="wallet_bill" src="../../static/images/wallet_bill.png">
-        </div>
-        <div class="weui-cell__bd">
-          <router-link to="/user_bill">
-            <p>账单明细</p>
-          </router-link>
-        </div>
-        <div class="weui-cell__ft"></div>
-      </router-link>
-    </div> -->
-	</div>
+
+    <router-link class="weui-cell bill-detail" to="/User_bill">
+      <img class="weui-cell__hd bill-img" src="../../static/images/wallet_bill.png">
+
+      <span class="weui-cell__bd bill-title">账单明细</span>
+
+      <img class="weui-cell__ft" src="../../static/images/right_gray.png">
+    </router-link>
+  </div>
+</div>
 </template>
 
 <script>
-import {mapState} from 'vuex';
-export default{
-  data(){
-    return{
-      // showBroadcast:true
-    }
+import { mapState } from 'vuex';
+
+export default {
+  name: 'userWallet',
+  data() {
+    return {}
   },
   computed: mapState(['userInfo']),
-  methods:{
-    // closeBroadcast:function(){
-    //   this.showBroadcast = false;
-    // }
+  methods: {},
+  mounted() {
+    console.log('userInfo', this.userInfo)
   }
 }
 </script>
 
 <style scoped>
-a:active,a:hover,a:visited{
-  color: #333333;
+
+/* common */
+
+a:link,
+a:visited,
+a:hover,
+a:active
+{
+  color: #fff;
 }
-.zj_broadcast{
+
+.full
+{
   width: 100%;
-  height: 25px;
-  background: #feffd3;
+  height: 100%;
+
+  background-color: #fbfbfb;
 }
-.news_broadcast{
-  color: #ffa701;
-  font-size: 14px;
-  background: url(../../static/images/wallet_trumpet.png) 0 3px no-repeat;
-  background-size: 17px 16px;
+
+/* common end */
+
+/* header */
+
+.account-balance
+{
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+
+  color: #fff;
+  text-align: center;
+  background-image: url(../../static/images/wallet_background.png);
+  background-size: 100% 100%;
+}
+
+.balance-title
+{
+  display: block;
+
+  margin-top: 80px;
+
+  font-size: 16px;
+}
+
+.balance-amount
+{
+  font-size: 60px;
+}
+
+/* header end */
+
+/* 充值 */
+
+.wallet-recharge
+{
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+
+  background-color: #fff;
+}
+
+.btn-recharge
+{
+  color: #fff;
+  background-color: #27b8f3;
+  font-size: 18px;
+}
+
+/* 充值 end */
+
+/* 账单详情 */
+
+.bill-detail
+{
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+
+  background-color: #fff;
+}
+
+.bill-img
+{
+  width: 26px;
+}
+
+.bill-title
+{
   margin-left: 12px;
-  padding-left: 24px;
-  float: left;
+
+  color: #333;
+  font-size: 16px;
 }
-.close_broadcast{
-  width: 15px;
-  height: 15px;
-  margin: 5px 7px 0 0;
-  background: url(../../static/images/wallet_close.png);
-  background-size: 15px 15px;
-  float: right;
-}
-.my_wallet{
-  height: 180px;
-  background: url(../../static/images/wallet_background.png);
-  background-size: cover;
-}
-.balance_title{
-  color: #fff;
-  font-size: 15px;
-  text-align: center;
-  padding-top: 43px;
-}
-.balance_number{
-  color: #fff;
-  font-size: 48px;
-  text-align: center;
-  margin-top: 22px;
-  line-height: 1.0;
-}
-.recharge_interface{
-  height: 62px;
-  padding-top: 12px;
-  background: #fff;
-  position: relative;
-}
-.recharge_interface:after{
-  content: " ";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  height: 1px;
-  border-bottom: 1px solid #dddddd;
-  color: #dddddd;
-  -webkit-transform-origin: 0 100%;
-  transform-origin: 0 100%;
-  -webkit-transform: scaleY(0.5);
-  transform: scaleY(0.5);
-}
-.recharge_btn{
-  width: 350px;
-  background: #27b7f3;
-  color: #fff;
-  height: 50px;
-  text-align: center;
-  border-radius: 2px;
-  line-height: 50px;
-  margin: 0 auto;
-}
-.wallet_bill{
-  width: 28px;
-  height: 28px;
-  margin-top: 3px;
-  padding-right: 13px;
-}
+
+/* 账单详情 end */
+
 </style>

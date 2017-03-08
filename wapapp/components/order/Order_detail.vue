@@ -91,7 +91,8 @@
       </div>
       <div class="weui-panel__bd">
         <div class="weui-media-box weui-media-box_text">
-          <span class="f14">实付款</span>
+          <span class="f14" v-if="situation===50">应付款</span>
+          <span class="f14" v-else>实付款</span>
           <span style="float:right;font-size:14px;color:#888">
             <span class="red f16">¥{{payable}}</span>
           </span>
@@ -217,20 +218,20 @@ import axios from 'axios';
 import qs from 'qs';
 
 // 对Date的扩展，将 Date 转化为指定格式的String
-// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符， 
-// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字) 
-// 例子： 
-// (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423 
-// (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18 
-Date.prototype.Format = function (fmt) { //author: meizz 
+// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
+// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+// 例子：
+// (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
+// (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18
+Date.prototype.Format = function (fmt) { //author: meizz
     var o = {
-        "M+": this.getMonth() + 1, //月份 
-        "d+": this.getDate(), //日 
-        "h+": this.getHours(), //小时 
-        "m+": this.getMinutes(), //分 
-        "s+": this.getSeconds(), //秒 
-        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
-        "S": this.getMilliseconds() //毫秒 
+        "M+": this.getMonth() + 1, //月份
+        "d+": this.getDate(), //日
+        "h+": this.getHours(), //小时
+        "m+": this.getMinutes(), //分
+        "s+": this.getSeconds(), //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        "S": this.getMilliseconds() //毫秒
     };
     if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
     for (var k in o)
@@ -239,128 +240,141 @@ Date.prototype.Format = function (fmt) { //author: meizz
 }
 
 export default {
-  name:"order_detail",
-  data(){
+  name: "order_detail",
+  data() {
     return {
-      od:{
-        Service:{
-          ServiceName:"",
-          Content:"",
-          AddressInfo:{
-            Address1:"",
-            Address2:""
+      od: {
+        Service: {
+          ServiceName: "",
+          Content: "",
+          AddressInfo: {
+            Address1: "",
+            Address2: ""
           }
         },
-        ActivityNgs:{
-          ServiceTypeRules:[]
+        ActivityNgs: {
+          ServiceTypeRules: []
         },
-        Refunds:[],
-        IsNegotiable:""
+        Refunds: [],
+        IsNegotiable: ""
       }, // 订单详情
-      isError:false,
-      errorMsg:"",
-      isLoading:false
+      discountSum: 0,
+      isError: false,
+      errorMsg: "",
+      isLoading: false
     }
   },
-  mounted(){
+  mounted() {
     // 获取订单详情
-    if(this.orderId){
-      axios.post(API.GetOrderInfoEx,qs.stringify({
+    if (this.orderId) {
+      axios.post(API.GetOrderInfoEx, qs.stringify({
         "Token": this.Token,
         "OrderId": this.orderId
-      }),{
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      }).then((res)=>{
-        console.log("获取订单详情",res.data);
-        if(res.data.Meta.ErrorCode === '0'){
+      }), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).then((res) => {
+        console.log("获取订单详情", res.data);
+        if (res.data.Meta.ErrorCode === '0') {
           this.od = res.data.Body.Order;
-        }else{
+        } else {
           this.isDelete = false;
           this.isError = true;
           this.errorMsg = res.data.Meta.ErrorMsg;
         }
-      }).catch(function (error) {
+      }).catch(function(error) {
         console.log(error);
         this.isError = true;
         this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
       });
     }
   },
-  methods:{
-    delOrder(){
+  methods: {
+    delOrder() {
       this.isLoading = true;
-      if(this.orderId){
-        axios.post(API.RemoveOrderEx,qs.stringify({
+      if (this.orderId) {
+        axios.post(API.RemoveOrderEx, qs.stringify({
           "Token": this.Token,
           "OrderId": this.orderId
-        }),{
-          headers: {'Content-Type':'application/x-www-form-urlencoded'}
-        }).then((res)=>{
+        }), {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then((res) => {
           this.isLoading = false;
-          console.log("删除订单",res.data);
-          if(res.data.Meta.ErrorCode === '0'){
-            this.$router.push({path:'/order_list'});
-          }else{
+          console.log("删除订单", res.data);
+          if (res.data.Meta.ErrorCode === '0') {
+            this.$router.push({
+              path: '/order_list'
+            });
+          } else {
             this.isDelete = false;
             this.isError = true;
             this.errorMsg = res.data.Meta.ErrorMsg;
           }
-        }).catch(function (error) {
+        }).catch(function(error) {
           console.log(error);
           this.isError = true;
           this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
         });
       }
     },
-    cancelOrder(){
+    cancelOrder() {
       this.isLoading = true;
-      if(this.orderId){
-        axios.post(API.CancelOrderEx,qs.stringify({
+      if (this.orderId) {
+        axios.post(API.CancelOrderEx, qs.stringify({
           "Token": this.Token,
           "OrderId": this.orderId
-        }),{
-          headers: {'Content-Type':'application/x-www-form-urlencoded'}
-        }).then((res)=>{
+        }), {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then((res) => {
           this.isLoading = false;
-          console.log("取消订单",res.data);
-          if(res.data.Meta.ErrorCode === '0'){
+          console.log("取消订单", res.data);
+          if (res.data.Meta.ErrorCode === '0') {
             this.$router.go(0)
-          }else{
+          } else {
             this.isDelete = false;
             this.isError = true;
             this.errorMsg = res.data.Meta.ErrorMsg;
           }
-        }).catch(function (error) {
+        }).catch(function(error) {
           console.log(error);
           this.isError = true;
           this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
         });
       }
     },
-    payOrder(){
-      if(this.orderId){
-        this.$router.push({path:'/pay'});
+    payOrder() {
+      if (this.orderId) {
+        this.$router.push({
+          path: '/pay'
+        });
       }
     },
-    sureOrder(){
+    sureOrder() {
       this.isLoading = true;
-      if(this.orderId){
-        axios.post(API.CompleteOrderEx,qs.stringify({
+      if (this.orderId) {
+        axios.post(API.CompleteOrderEx, qs.stringify({
           "Token": this.Token,
           "OrderId": this.orderId
-        }),{
-          headers: {'Content-Type':'application/x-www-form-urlencoded'}
-        }).then((res)=>{
+        }), {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then((res) => {
           this.isLoading = false;
-          console.log("确认订单",res.data);
-          if(res.data.Meta.ErrorCode === '0'){
+          console.log("确认订单", res.data);
+          if (res.data.Meta.ErrorCode === '0') {
             this.$router.go(0)
-          }else{
+          } else {
             this.isDelete = false;
             this.isError = true;
             this.errorMsg = res.data.Meta.ErrorMsg;
           }
-        }).catch(function (error) {
+        }).catch(function(error) {
           console.log(error);
           this.isError = true;
           this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
@@ -368,155 +382,155 @@ export default {
       }
     }
   },
-  computed:{
-    situation(){
+  computed: {
+    situation() {
       // 订单提交 && 未付款 需要指派 订单已提交---待付款
-      if(this.od.OrderStatus === '1' && this.od.IsPayOff ==='0'){
+      if (this.od.OrderStatus === '1' && this.od.IsPayOff === '0') {
         return 10;
       }
       // 订单已提交---待付款
-      if(this.od.OrderStatus === '10' && this.od.IsPayOff ==='0'){
+      if (this.od.OrderStatus === '10' && this.od.IsPayOff === '0') {
         return 100;
       }
       // 订单已提交---已付款---待工人接单
-      if(this.od.OrderStatus === '10' && this.od.IsPayOff ==='1'){
+      if (this.od.OrderStatus === '10' && this.od.IsPayOff === '1') {
         return 101;
       }
       // 订单已提交---未付款---服务中
-      if(this.od.OrderStatus === '20' && this.od.IsPayOff ==='0'){
+      if (this.od.OrderStatus === '20' && this.od.IsPayOff === '0') {
         return 200;
       }
       // 订单已提交---已付款---服务中
-      if(this.od.OrderStatus === '20' && this.od.IsPayOff ==='1'){
+      if (this.od.OrderStatus === '20' && this.od.IsPayOff === '1') {
         return 201;
       }
       // 订单已提交---已付款---完成服务
-      if(this.od.OrderStatus === '30' && this.od.IsPayOff ==='1'){
+      if (this.od.OrderStatus === '30' && this.od.IsPayOff === '1') {
         return 301;
       }
       // 订单已提交---已付款---服务已完成
-      if(this.od.OrderStatus === '40' && this.od.IsPayOff ==='1'){
+      if (this.od.OrderStatus === '40' && this.od.IsPayOff === '1') {
         return 401;
       }
       // 订单已提交---订单取消
-      if(this.od.OrderStatus === '50' && this.od.Refunds.length === 0){
+      if (this.od.OrderStatus === '50' && this.od.Refunds.length === 0) {
         return 50;
       }
       // 订单已提交---退款中
-      if(this.od.IsPayOff ==='1' && this.od.Refunds.length > 0){
-        let status = this.od.Refunds.every((v,i,arry)=>{
+      if (this.od.IsPayOff === '1' && this.od.Refunds.length > 0) {
+        let status = this.od.Refunds.every((v, i, arry) => {
           return v.Status > 1
         })
-        if(status){
+        if (status) {
           //完成退款
           return 5012
-        }else{
+        } else {
           // 退款中
           return 5011;
-        } 
+        }
       }
     },
-    payable(){
+    payable() {
       // 订单优惠后价格 应付价格 0 满减 ，1 满返
-      let discountList =[];
-      if(this.od.ActivityNgs.ServiceTypeRules && this.od.ActivityNgs.ServiceTypeRules.length > 0){
-        this.od.ActivityNgs.ServiceTypeRules.map((v)=>{
-          v.Details.map((x)=>{
-            if(x.ReturnType === '0'){
+      let discountList = [];
+      if (this.od.ActivityNgs.ServiceTypeRules && this.od.ActivityNgs.ServiceTypeRules.length > 0) {
+        this.od.ActivityNgs.ServiceTypeRules.map((v) => {
+          v.Details.map((x) => {
+            if (x.ReturnType === '0') {
               let rule = [];
-              x.Rules.map((y)=>{
-                if(parseFloat(this.od.TotalPrice) >= parseFloat(y.Upper)){
+              x.Rules.map((y) => {
+                if (parseFloat(this.od.TotalPrice) >= parseFloat(y.Upper)) {
                   rule.push(parseFloat(y.Minus));
                 }
               })
-              if(rule.length > 0){
-                let max = rule.reduce((x,y)=>{
-                  return (x>y) ? x:y;
+              if (rule.length > 0) {
+                let max = rule.reduce((x, y) => {
+                  return (x > y) ? x : y;
                 })
                 discountList.push(max);
               }
             }
           })
         })
-        if(discountList.length > 0){
-          this.discountSum = discountList.reduce((x,y)=>{
-            return x+y;
-          },0)
-        }     
-        if(this.od.DiscountAmount){
-          return this.od.TotalPrice-this.discountSum-parseFloat(this.od.DiscountAmount);
-        }else{
-          return this.od.TotalPrice-this.discountSum;
-        } 
+        if (discountList.length > 0) {
+          this.discountSum = discountList.reduce((x, y) => {
+            return x + y;
+          }, 0)
+        }
+        if (this.od.DiscountAmount) {
+          return this.od.TotalPrice - this.discountSum - parseFloat(this.od.DiscountAmount);
+        } else {
+          return this.od.TotalPrice - this.discountSum;
+        }
       }
     },
-    serviceTypeRules(){
+    serviceTypeRules() {
       // 活动规则
       let discountList = [];
-      if(this.od.ActivityNgs.ServiceTypeRules && this.od.ActivityNgs.ServiceTypeRules.length > 0){
-        this.od.ActivityNgs.ServiceTypeRules.map((v,j,arr)=>{
-          v.Details.map((x,i,arry)=>{
+      if (this.od.ActivityNgs.ServiceTypeRules && this.od.ActivityNgs.ServiceTypeRules.length > 0) {
+        this.od.ActivityNgs.ServiceTypeRules.map((v, j, arr) => {
+          v.Details.map((x, i, arry) => {
             let rule = [];
-            x.Rules.map((y)=>{
-              if(parseFloat(this.od.TotalPrice) >= parseFloat(y.Upper)){
+            x.Rules.map((y) => {
+              if (parseFloat(this.od.TotalPrice) >= parseFloat(y.Upper)) {
                 rule.push(y);
               }
             })
-            if(rule.length > 0){
-              let max = rule.reduce((x,y)=>{
-                return (parseFloat(x.Minus)> parseFloat(y.Minus)) ? x:y;
+            if (rule.length > 0) {
+              let max = rule.reduce((x, y) => {
+                return (parseFloat(x.Minus) > parseFloat(y.Minus)) ? x : y;
               })
               arry[i]['Rule'] = max;
               discountList.push(x);
             }
           })
-        })      
+        })
       }
       return discountList;
     },
-    orderCreateTime(){
+    orderCreateTime() {
       // 订单创建时间
-      if(this.od.CreateTime){
+      if (this.od.CreateTime) {
         let time = this.od.CreateTime + "000";
-        return new Date(parseInt(time,10)).Format("yyyy-MM-dd hh:mm:ss");
-      } 
+        return new Date(parseInt(time, 10)).Format("yyyy-MM-dd hh:mm:ss");
+      }
     },
-    payOverTime(){
+    payOverTime() {
       // 订单支付时间
-      if(this.od.PayOffTime){
+      if (this.od.PayOffTime) {
         let time = this.od.PayOffTime + "000";
-        return new Date(parseInt(time,10)).Format("yyyy-MM-dd hh:mm:ss");
+        return new Date(parseInt(time, 10)).Format("yyyy-MM-dd hh:mm:ss");
       }
     },
-    serviceStartTime(){
+    serviceStartTime() {
       // 服务开始时间
-      if(this.od.Service.ServiceStartTime){
-        let time = this.od.Service.ServiceStartTime + "000";   
-        return new Date(parseInt(time,10)).Format("yyyy-MM-dd hh:mm:ss");
+      if (this.od.Service.ServiceStartTime) {
+        let time = this.od.Service.ServiceStartTime + "000";
+        return new Date(parseInt(time, 10)).Format("yyyy-MM-dd hh:mm:ss");
       }
     },
-    acceptTime(){
+    acceptTime() {
       //接单时间
-      if(this.od.AcceptTime){
-        let time = this.od.AcceptTime + "000";   
-        return new Date(parseInt(time,10)).Format("yyyy-MM-dd hh:mm:ss");
+      if (this.od.AcceptTime) {
+        let time = this.od.AcceptTime + "000";
+        return new Date(parseInt(time, 10)).Format("yyyy-MM-dd hh:mm:ss");
       }
     },
-    cancelTime(){
+    cancelTime() {
       // 取消时间
-      if(this.od.CancelTime){
-        let time = this.od.CancelTime + "000";   
-        return new Date(parseInt(time,10)).Format("yyyy-MM-dd hh:mm:ss");
+      if (this.od.CancelTime) {
+        let time = this.od.CancelTime + "000";
+        return new Date(parseInt(time, 10)).Format("yyyy-MM-dd hh:mm:ss");
       }
     },
-    wkPhoneNumber(){
-      if(this.od.Worker){
-        return "tel:"+ this.od.Worker.PhoneNumber;
-      } 
+    wkPhoneNumber() {
+      if (this.od.Worker) {
+        return "tel:" + this.od.Worker.PhoneNumber;
+      }
     },
-    ...mapState(['Token','orderId'])
+    ...mapState(['Token', 'orderId'])
   }
-}  
+}
 </script>
 <style scoped>
 .red {

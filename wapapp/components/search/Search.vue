@@ -14,7 +14,7 @@
 	    </form>
 	    <a href="javascript:;" class="vue-search-bar__cancel-btn" @click="searchCancel(localSearchInput)">取消</a>
 	</div>
-	
+
 	<!-- 热门服务 && 历史搜索 -->
 	<div v-show="localSearchInput === '' && isResult.length === 0" class="vue-hots">
 		<p>热门服务</p>
@@ -29,7 +29,7 @@
 			</p>
 		</div>
 	</div>
-	
+
 	<!-- 无 搜索结果 -->
 	<div v-show="localSearchInput !== '' && isResult.length === 0" class="vue-noresult" >
 		<p>没有相关搜索结果，试试一键下单，</p>
@@ -39,7 +39,7 @@
 	</div>
 
 	<!-- 搜索结果 -->
-	<div v-if="isResult.length >0" class="vue-cells searchbar-result" style="transform-origin: 0px 0px; opacity: 1; transform: scale(1, 1); display: block;">
+	<div v-if="isResult.length>0" class="vue-cells searchbar-result" style="transform-origin: 0px 0px; opacity: 1; transform: scale(1, 1); display: block;">
 			<div v-for="item in serviceTypeResult" class="vue-cell">
           <div class="vue-cell__bd vue-cell_primary" @click="goToMapResult(item.Name)">
               <p class="vue-cell__p">
@@ -47,7 +47,7 @@
               </p>
           </div>
           <div>
-          	<button class="vue-btn vue-btn_primary">一键下单</button>
+          	<button class="vue-btn vue-btn_primary">指定下单</button>
           </div>
       </div>
       <div v-for="item in wholeWorkerResult" class="vue-cell">
@@ -64,7 +64,7 @@
               </p>
           </div>
           <div>
-          	<button class="vue-btn vue-btn_primary">一键下单</button>
+          	<button class="vue-btn vue-btn_primary">指定下单</button>
           </div>
       </div>
       <div v-for="item in wholeBossResult" class="vue-cell">
@@ -80,7 +80,7 @@
               </p>
           </div>
           <div>
-          	<button class="vue-btn vue-btn_primary">一键下单</button>
+          	<button class="vue-btn vue-btn_primary">指定下单</button>
           </div>
       </div>
       <div v-for="item in workerResult" class="vue-cell">
@@ -97,7 +97,7 @@
               </p>
           </div>
           <div>
-          	<button class="vue-btn vue-btn_primary">一键下单</button>
+          	<button class="vue-btn vue-btn_primary">指定下单</button>
           </div>
       </div>
       <div v-for="item in bossResult" class="vue-cell">
@@ -110,7 +110,7 @@
               </p>
           </div>
           <div>
-          	<button class="vue-btn vue-btn_primary">一键下单</button>
+          	<button class="vue-btn vue-btn_primary">指定下单</button>
           </div>
       </div>
   </div>
@@ -124,148 +124,158 @@ import axios from 'axios';
 import qs from 'qs';
 
 export default {
-	name:"search",
-	data(){
-		return {
-			localSearchInput:"",
-			workerResult:[],
-			bossResult:[],
-			wholeWorkerResult:[],
-			wholeBossResult:[],
-			serviceTypeResult:[],
-			isResult:[],
-			history:[],
-			hotTotals:[]
-		}
-	},
-	mounted:function(){
-		// 初始搜索
-		this.localSearchInput = this.mapSearchInput;
+  name: "search",
+  data() {
+    return {
+      localSearchInput: "",
+      workerResult: [],
+      bossResult: [],
+      wholeWorkerResult: [],
+      wholeBossResult: [],
+      serviceTypeResult: [],
+      isResult: [],
+      history: [],
+      hotTotals: []
+    }
+  },
+  mounted: function() {
+    // 初始搜索
+    this.localSearchInput = this.mapSearchInput;
 
-		// 加载 热门服务
-		axios.post(API.GetHotServices,qs.stringify({
-      "Latitude":this.mapPoint.lat,
-      "Longitude":this.mapPoint.lng,
-      "Token":""
-    }),{
-      headers: {'Content-Type':'application/x-www-form-urlencoded'}
-    }).then((res)=>{
-    	console.log(res.data);
-    	if(res.data.Body){
-    		this.hotTotals = res.data.Body; 
-    	}
-    })
-		// 加载 历史搜索
-		if(localStorage.getItem("SearchHistory")){
-			this.history = JSON.parse(localStorage.getItem("SearchHistory"));
-		}
-	},
-	methods:{
-		goToMapResult(name){
-			this.$store.dispatch('searchMap',{
-        txt:name
+    // 加载 热门服务
+    axios.post(API.GetHotServices, qs.stringify({
+        "Latitude": this.mapPoint.lat,
+        "Longitude": this.mapPoint.lng,
+        "Token": ""
+      }), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).then((res) => {
+        console.log(res.data);
+        if (res.data.Body) {
+          this.hotTotals = res.data.Body;
+        }
+      })
+      // 加载 历史搜索
+    if (localStorage.getItem("SearchHistory")) {
+      this.history = JSON.parse(localStorage.getItem("SearchHistory"));
+    }
+  },
+  methods: {
+    goToMapResult(name) {
+      this.$store.dispatch('searchMap', {
+        txt: name
       });
-      this.$store.dispatch('searchInput',{
-				txt:name
-			})
-      this.$router.push({path:'/menu/service'});
-		},
-		clearHistory(){
-			if(localStorage.getItem("SearchHistory")){
-				this.history = [];
-				localStorage.removeItem("SearchHistory");
-			}
-		},
-		searchIcon(input){
-			this.localSearchInput = input;
-		},
-		searchClear(){
-			this.localSearchInput = "";
-			this.workerResult = [];
-			this.bossResult = [];
-			this.wholeWorkerResult = [];
-			this.wholeBossResult = [];
-			this.serviceTypeResult = [];
-			this.isResult = [];
-			this.$store.dispatch('searchInput',{
-				txt:""
-			});
-		},
-		searchCancel(input){
-			// 记录历史搜索结果
-			if(localStorage.getItem("SearchHistory")){
-				let searchHistory = JSON.parse(localStorage.getItem("SearchHistory"));
-				if(searchHistory.every(function(i){return i !== input;})){
-					searchHistory.push(input);
-					localStorage.setItem("SearchHistory",JSON.stringify(searchHistory));
-				};
-			}else{
-				let searchHistory = [];
-				if(input !== ''){
-					searchHistory.push(input);
-				}
-				localStorage.setItem("SearchHistory",JSON.stringify(searchHistory));
-			}			
-			// 同步 searchInput 与 mapSearchInput 状态
-			this.$store.dispatch('searchInput',{
-				txt:input
-			})
-			this.$router.push({path:'/menu/service'})
-		}
-	},
-	computed:mapState(['mapPoint','mapSearchInput']),
-	watch:{
-		localSearchInput(){
-			this.isResult = [1];
-			if(this.localSearchInput == ''){
-				this.workerResult = [];
-				this.bossResult = [];
-				this.wholeWorkerResult = [];
-				this.wholeBossResult = [];
-				this.serviceTypeResult = [];
-				this.isResult = [];
-			}else{
-				axios.post(API.IndexEx2,qs.stringify({
-	        "Latitude":this.mapPoint.lat,
-	        "Longitude":this.mapPoint.lng,
-	        "Type": "0",
-	        "QueryStr": this.localSearchInput,
-	        "QueryType":"0",
-	        "ServiceId":"",
-	        "Token":""
-	      }),{
-	        header: {'Content-Type':'application/x-www-form-urlencoded'}
-	      }).then((res) => {
-	        console.log(res.data);
-	        if(res.data.Body){
-	        	this.isResult = res.data.Body.Workers.concat(res.data.Body.Business,res.data.Body.WholeWorkers,res.data.Body.WholeBusiness,res.data.Body.ServiceTypes);
-	        }
-	        if(res.data.Body && res.data.Body.Workers.length > 0){
-	        	this.workerResult = res.data.Body.Workers;
-	        }
-	        if(res.data.Body && res.data.Body.Business.length > 0){
-	        	this.bossResult = res.data.Body.Business;
-	        }
-	        if(res.data.Body && res.data.Body.WholeWorkers.length >0){
-	        	this.wholeWorkerResult = res.data.Body.WholeWorkers;
-	        }
-	        if(res.data.Body && res.data.Body.WholeBusiness.length >0){
-	        	this.wholeBossResult = res.data.Body.WholeBusiness;
-	        }
-	        if(res.data.Body && res.data.Body.ServiceTypes.length >0){
-	        	this.serviceTypeResult = res.data.Body.ServiceTypes;
-	        }
-	      })  
-	    }
-		}
-	},
-	directives:{
-		focus:{
-			// inserted:function(el){
-			// 	el.focus();
-			// }
-		}
-	}
+      this.$store.dispatch('searchInput', {
+        txt: name
+      })
+      this.$router.push({
+        path: '/menu/service'
+      });
+    },
+    clearHistory() {
+      if (localStorage.getItem("SearchHistory")) {
+        this.history = [];
+        localStorage.removeItem("SearchHistory");
+      }
+    },
+    searchIcon(input) {
+      this.localSearchInput = input;
+    },
+    searchClear() {
+      this.localSearchInput = "";
+      this.workerResult = [];
+      this.bossResult = [];
+      this.wholeWorkerResult = [];
+      this.wholeBossResult = [];
+      this.serviceTypeResult = [];
+      this.isResult = [];
+      this.$store.dispatch('searchInput', {
+        txt: ""
+      });
+    },
+    searchCancel(input) {
+      // 记录历史搜索结果
+      if (localStorage.getItem("SearchHistory")) {
+        let searchHistory = JSON.parse(localStorage.getItem("SearchHistory"));
+        if (searchHistory.every(function(i) {
+            return i !== input;
+          })) {
+          searchHistory.push(input);
+          localStorage.setItem("SearchHistory", JSON.stringify(searchHistory));
+        };
+      } else {
+        let searchHistory = [];
+        if (input !== '') {
+          searchHistory.push(input);
+        }
+        localStorage.setItem("SearchHistory", JSON.stringify(searchHistory));
+      }
+      // 同步 searchInput 与 mapSearchInput 状态
+      this.$store.dispatch('searchInput', {
+        txt: input
+      })
+      this.$router.push({
+        path: '/menu/service'
+      })
+    }
+  },
+  computed: mapState(['mapPoint', 'mapSearchInput']),
+  watch: {
+    localSearchInput() {
+      this.isResult = [1];
+      if (this.localSearchInput == '') {
+        this.workerResult = [];
+        this.bossResult = [];
+        this.wholeWorkerResult = [];
+        this.wholeBossResult = [];
+        this.serviceTypeResult = [];
+        this.isResult = [];
+      } else {
+        axios.post(API.IndexEx2, qs.stringify({
+          "Latitude": this.mapPoint.lat,
+          "Longitude": this.mapPoint.lng,
+          "Type": "0",
+          "QueryStr": this.localSearchInput,
+          "QueryType": "0",
+          "ServiceId": "",
+          "Token": ""
+        }), {
+          header: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then((res) => {
+          console.log(res.data);
+          if (res.data.Body) {
+            this.isResult = res.data.Body.Workers.concat(res.data.Body.Business, res.data.Body.WholeWorkers, res.data.Body.WholeBusiness, res.data.Body.ServiceTypes);
+          }
+          if (res.data.Body && res.data.Body.Workers.length > 0) {
+            this.workerResult = res.data.Body.Workers;
+          }
+          if (res.data.Body && res.data.Body.Business.length > 0) {
+            this.bossResult = res.data.Body.Business;
+          }
+          if (res.data.Body && res.data.Body.WholeWorkers.length > 0) {
+            this.wholeWorkerResult = res.data.Body.WholeWorkers;
+          }
+          if (res.data.Body && res.data.Body.WholeBusiness.length > 0) {
+            this.wholeBossResult = res.data.Body.WholeBusiness;
+          }
+          if (res.data.Body && res.data.Body.ServiceTypes.length > 0) {
+            this.serviceTypeResult = res.data.Body.ServiceTypes;
+          }
+        })
+      }
+    }
+  },
+  directives: {
+    focus: {
+      // inserted:function(el){
+      //  el.focus();
+      // }
+    }
+  }
 }
 </script>
 

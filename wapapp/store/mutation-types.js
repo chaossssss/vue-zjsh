@@ -18,7 +18,7 @@ const SEARCH_MAP_INPUT = "SEARCH_MAP_INPUT";
 // 设置个人信息
 export
 const SET_USER_INFO = "SET_USER_INFO";
-// 设置token 
+// 设置token
 export
 const SET_TOKEN = "SET_TOKEN";
 // 设置code 微信支付

@@ -1,13 +1,13 @@
 <template>
 <div class="page tabbar">
-  
+
   <search-all></search-all>
 
   <div class="vue-topnav">
     <div class="vue-topnav__primary">
       <span :class="{'vue-topnav__item_on': mapFastType === '全部'}" class="vue-topnav__item" @click="searchType('全部')">全部</span>
       <span :class="{'vue-topnav__item_on': mapFastType === item.Name}" class="vue-topnav__item" v-for="item in totals" @click="searchType(item.Name)">{{item.Name}}</span>
-    </div> 
+    </div>
     <img class="vue-topnav__swit-btn" src="../../static/images/button-swit.png" alt="">
   </div>
 
@@ -17,8 +17,8 @@
     <img v-show="mapClassType === 2" src="../../static/images/button_home_boss.png" alt="">
   </div>
 
-	<div id="map-container"></div> 
-  
+	<div id="map-container"></div>
+
   <div class="vue-swiper" v-show="isSwiper">
     <div class="swiper-container swiper-container-horizontal">
       <div class="swiper-wrapper" style="transition-duration: 0ms; -webkit-transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
@@ -34,7 +34,7 @@
             <!-- 商户 -->
             <div class="swiper-slide" v-if="item.Belong === 1" v-for="item in swiperList">
               <service-shop :msg="item"></service-shop>
-            </div>               
+            </div>
         </div>
     </div>
   </div>
@@ -68,7 +68,7 @@ function clear_active(map,point) {
     allOverlay.map(function(i,v,arry){
       if(i instanceof BLNOverlay || i instanceof LocalOverlay){
       }else if(i._point.lat === point.lat && i._point.lng === point.lng){
-        i.show(); 
+        i.show();
       }else {
         i.hide();
       }
@@ -233,7 +233,7 @@ MirrorOverlay.prototype.initialize = function(map){
   span.style.borderBottomLeftRadius = "20px";
   span.style.borderBottomRightRadius = "20px";
   box.appendChild(span);
-  span.appendChild(document.createTextNode(this._text));   
+  span.appendChild(document.createTextNode(this._text));
 
   div.addEventListener('touchstart',() => {
     clear_active(this._map,this._point);
@@ -341,8 +341,8 @@ HouseOverlay.prototype.initialize = function(map){
   span.style.borderBottomLeftRadius = "20px";
   span.style.borderBottomRightRadius = "20px";
   box.appendChild(span);
-  span.appendChild(document.createTextNode(this._text));        
- 
+  span.appendChild(document.createTextNode(this._text));
+
   arrow.addEventListener('touchstart',() => {
     clear_active(this._map,this._point);
     this._touchStart();
@@ -450,8 +450,8 @@ WholeOverlay.prototype.initialize = function(map){
   span.style.borderBottomLeftRadius = "20px";
   span.style.borderBottomRightRadius = "20px";
   box.appendChild(span);
-  span.appendChild(document.createTextNode("全城服务"));        
- 
+  span.appendChild(document.createTextNode("全城服务"));
+
   container.addEventListener('touchstart',() => {
     clear_active(this._map,this._point);
     this._touchStart();
@@ -504,14 +504,14 @@ export default {
       isSwiper:false   // 是否显示滑动
     }
   },
-	mounted:function(){ 
-    let map = new BMap.Map("map-container");          // 创建地图实例 
-    let point = new BMap.Point(116.404, 39.915);  // 创建点坐标  
-    map.centerAndZoom(point, 15);                 // 初始化地图，设置中心点坐标和地图级别   
+	mounted:function(){
+    let map = new BMap.Map("map-container");          // 创建地图实例
+    let point = new BMap.Point(116.404, 39.915);  // 创建点坐标
+    map.centerAndZoom(point, 15);                 // 初始化地图，设置中心点坐标和地图级别
 
     // 移动点point sessionStorage 做本地缓存
     if(sessionStorage.getItem("Point")){
-      let storePoint = JSON.parse(sessionStorage.getItem("Point"));  
+      let storePoint = JSON.parse(sessionStorage.getItem("Point"));
       getHot(storePoint.lng,storePoint.lat).then((res)=>{
         this.totals = res.data.Body;
       });
@@ -544,7 +544,7 @@ export default {
         }
       }, {
           enableHighAccuracy: true
-      }) 
+      })
     }
 
     /**
@@ -625,7 +625,7 @@ export default {
     },
     mapClassType(){
       this.drawMap();
-    }  
+    }
   },
   methods:{
     drawMap(){

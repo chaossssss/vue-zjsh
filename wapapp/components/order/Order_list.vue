@@ -39,10 +39,10 @@
 						</div>
 					</div>
 				</div>
-				<div class="vue-panel__bd" @click="routerTo(item.OrderId)">		
+				<div class="vue-panel__bd" @click="routerTo(item.OrderId)">
 						<div class="vue-cell" style="padding:0 15px 5px;" v-if="item.Worker">
 							<div class="vue-cell__hd">
-								<img :src="item.Worker.Icon" alt="" style="width:25px;height:25px;margin-right:10px;display:block;border-radius:50%;">	
+								<img :src="item.Worker.Icon" alt="" style="width:25px;height:25px;margin-right:10px;display:block;border-radius:50%;">
 							</div>
 							<div class="vue-cell__bd">
 								<span>{{item.Worker.Name}}</span>
@@ -115,7 +115,7 @@
 
 	</div>
 
-<!-- 错误提示 -->
+  <!-- 错误提示 -->
   <div class="js_dialog" id="iosDialog2" v-show="isError">
       <div class="weui-mask"></div>
       <div class="weui-dialog">
@@ -124,9 +124,9 @@
               <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" @click="isError = false">朕 知道了!</a>
           </div>
       </div>
-  </div>  
+  </div>
 
-<!-- 正在提交提示 -->
+  <!-- 正在提交提示 -->
   <div id="loadingToast" v-show="isLoading">
       <div class="weui-mask_transparent"></div>
       <div class="weui-toast">
@@ -134,7 +134,6 @@
           <p class="weui-toast__content">正在提交...</p>
       </div>
   </div>
-    
 </div>
 </template>
 
@@ -147,254 +146,272 @@ import axios from 'axios';
 import qs from 'qs';
 
 // 对Date的扩展，将 Date 转化为指定格式的String
-// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符， 
-// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字) 
-// 例子： 
-// (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423 
-// (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18 
-Date.prototype.Format = function (fmt) { //author: meizz 
-    var o = {
-        "M+": this.getMonth() + 1, //月份 
-        "d+": this.getDate(), //日 
-        "h+": this.getHours(), //小时 
-        "m+": this.getMinutes(), //分 
-        "s+": this.getSeconds(), //秒 
-        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
-        "S": this.getMilliseconds() //毫秒 
-    };
-    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-    for (var k in o)
+// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
+// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+// 例子：
+// (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
+// (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18
+Date.prototype.Format = function(fmt) { //author: meizz
+  var o = {
+    "M+": this.getMonth() + 1, //月份
+    "d+": this.getDate(), //日
+    "h+": this.getHours(), //小时
+    "m+": this.getMinutes(), //分
+    "s+": this.getSeconds(), //秒
+    "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+    "S": this.getMilliseconds() //毫秒
+  };
+  if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+  for (var k in o)
     if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-    return fmt;
+  return fmt;
 }
 
 export default {
-	name:"order_list",
-  data(){
+  name: "order_list",
+  data() {
     return {
-    	type:0,
-    	list:[],
-    	isError:false,
-      errorMsg:"",
-      isLoading:false
+      type: 0,
+      list: [],
+      isError: false,
+      errorMsg: "",
+      isLoading: false
     }
   },
   methods: {
     async onInfinite() {
-      await axios.post(API.GetOrderListEx,qs.stringify({
+      await axios.post(API.GetOrderListEx, qs.stringify({
         "Token": this.Token,
-        "PageIndex": this.list.length/10+1,
+        "PageIndex": this.list.length / 10 + 1,
         "PageSize": "10",
         "Type": this.type
-      }),{
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      }).then((res)=>{
-        console.log("订单列表",res.data);
-        if(res.data.Meta.ErrorCode === '0'){
-        	if(res.data.Body.OrderList && res.data.Body.OrderList.length>0){
-        		res.data.Body.OrderList.map((v,i,arry)=>{
-        			arry[i]['situation'] = this.situation(v.OrderStatus,v.IsPayOff,v.RefundStatus);
-        			arry[i]['payable'] = this.payable(v.ActivityNgs,v.DiscountAmount,v.TotalPrice);
-        			arry[i]['serviceStartTime'] = this.formatTime(v.Service.ServiceStartTime);
-        		})
-        		this.list = this.list.concat(res.data.Body.OrderList);
-        		this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded');
-        	}else{
-        		this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
-        	}
-        }else{
+      }), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).then((res) => {
+        console.log("订单列表", res.data);
+        if (res.data.Meta.ErrorCode === '0') {
+          if (res.data.Body.OrderList && res.data.Body.OrderList.length > 0) {
+            res.data.Body.OrderList.map((v, i, arry) => {
+              arry[i]['situation'] = this.situation(v.OrderStatus, v.IsPayOff, v.RefundStatus);
+              arry[i]['payable'] = this.payable(v.ActivityNgs, v.DiscountAmount, v.TotalPrice);
+              arry[i]['serviceStartTime'] = this.formatTime(v.Service.ServiceStartTime);
+            })
+            this.list = this.list.concat(res.data.Body.OrderList);
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded');
+          } else {
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
+          }
+        } else {
           this.isError = true;
           this.errorMsg = res.data.Meta.ErrorMsg;
         }
-      }).catch(function (error) {
+      }).catch(function(error) {
         console.log(error);
         this.isError = true;
         this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
       });
     },
-    delOrder(orderId){
+    delOrder(orderId) {
       this.isLoading = true;
-      if(orderId){
-        axios.post(API.RemoveOrderEx,qs.stringify({
+      if (orderId) {
+        axios.post(API.RemoveOrderEx, qs.stringify({
           "Token": this.Token,
           "OrderId": orderId
-        }),{
-          headers: {'Content-Type':'application/x-www-form-urlencoded'}
-        }).then((res)=>{
+        }), {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then((res) => {
           this.isLoading = false;
-          console.log("删除订单",res.data);
-          if(res.data.Meta.ErrorCode === '0'){
+          console.log("删除订单", res.data);
+          if (res.data.Meta.ErrorCode === '0') {
             this.$router.go(0);
-          }else{
+          } else {
             this.isDelete = false;
             this.isError = true;
             this.errorMsg = res.data.Meta.ErrorMsg;
           }
-        }).catch(function (error) {
+        }).catch(function(error) {
           console.log(error);
           this.isError = true;
           this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
         });
       }
     },
-    cancelOrder(orderId){
+    cancelOrder(orderId) {
       this.isLoading = true;
-      if(orderId){
-        axios.post(API.CancelOrderEx,qs.stringify({
+      if (orderId) {
+        axios.post(API.CancelOrderEx, qs.stringify({
           "Token": this.Token,
           "OrderId": orderId
-        }),{
-          headers: {'Content-Type':'application/x-www-form-urlencoded'}
-        }).then((res)=>{
+        }), {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then((res) => {
           this.isLoading = false;
-          console.log("取消订单",res.data);
-          if(res.data.Meta.ErrorCode === '0'){
+          console.log("取消订单", res.data);
+          if (res.data.Meta.ErrorCode === '0') {
             this.$router.go(0)
-          }else{
+          } else {
             this.isDelete = false;
             this.isError = true;
             this.errorMsg = res.data.Meta.ErrorMsg;
           }
-        }).catch(function (error) {
+        }).catch(function(error) {
           console.log(error);
           this.isError = true;
           this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
         });
       }
     },
-    payOrder(orderId){
-      if(orderId){
-      	this.$store.dispatch('setOrderId',{
-      		txt:orderId
-      	});
-        this.$router.push({path:'/pay'});
+    payOrder(orderId) {
+      if (orderId) {
+        this.$store.dispatch('setOrderId', {
+          txt: orderId
+        });
+        this.$router.push({
+          path: '/pay'
+        });
       }
     },
-    sureOrder(orderId){
+    sureOrder(orderId) {
       this.isLoading = true;
-      if(orderId){
-        axios.post(API.CompleteOrderEx,qs.stringify({
+      if (orderId) {
+        axios.post(API.CompleteOrderEx, qs.stringify({
           "Token": this.Token,
           "OrderId": orderId
-        }),{
-          headers: {'Content-Type':'application/x-www-form-urlencoded'}
-        }).then((res)=>{
+        }), {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then((res) => {
           this.isLoading = false;
-          console.log("确认订单",res.data);
-          if(res.data.Meta.ErrorCode === '0'){
+          console.log("确认订单", res.data);
+          if (res.data.Meta.ErrorCode === '0') {
             this.$router.go(0)
-          }else{
+          } else {
             this.isDelete = false;
             this.isError = true;
             this.errorMsg = res.data.Meta.ErrorMsg;
           }
-        }).catch(function (error) {
+        }).catch(function(error) {
           console.log(error);
           this.isError = true;
           this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
         });
       }
     },
-    situation(orderStatus,isPayOff,refundStatus){
-    	// 传入订单状态，是否支付，是否退款
-    	// 订单提交 && 未付款 需要指派 订单已提交---待付款
-      if(orderStatus === '1' && isPayOff ==='0'){
+    situation(orderStatus, isPayOff, refundStatus) {
+      // 传入订单状态，是否支付，是否退款
+      // 订单提交 && 未付款 需要指派 订单已提交---待付款
+      if (orderStatus === '1' && isPayOff === '0') {
         return 10;
       }
       // 订单已提交---待付款
-      if(orderStatus === '10' && isPayOff ==='0'){
+      if (orderStatus === '10' && isPayOff === '0') {
         return 100;
       }
       // 订单已提交---已付款---待工人接单
-      if(orderStatus === '10' && isPayOff ==='1'){
+      if (orderStatus === '10' && isPayOff === '1') {
         return 101;
       }
       // 订单已提交---未付款---服务中
-      if(orderStatus === '20' && isPayOff ==='0'){
+      if (orderStatus === '20' && isPayOff === '0') {
         return 200;
       }
       // 订单已提交---已付款---服务中
-      if(orderStatus === '20' && isPayOff ==='1'){
+      if (orderStatus === '20' && isPayOff === '1') {
         return 201;
       }
       // 订单已提交---已付款---完成服务
-      if(orderStatus === '30' && isPayOff ==='1'){
+      if (orderStatus === '30' && isPayOff === '1') {
         return 301;
       }
       // 订单已提交---已付款---服务已完成
-      if(orderStatus === '40' && isPayOff ==='1'){
+      if (orderStatus === '40' && isPayOff === '1') {
         return 401;
       }
       // 订单已提交---订单取消
-      if(orderStatus === '50'){
+      if (orderStatus === '50') {
         return 50;
       }
       // 订单已提交---退款中
-      if(orderStatus ==='1' && refundStatus === '2'){
-      	// 完成退款
-        return 5012    
-      }else{
-      	// 退款中
-      	return 5011;
+      if (orderStatus === '1' && refundStatus === '2') {
+        // 完成退款
+        return 5012
+      } else {
+        // 退款中
+        return 5011;
       }
     },
-    payable(activityNgs,discountAmount,totalPrice){
-    	// 传入活动，红包折扣，订单总计
-    	// 返回 计算优惠后的价格
+    payable(activityNgs, discountAmount, totalPrice) {
+      // 传入活动，红包折扣，订单总计
+      // 返回 计算优惠后的价格
       // 订单优惠后价格 应付价格 0 满减 ，1 满返
-      let discountList =[];
-      if(activityNgs.ServiceTypeRules && activityNgs.ServiceTypeRules.length > 0){
-        activityNgs.ServiceTypeRules.map((v)=>{
-          v.Details.map((x)=>{
-            if(x.ReturnType === '0'){
+      let discountList = [];
+      if (activityNgs.ServiceTypeRules && activityNgs.ServiceTypeRules.length > 0) {
+        activityNgs.ServiceTypeRules.map((v) => {
+          v.Details.map((x) => {
+            if (x.ReturnType === '0') {
               let rule = [];
-              x.Rules.map((y)=>{
-                if(parseFloat(totalPrice) >= parseFloat(y.Upper)){
+              x.Rules.map((y) => {
+                if (parseFloat(totalPrice) >= parseFloat(y.Upper)) {
                   rule.push(parseFloat(y.Minus));
                 }
               })
-              if(rule.length > 0){
-              	let max = rule.reduce((x,y)=>{
-	                return (x>y) ? x:y;
-	              })
-	              discountList.push(max);
+              if (rule.length > 0) {
+                let max = rule.reduce((x, y) => {
+                  return (x > y) ? x : y;
+                })
+                discountList.push(max);
               }
             }
           })
         })
-        if(discountList.length > 0){
-					var discountSum = discountList.reduce((x,y)=>{
-	          return x+y;
-	        },0)
-      	}
-        if(discountAmount){
+        if (discountList.length > 0) {
+          var discountSum = discountList.reduce((x, y) => {
+            return x + y;
+          }, 0)
+        }
+        if (discountAmount) {
           return totalPrice - discountSum - parseFloat(discountAmount);
-        }else{
+        } else {
           return totalPrice - discountSum;
-        } 
+        }
       }
     },
-    formatTime(times){
-  		let time = times + "000";
-  		return new Date(parseInt(time,10)).Format("yyyy-MM-dd hh:mm:ss");
+    formatTime(times) {
+      let time = times + "000";
+      //添加时间可能为null的可能
+      if(times == null) {
+        return '';
+      }
+      return new Date(parseInt(time, 10)).Format("yyyy-MM-dd hh:mm:ss");
     },
-    routerTo(orderId){
-    	this.$store.dispatch('setOrderId',{
-    		txt:orderId
-    	});
-    	this.$router.push({path:'/order_detail'});
+    routerTo(orderId) {
+      this.$store.dispatch('setOrderId', {
+        txt: orderId
+      });
+      this.$router.push({
+        path: '/order_detail'
+      });
     }
   },
-  watch:{
-  	type(){
-  		this.list = [];
-  		this.onInfinite();
-  	}
+  watch: {
+    type() {
+      this.list = [];
+      this.onInfinite();
+    }
   },
-  computed:{
-  	...mapState(['Token'])
+  computed: {
+    ...mapState(['Token'])
   },
-  components:{InfiniteLoading}
+  components: {
+    InfiniteLoading
+  }
 }
 </script>
 <style scoped>
