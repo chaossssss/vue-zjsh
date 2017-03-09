@@ -426,7 +426,7 @@ export default {
         //定价，未付款
         if (isPayOff == 0) {
           //取消订单
-          if (orderStatus == 50 && (refundStatus == 1 || refundStatus == 2)) {
+          if (orderStatus == 50) {
             //定价，未付款，工人未接，取消中/已取消
             if (isAccept == 0) {
               return 500;
@@ -502,7 +502,7 @@ export default {
         if (isPayOff == 0) {
           //取消订单
           //面议单，未付款，取消中/已取消
-          if (orderStatus == 50 && (refundStatus == 1 || refundStatus == 2)) {
+          if (orderStatus == 50) {
             return 500;
           }
 
