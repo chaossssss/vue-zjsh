@@ -49,7 +49,7 @@
     <div class="weui-cell">
       <div class="weui-cell__bd">
         <p>备注</p>
-        <p class="fc9" v-show="od.Service.Content">{{od.Service.Content}}</p>
+        <p class="fc9" v-show="od.Service.Content" v-for="elem in od.Service.Content">{{elem}}</p>
         <p class="fc9" v-show="!od.Service.Content">无任何备注信息</p>
       </div>
     </div>
@@ -548,7 +548,7 @@ export default {
 .weui-cell {
   font-size:14px;
   line-height:1.75em;
-} 
+}
 .weui-panel {
   margin-top: 0;
   font-size:14px;
@@ -556,6 +556,9 @@ export default {
 }
 .weui-media-box {
   padding:5px 15px 5px 15px;
+}
+.weui-media-box::before {
+  top: 100%;
 }
 .weui-panel__hd {
   padding:5px 15px 10px;

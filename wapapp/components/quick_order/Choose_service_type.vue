@@ -265,7 +265,7 @@ export default {
 	    // autoplay: 5000,//可选选项，自动滑动
 	    pagination: '.swiper-pagination',
 	    paginationType : 'bullets'
-	  })  
+	  })
 
 	  // 重构 含有1，2级别；1，2，3级别；1，3，4级别
 	  function reconsitution(arry){
@@ -276,7 +276,6 @@ export default {
 					//  不含四级的 三级对象
 					let two = x.Children.map(function(z,i,arry){
 						if(z.Children){ // 是否存在四级
-							
 						}else{
 							return z;
 						}
@@ -356,7 +355,7 @@ export default {
         			console.log("接口错误");
         			break;
         	}
-        });     
+        });
       }else{
         this.isDelete = false;
         this.isError = true;
@@ -366,7 +365,7 @@ export default {
       console.log(error);
       this.isError = true;
       this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
-    }); 
+    });
   },
 	methods: {
 		setQuickShop(){
@@ -381,16 +380,16 @@ export default {
 			}else{
 				this.quickShop.ServiceTypeId = item.TypeId;
 				this.quickShop.ServiceTypeName = item.TypeName;
-				this.quickShop.Total = '1'; 
+				this.quickShop.Total = '1';
 				this.quickShop.ServiceStartAt = "";
 				this.quickShop.ServicePrice = "";
 				this.setQuickShop();
 				this.$router.push({path:'/quick_order'});
-			}	
+			}
 		}
   },
   computed:mapState(['Token','quickShop'])
-}	
+}
 </script>
 <style scoped>
 .swiper-container {
