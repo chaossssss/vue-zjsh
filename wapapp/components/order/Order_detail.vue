@@ -37,7 +37,7 @@
     </div>
     <div class="weui-cell">
       <div class="weui-cell__bd">
-        <p>服务类型</p>
+        <p>服务类型{{ situation }}</p>
       </div>
       <div class="weui-cell__ft">
         {{od.Service.ServiceName}}
@@ -389,12 +389,6 @@ export default {
   },
   computed: {
     situation() {
-      //参数说明
-      //orderStatus:订单状态码（见接口文档）
-      //refundStatus:退款码（见接口文档），如果未退款则为空
-      //isPayOff:是否支付（0否1是）
-      //isNegotiable:是否面议（0否1是）
-
       //状态码返回规范
       //状态码由三位数组成，其中
       //百位：1:待接单 2:待服务 3:待确认 4:已完成 5.退款中 6.已退款
@@ -403,12 +397,28 @@ export default {
 
       //例外：定价单与面议单中工人未接单且未付款的状态码都为100，但需要显示不同的状态图，因此在出现此种冲突时在面议单的状态码前补3作为其标识
 
+      //orderStatus:订单状态码（见接口文档）
       let orderStatus = this.od.OrderStatus;
-      //let refundStatus = this.od.Refunds[0].Status || '';
-      //let refundStatus = this.od.Refunds != [] ? this.od.Refunds[0].Status : '';
+
+      //refundStatus:退款码（见接口文档），如果未退款则为空
       let refundStatus = '';
+      //如果存在退款信息则获取其退款状态码
+      if(this.od.Refunds.length != 0) {
+        refundStatus = this.od.Refunds[0].Status;
+      }
+
+      //isPayOff:是否支付（0否1是）
       let isPayOff = this.od.IsPayOff;
+
+      //isNegotiable:是否面议（0否1是）
       let isNegotiable = this.od.IsNegotiable;
+
+       //isAccept:是否接单（0否1是）
+      let isAccept = 1;
+      //如果没有接收时间则工人未接单
+      if(this.od.AcceptTime == null) {
+        isAccept = 0;
+      }
 
       if (isNegotiable == 0) {
         //定价
@@ -416,21 +426,21 @@ export default {
         //定价，未付款
         if (isPayOff == 0) {
           //取消订单
-          if (refundStatus == 1 || refundStatus == 2) {
+          if (orderStatus == 50 && (refundStatus == 1 || refundStatus == 2)) {
             //定价，未付款，工人未接，取消中/已取消
-            if (orderStatus == 1 || orderStatus == 10) {
+            if (isAccept == 0) {
               return 500;
             }
 
             //定价，未付款，工人已接，取消中/已取消
-            if (orderStatus == 20) {
+            if (isAccept == 1) {
               return 510;
             }
           }
 
           //未取消订单
           //定价，未付款
-          if (refundStatus == '') {
+          if (refundStatus == '' && orderStatus != 50) {
             return 100;
           }
         }
@@ -438,45 +448,47 @@ export default {
         //定价，已付款
         if (isPayOff == 1) {
           //取消订单
-          //定价，已付款，工人未接，退款中
-          if (refundStatus == 1 && (orderStatus == 1 || orderStatus == 10)) {
-            return 501;
-          }
+          if (orderStatus == 50) {
+            //定价，已付款，工人未接，退款中
+            if (refundStatus == 1 && isAccept == 0) {
+              return 501;
+            }
 
-          //定价，已付款，工人已接，退款中
-          if (refundStatus == 1 && orderStatus == 20) {
-            return 511;
-          }
+            //定价，已付款，工人已接，退款中
+            if (refundStatus == 1 && isAccept == 1) {
+              return 511;
+            }
 
-          //定价，已付款，工人未接，已退款
-          if (refundStatus == 2 && (orderStatus == 1 || orderStatus == 10)) {
-            return 601;
-          }
+            //定价，已付款，工人未接，已退款
+            if (refundStatus == 2 && isAccept == 0) {
+              return 601;
+            }
 
-          //定价，已付款，工人已接，已退款
-          if (refundStatus == 2 && orderStatus == 20) {
-            return 611;
+            //定价，已付款，工人已接，已退款
+            if (refundStatus == 2 && isAccept == 1) {
+              return 611;
+            }
           }
 
           //未取消订单
           if (refundStatus == '') {
             //定价，已付款，工人未接
-            if (orderStatus == 1 || orderStatus == 10) {
+            if (isAccept == 0 || (orderStatus == 1 || orderStatus == 10)) {
               return 101;
             }
 
             //定价，已付款，工人已接，待服务
-            if (orderStatus == 20) {
+            if (orderStatus == 20 && isAccept == 1) {
               return 211;
             }
 
             //定价，已付款，工人已接，服务完成，待确认
-            if (orderStatus == 30) {
+            if (orderStatus == 30 && isAccept == 1) {
               return 311;
             }
 
             //定价，已付款，工人已接，服务完成，已确认
-            if (orderStatus == 40) {
+            if (orderStatus == 40 && isAccept == 1) {
               return 411;
             }
           }
@@ -490,42 +502,43 @@ export default {
         if (isPayOff == 0) {
           //取消订单
           //面议单，未付款，取消中/已取消
-          if (refundStatus == 1 || refundStatus == 2) {
+          if (orderStatus == 50 && (refundStatus == 1 || refundStatus == 2)) {
             return 500;
           }
 
           //未取消订单
           if (refundStatus == '') {
             //面议单，未付款，工人未接单
-            if (orderStatus == 1 || orderStatus == 10) {
+            if ((orderStatus == 1 || orderStatus == 10) && isAccept == 0) {
               return 3100;
             }
 
             //面议单，未付款，工人已接单
-            if (orderStatus == 20) {
+            if (orderStatus == 20 && isAccept == 1) {
               return 210;
             }
 
             //面议单，未付款，工人已接单，待确认
-            if (orderStatus == 30) {
+            if (orderStatus == 30 && isAccept == 1) {
               return 310;
             }
           }
         }
 
         //面议单，已付款
-        if (isPayOff == 1) {
+        if (isPayOff == 1 && isAccept == 1) {
           //取消订单
-          //面议单，已付款，取消中
-          if (refundStatus == 1 && (orderStatus == 1 || orderStatus == 10)) {
-            return 511;
-          }
+          if (orderStatus == 50) {
+            //面议单，已付款，取消中
+            if (refundStatus == 1 && orderStatus == 50) {
+              return 511;
+            }
 
-          //面议单，已付款，已取消
-          if (refundStatus == 1 && (orderStatus == 1 || orderStatus == 10)) {
-            return 611;
+            //面议单，已付款，已取消
+            if (refundStatus == 2 && orderStatus == 50) {
+              return 611;
+            }
           }
-
 
           //未取消订单
           if (refundStatus == '') {
@@ -541,6 +554,9 @@ export default {
           }
         }
       }
+
+      return 'error'
+
     },
     payable() {
       // 订单优惠后价格 应付价格 0 满减 ，1 满返
