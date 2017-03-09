@@ -3,16 +3,21 @@
   <div class="weui-cells" style="margin-top:0;">
     <div class="weui-cell" style="padding:0;">
       <div class="weui-cell__bd">
-        <img v-show="situation === 10" style="width:100%;" src="../../static/images/pic-ordernew-success.png" alt="">
-        <img v-show="situation === 100" style="width:100%;" src="../../static/images/pic-ordernew-success2.png" alt="">
-        <img v-show="situation === 101" style="width:100%;" src="../../static/images/pic-pay-success.png" alt="">
-        <img v-show="situation === 200" style="width:100%;" src="../../static/images/pic-worker-uncomfirm.png" alt="">
-        <img v-show="situation === 201" style="width:100%;" src="../../static/images/pic-worker-uncomfirms.png" alt="">
-        <img v-show="situation === 301" style="width:100%;" src="../../static/images/pic-newawaiting.png" alt="">
-        <img v-show="situation === 401" style="width:100%;" src="../../static/images/pic-orders_evaluate.png" alt="">
-        <img v-show="situation === 50" style="width:100%;" src="../../static/images/pic-orders_cancel1.png" alt="">
-        <img v-show="situation === 5011" style="width:100%;" src="../../static/images/pic-orders_cancel6.png" alt="">
-        <img v-show="situation === 5012" style="width:100%;" src="../../static/images/pic-orders_cancel2.png" alt="">
+        <img v-show="situation == 100" style="width:100%;" src="../../static/images/100.png" alt="">
+        <img v-show="situation == 3100" style="width:100%;" src="../../static/images/3100.png" alt="">
+        <img v-show="situation == 101" style="width:100%;" src="../../static/images/101.png" alt="">
+        <img v-show="situation == 210" style="width:100%;" src="../../static/images/210.png" alt="">
+        <img v-show="situation == 211" style="width:100%;" src="../../static/images/211.png" alt="">
+        <img v-show="situation == 301" style="width:100%;" src="../../static/images/301.png" alt="">
+        <img v-show="situation == 310" style="width:100%;" src="../../static/images/310.png" alt="">
+        <img v-show="situation == 311" style="width:100%;" src="../../static/images/311.png" alt="">
+        <img v-show="situation == 411" style="width:100%;" src="../../static/images/411.png" alt="">
+        <img v-show="situation == 500" style="width:100%;" src="../../static/images/500.png" alt="">
+        <img v-show="situation == 501" style="width:100%;" src="../../static/images/501.png" alt="">
+        <img v-show="situation == 510" style="width:100%;" src="../../static/images/510.png" alt="">
+        <img v-show="situation == 511" style="width:100%;" src="../../static/images/511.png" alt="">
+        <img v-show="situation == 601" style="width:100%;" src="../../static/images/601.png" alt="">
+        <img v-show="situation == 611" style="width:100%;" src="../../static/images/611.png" alt="">
       </div>
     </div>
   </div>
@@ -384,49 +389,156 @@ export default {
   },
   computed: {
     situation() {
-      // 订单提交 && 未付款 需要指派 订单已提交---待付款
-      if (this.od.OrderStatus === '1' && this.od.IsPayOff === '0') {
-        return 10;
+      //参数说明
+      //orderStatus:订单状态码（见接口文档）
+      //refundStatus:退款码（见接口文档），如果未退款则为空
+      //isPayOff:是否支付（0否1是）
+      //isNegotiable:是否面议（0否1是）
+
+      //状态码返回规范
+      //状态码由三位数组成，其中
+      //百位：1:待接单 2:待服务 3:待确认 4:已完成 5.退款中 6.已退款
+      //十位：0:工人未接单 1:工人已接单
+      //个位：0:未付款 1:已付款
+
+      //例外：定价单与面议单中工人未接单且未付款的状态码都为100，但需要显示不同的状态图，因此在出现此种冲突时在面议单的状态码前补3作为其标识
+
+      let orderStatus = this.od.OrderStatus;
+      //let refundStatus = this.od.Refunds[0].Status || '';
+      //let refundStatus = this.od.Refunds != [] ? this.od.Refunds[0].Status : '';
+      let refundStatus = '';
+      let isPayOff = this.od.IsPayOff;
+      let isNegotiable = this.od.IsNegotiable;
+
+      if (isNegotiable == 0) {
+        //定价
+
+        //定价，未付款
+        if (isPayOff == 0) {
+          //取消订单
+          if (refundStatus == 1 || refundStatus == 2) {
+            //定价，未付款，工人未接，取消中/已取消
+            if (orderStatus == 1 || orderStatus == 10) {
+              return 500;
+            }
+
+            //定价，未付款，工人已接，取消中/已取消
+            if (orderStatus == 20) {
+              return 510;
+            }
+          }
+
+          //未取消订单
+          //定价，未付款
+          if (refundStatus == '') {
+            return 100;
+          }
+        }
+
+        //定价，已付款
+        if (isPayOff == 1) {
+          //取消订单
+          //定价，已付款，工人未接，退款中
+          if (refundStatus == 1 && (orderStatus == 1 || orderStatus == 10)) {
+            return 501;
+          }
+
+          //定价，已付款，工人已接，退款中
+          if (refundStatus == 1 && orderStatus == 20) {
+            return 511;
+          }
+
+          //定价，已付款，工人未接，已退款
+          if (refundStatus == 2 && (orderStatus == 1 || orderStatus == 10)) {
+            return 601;
+          }
+
+          //定价，已付款，工人已接，已退款
+          if (refundStatus == 2 && orderStatus == 20) {
+            return 611;
+          }
+
+          //未取消订单
+          if (refundStatus == '') {
+            //定价，已付款，工人未接
+            if (orderStatus == 1 || orderStatus == 10) {
+              return 101;
+            }
+
+            //定价，已付款，工人已接，待服务
+            if (orderStatus == 20) {
+              return 211;
+            }
+
+            //定价，已付款，工人已接，服务完成，待确认
+            if (orderStatus == 30) {
+              return 311;
+            }
+
+            //定价，已付款，工人已接，服务完成，已确认
+            if (orderStatus == 40) {
+              return 411;
+            }
+          }
+        }
       }
-      // 订单已提交---待付款
-      if (this.od.OrderStatus === '10' && this.od.IsPayOff === '0') {
-        return 100;
-      }
-      // 订单已提交---已付款---待工人接单
-      if (this.od.OrderStatus === '10' && this.od.IsPayOff === '1') {
-        return 101;
-      }
-      // 订单已提交---未付款---服务中
-      if (this.od.OrderStatus === '20' && this.od.IsPayOff === '0') {
-        return 200;
-      }
-      // 订单已提交---已付款---服务中
-      if (this.od.OrderStatus === '20' && this.od.IsPayOff === '1') {
-        return 201;
-      }
-      // 订单已提交---已付款---完成服务
-      if (this.od.OrderStatus === '30' && this.od.IsPayOff === '1') {
-        return 301;
-      }
-      // 订单已提交---已付款---服务已完成
-      if (this.od.OrderStatus === '40' && this.od.IsPayOff === '1') {
-        return 401;
-      }
-      // 订单已提交---订单取消
-      if (this.od.OrderStatus === '50' && this.od.Refunds.length === 0) {
-        return 50;
-      }
-      // 订单已提交---退款中
-      if (this.od.IsPayOff === '1' && this.od.Refunds.length > 0) {
-        let status = this.od.Refunds.every((v, i, arry) => {
-          return v.Status > 1
-        })
-        if (status) {
-          //完成退款
-          return 5012
-        } else {
-          // 退款中
-          return 5011;
+
+      if (isNegotiable == 1) {
+        //面议单
+
+        //面议单，未付款
+        if (isPayOff == 0) {
+          //取消订单
+          //面议单，未付款，取消中/已取消
+          if (refundStatus == 1 || refundStatus == 2) {
+            return 500;
+          }
+
+          //未取消订单
+          if (refundStatus == '') {
+            //面议单，未付款，工人未接单
+            if (orderStatus == 1 || orderStatus == 10) {
+              return 3100;
+            }
+
+            //面议单，未付款，工人已接单
+            if (orderStatus == 20) {
+              return 210;
+            }
+
+            //面议单，未付款，工人已接单，待确认
+            if (orderStatus == 30) {
+              return 310;
+            }
+          }
+        }
+
+        //面议单，已付款
+        if (isPayOff == 1) {
+          //取消订单
+          //面议单，已付款，取消中
+          if (refundStatus == 1 && (orderStatus == 1 || orderStatus == 10)) {
+            return 511;
+          }
+
+          //面议单，已付款，已取消
+          if (refundStatus == 1 && (orderStatus == 1 || orderStatus == 10)) {
+            return 611;
+          }
+
+
+          //未取消订单
+          if (refundStatus == '') {
+            //面议单，已付款，待服务
+            if (orderStatus == 30) {
+              return 311;
+            }
+
+            //面议单，已付款，已完成
+            if (orderStatus == 40) {
+              return 411;
+            }
+          }
         }
       }
     },
