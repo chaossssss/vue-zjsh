@@ -22,21 +22,27 @@
 							<span class="fc0">{{item.Service.ServiceName}}</span>
 						</div>
 						<div class="vue-cell__bd"></div>
-						<div class="vue-cell__ft blue" v-show="item.situation === 10">
-							<span>订单已提交</span>
-						</div>
-						<div class="vue-cell__ft blue" v-show="item.situation === 100 || item.situation === 101">
-							<span>等待工人接单</span>
-						</div>
-						<div class="vue-cell__ft blue" v-show="item.situation === 200 || item.situation === 201">
-							<span>待工人服务</span>
-						</div>
-						<div class="vue-cell__ft blue" v-show="item.situation === 301 || item.situation === 401">
-							<span>订单已完成</span>
-						</div>
-						<div class="vue-cell__ft blue" v-show="item.situation === 5011">
-							<span>退款中</span>
-						</div>
+            <div class="vue-cell__ft blue" v-show="item.situation === 101 || item.situation === 1003">
+              <span>待接单</span>
+            </div>
+            <div class="vue-cell__ft blue" v-show="item.situation === 100 || item.situation === 210 || item.situation === 2103">
+              <span>待付款</span>
+            </div>
+            <div class="vue-cell__ft blue" v-show="item.situation === 211 || item.situation === 2113">
+              <span>待服务</span>
+            </div>
+            <div class="vue-cell__ft blue" v-show="item.situation === 311">
+              <span>待确认</span>
+            </div>
+            <div class="vue-cell__ft blue" v-show="item.situation === 411">
+              <span>待评价</span>
+            </div>
+            <div class="vue-cell__ft blue" v-show="item.situation === 501 || item.situation === 511">
+              <span>退款中</span>
+            </div>
+            <div class="vue-cell__ft blue" v-show="item.situation === 600 || item.situation === 601 || item.situation === 610 || item.situation === 611">
+              <span>已取消</span>
+            </div>
 					</div>
 				</div>
 				<div class="vue-panel__bd" @click="routerTo(item.OrderId)">
@@ -70,24 +76,24 @@
 							<div class="vue-cell__bd">
 								<p class="fc9">服务价格</p>
 							</div>
+              <div class="vue-cell__ft" v-show="!item.TotalPrice && !item.StartingPrice && !item.Price">
+                面议
+              </div>
 							<div class="vue-cell__ft" v-show="item.Price && item.TotalPrice">
 								¥{{item.Price}}/{{item.UnitName}} &nbsp;x{{item.Total}}
-							</div>
-							<div class="vue-cell__ft" v-show="!item.Price && !item.StartingPrice">
-								面议
 							</div>
 							<div class="vue-cell__ft" v-show="!item.Price && item.StartingPrice">
 								¥{{item.StartingPrice}}元&nbsp;起
 							</div>
 						</div>
-						<div class="vue-cell" style="padding-top:5px;" v-show="item.situation === 100 || item.situation === 200">
+						<div class="vue-cell" style="padding-top:5px;" v-show="item.IsPayOff == 0">
 							<div class="vue-cell__bd"></div>
 							<div class="vue-cell__ft">
 								 <span >待支付：</span>
 								<span class="red f16">¥ {{item.payable}}</span>
 							</div>
 						</div>
-						<div class="vue-cell" style="padding-top:5px;" v-show="item.situation === 101 && item.situation === 201 && item.situation === 301 && item.situation === 401">
+						<div class="vue-cell" style="padding-top:5px;" v-show="item.IsPayOff == 1">
 							<div class="vue-cell__bd"></div>
 							<div class="vue-cell__ft">
 								 <span >实付：</span>
@@ -99,10 +105,10 @@
 					<div class="vue-cell" style="padding:5px 15px;">
 						<div class="vue-cell__bd"></div>
 						<div class="vue-cell_ft">
-							<button @click="delOrder(item.OrderId)" v-show="item.situation === 50" class="vue-btn vue-btn_plain-default">删除订单</button>
-			        <button @click="cancelOrder(item.OrderId)" v-show="parseInt(item.OrderStatus)<=14" class="vue-btn vue-btn_plain-default">取消订单</button>
-			        <button @click="payOrder(item.OrderId)" v-show="item.situation === 100 || item.situation === 200" class="vue-btn vue-btn_plain-primary">支付</button>
-			        <button @click="sureOrder(item.OrderId)" v-show="item.situation === 401" class="vue-btn vue-btn_plain-success">确认服务完成</button>
+							<button @click="delOrder(item.OrderId)" v-show="item.situation === 600 || item.situation === 601 || item.situation === 610 || item.situation === 611" class="vue-btn vue-btn_plain-default">删除订单</button>
+			        <button @click="cancelOrder(item.OrderId)" v-show="item.situation === 501 || item.situation === 511" class="vue-btn vue-btn_plain-default">取消订单</button>
+			        <button @click="payOrder(item.OrderId)" v-show="item.IsPayOff == 0 && item.situation < 300" class="vue-btn vue-btn_plain-primary">支付</button>
+			        <button @click="sureOrder(item.OrderId)" v-show="item.situation === 311" class="vue-btn vue-btn_plain-success">确认服务完成</button>
 						</div>
 					</div>
 				</div>
@@ -194,8 +200,9 @@ export default {
         if (res.data.Meta.ErrorCode === '0') {
           if (res.data.Body.OrderList && res.data.Body.OrderList.length > 0) {
             res.data.Body.OrderList.map((v, i, arry) => {
-              arry[i]['situation'] = this.situation(v.OrderStatus, v.IsPayOff, v.RefundStatus);
-              arry[i]['payable'] = this.payable(v.ActivityNgs, v.DiscountAmount, v.TotalPrice);
+              let isAccept = parseInt(v.ServiceProviderType) === 0 ? 0 : 1;
+              arry[i]['situation'] = this.situation(v.OrderStatus, v.RefundStatus, v.IsPayOff, v.IsNegotiable, isAccept);
+              arry[i]['payable'] = this.payable(v.ActivityNgs, v.DiscountAmount, v.TotalPrice, v.StartingPrice);
               arry[i]['serviceStartTime'] = this.formatTime(v.Service.ServiceStartTime);
             })
             this.list = this.list.concat(res.data.Body.OrderList);
@@ -304,53 +311,174 @@ export default {
         });
       }
     },
-    situation(orderStatus, isPayOff, refundStatus) {
-      // 传入订单状态，是否支付，是否退款
-      // 订单提交 && 未付款 需要指派 订单已提交---待付款
-      if (orderStatus === '1' && isPayOff === '0') {
-        return 10;
+    situation(orderStatus, refundStatus, isPayOff, isNegotiable, isAccept) {
+      //状态码返回规范
+      //状态码由三位数组成，其中
+      //百位：1:待接单 2:待服务 3:待确认 4:已完成 5.退款中 6.已退款
+      //十位：0:工人未接单 1:工人已接单
+      //个位：0:未付款 1:已付款
+
+      //例外：面议单中顺序为先等工人接单再付款，为保证一致，在部分状态码后补3以区别（并非所有面议单状态码后都补3）
+
+      //orderStatus:订单状态码（见接口文档）
+      //refundStatus:退款码（见接口文档），如果未退款则为空
+      //isPayOff:是否支付（0否1是）
+      //isNegotiable:是否面议（0否1是）
+      //isAccept:工人是否接单（0否1是）
+
+      if (isNegotiable == 0) {
+        //定价
+
+        //定价，未付款
+        if (isPayOff == 0) {
+          //取消订单
+          if (orderStatus == 50) {
+            //定价，未付款，工人未接，取消中/已取消
+            if (isAccept == 0) {
+              return 600;
+            }
+
+            //定价，未付款，工人已接，取消中/已取消
+            if (isAccept == 1) {
+              return 610;
+            }
+          }
+
+          //未取消订单
+          //定价，未付款
+          if (refundStatus == '' && orderStatus != 50) {
+            return 100;
+          }
+        }
+
+        //定价，已付款
+        if (isPayOff == 1) {
+          //取消订单
+          if (orderStatus == 50) {
+            //定价，已付款，工人未接，退款中
+            if (refundStatus == 1 && isAccept == 0) {
+              return 501;
+            }
+
+            //定价，已付款，工人已接，退款中
+            if (refundStatus == 1 && isAccept == 1) {
+              return 511;
+            }
+
+            //定价，已付款，工人未接，已退款
+            if (refundStatus == 2 && isAccept == 0) {
+              return 601;
+            }
+
+            //定价，已付款，工人已接，已退款
+            if (refundStatus == 2 && isAccept == 1) {
+              return 611;
+            }
+          }
+
+          //未取消订单
+          if (refundStatus == '') {
+            //定价，已付款，工人未接
+            if (isAccept == 0 || (orderStatus == 1 || orderStatus == 10)) {
+              return 101;
+            }
+
+            //定价，已付款，工人已接，待服务
+            if (orderStatus == 20 && isAccept == 1) {
+              return 211;
+            }
+
+            //定价，已付款，工人已接，服务完成，待确认
+            if (orderStatus == 30 && isAccept == 1) {
+              return 311;
+            }
+
+            //定价，已付款，工人已接，服务完成，已确认
+            if (orderStatus == 40 && isAccept == 1) {
+              return 411;
+            }
+          }
+        }
       }
-      // 订单已提交---待付款
-      if (orderStatus === '10' && isPayOff === '0') {
-        return 100;
+
+      if (isNegotiable == 1) {
+        //面议单
+
+        //面议单，未付款
+        if (isPayOff == 0) {
+          //取消订单
+          //面议单，未付款，取消中/已取消
+          if (orderStatus == 50) {
+            return 600;
+          }
+
+          //未取消订单
+          if (refundStatus == '') {
+            //面议单，未付款，工人未接单
+            if ((orderStatus == 1 || orderStatus == 10) && isAccept == 0) {
+              return 1003;
+            }
+
+            //面议单，未付款，工人已接单
+            if (orderStatus == 20 && isAccept == 1) {
+              return 210;
+            }
+
+            //面议单，未付款，工人已接单，待确认
+            if (orderStatus == 30 && isAccept == 1) {
+              return 2103;
+            }
+          }
+        }
+
+        //面议单，已付款
+        if (isPayOff == 1 && isAccept == 1) {
+          //取消订单
+          if (orderStatus == 50) {
+            //面议单，已付款，取消中
+            if (refundStatus == 1 && orderStatus == 50) {
+              return 511;
+            }
+
+            //面议单，已付款，已取消
+            if (refundStatus == 2 && orderStatus == 50) {
+              return 611;
+            }
+          }
+
+          //未取消订单
+          if (refundStatus == '') {
+            //面议单，已付款，待服务
+            if (orderStatus == 20) {
+              return 211;
+            }
+
+            if (orderStatus == 30) {
+              return 311;
+            }
+
+            //面议单，已付款，已完成
+            if (orderStatus == 40) {
+              return 411;
+            }
+          }
+        }
       }
-      // 订单已提交---已付款---待工人接单
-      if (orderStatus === '10' && isPayOff === '1') {
-        return 101;
-      }
-      // 订单已提交---未付款---服务中
-      if (orderStatus === '20' && isPayOff === '0') {
-        return 200;
-      }
-      // 订单已提交---已付款---服务中
-      if (orderStatus === '20' && isPayOff === '1') {
-        return 201;
-      }
-      // 订单已提交---已付款---完成服务
-      if (orderStatus === '30' && isPayOff === '1') {
-        return 301;
-      }
-      // 订单已提交---已付款---服务已完成
-      if (orderStatus === '40' && isPayOff === '1') {
-        return 401;
-      }
-      // 订单已提交---订单取消
-      if (orderStatus === '50') {
-        return 50;
-      }
-      // 订单已提交---退款中
-      if (orderStatus === '1' && refundStatus === '2') {
-        // 完成退款
-        return 5012
-      } else {
-        // 退款中
-        return 5011;
-      }
+
+      return 'error'
     },
-    payable(activityNgs, discountAmount, totalPrice) {
+    payable(activityNgs, discountAmount, totalPrice, startPrice) {
       // 传入活动，红包折扣，订单总计
       // 返回 计算优惠后的价格
       // 订单优惠后价格 应付价格 0 满减 ，1 满返
+      if(!totalPrice) {
+        if(startPrice != null || startPrice != '') {
+          return startPrice + '起';
+        } else {
+          return '面议';
+        }
+      }
+
       let discountList = [];
       if (activityNgs.ServiceTypeRules && activityNgs.ServiceTypeRules.length > 0) {
         activityNgs.ServiceTypeRules.map((v) => {
@@ -381,6 +509,8 @@ export default {
         } else {
           return totalPrice - discountSum;
         }
+      } else {
+        return totalPrice;
       }
     },
     formatTime(times) {
@@ -405,6 +535,9 @@ export default {
       this.list = [];
       this.onInfinite();
     }
+  },
+  mounted() {
+    this.onInfinite();
   },
   computed: {
     ...mapState(['Token'])
