@@ -42,12 +42,12 @@
         </div>
     </div>
 	<div class="weui-cells mt15" style="margin-top: 0.5em;font-size:14px;color:#333639;">
-        <router-link class="list-item weui-cell_access" :to="{name:'addr_list',params:{origin:'user'}}">
+        <div @click="routerToAddr" class="list-item weui-cell_access">
             <div class="weui-cell__bd">
                 <p>服务地址</p>
             </div>
             <div class="weui-cell__ft"></div>
-        </router-link>
+        </div>
         <!-- <router-link class="list-item weui-cell_access" to="/call_log">
             <div class="weui-cell__bd">
                 <p>通话记录</p>
@@ -107,6 +107,12 @@ export default {
       this.$store.dispatch('setUserInfo',{
         txt:data
       });
+    },
+    routerToAddr(){
+      this.$store.dispatch('setAddrOrigin',{
+        txt: 0
+      });
+      this.$router.push({path:'/addr_list'});
     }
   }
 }
