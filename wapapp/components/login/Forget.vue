@@ -101,7 +101,7 @@ export default {
 	      }),{
 	        headers: {'Content-Type':'application/x-www-form-urlencoded'}
 	      }).then((res)=>{
-	      	console.log(res.data);
+	      	// console.log(res.data);
 	      	if(res.data.Meta.ErrorCode === '0'){
 	      		this.$router.push({path:'/login'});
 	      	}else{
@@ -122,7 +122,7 @@ export default {
 	      }),{
 	        headers: {'Content-Type':'application/x-www-form-urlencoded'}
 	      }).then((res)=>{
-	      	console.log(res.data);
+	      	// console.log(res.data);
 	      }).catch(function (error) {
 	        console.log(error);
 	      });

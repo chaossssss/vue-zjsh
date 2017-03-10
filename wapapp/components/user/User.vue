@@ -97,7 +97,7 @@ export default {
     }
   },
   mounted(){
-    if(!this.userInfo){
+    if(JSON.stringify(this.userInfo) === "{}"){
       this.$router.push({path:'/login'});
     }
   },

@@ -29,7 +29,7 @@ export default {
       await axios.get(API.GetAds, JSON.stringify({}),{
         headers: {'Content-Type':'application/json;charset=utf-8'}
       }).then((res)=>{
-        console.log(res.data.Body);
+        // console.log(res.data.Body);
         if(res.data.Body && res.data.Body.Ads){
           this.list = this.list.concat(res.data.Body.Ads);
           this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');

@@ -102,7 +102,7 @@ export default {
 	      }),{
 	        headers: {'Content-Type':'application/x-www-form-urlencoded'}
 	      }).then((res)=>{
-	      	console.log(res.data);
+	      	// console.log(res.data);
 	      	if(res.data.Body && res.data.Body.Token){
 	      		// 保存token进cookie 
 		      	this.$store.dispatch('setToken',{
@@ -127,7 +127,7 @@ export default {
 	      }),{
 	        headers: {'Content-Type':'application/x-www-form-urlencoded'}
 	      }).then((res)=>{
-	      	console.log(res.data);
+	      	// console.log(res.data);
 	      }).catch(function (error) {
 	        console.log(error);
 	      });

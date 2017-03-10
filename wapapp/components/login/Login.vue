@@ -122,7 +122,7 @@ export default {
 		      return response;
 		    }
 		    login(this.phone,this.password).then((res)=>{
-		      console.log("token",res.data);
+		      // console.log("token",res.data);
 		      this.isLoading = false;
 		      if(res.data.Body && res.data.Body.Token){
 		      	// 保存token进cookie 
@@ -131,7 +131,7 @@ export default {
 		      	});
 
 		        getUserInfo(res.data.Body.Token).then((res)=>{
-		          console.log("获取个人信息",res.data);
+		          // console.log("获取个人信息",res.data);
 		          if(res.data.Meta.ErrorCode === '0'){
 		            this.setUserInfo(res.data.Body.Info);
 		            this.$router.push({path:'/menu/service'});
