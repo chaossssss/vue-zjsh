@@ -60,7 +60,7 @@ default new Vuex.Store({
 		changeMap({
 			commit
 		}, data) {
-			console.log(types.CHANGE_MAP_POINT);
+			// console.log(types.CHANGE_MAP_POINT);
 			commit(types.CHANGE_MAP_POINT, {
 				point: data.point
 			});
@@ -68,7 +68,7 @@ default new Vuex.Store({
 		searchMap({
 			commit
 		}, data) {
-			console.log(types.SEARCH_MAP_FAST);
+			// console.log(types.SEARCH_MAP_FAST);
 			commit(types.SEARCH_MAP_FAST, {
 				txt: data.txt
 			});
@@ -76,13 +76,13 @@ default new Vuex.Store({
 		switchMap({
 			commit
 		}) {
-			console.log(types.SWITCH_MAP_CLASS);
+			// console.log(types.SWITCH_MAP_CLASS);
 			commit(types.SWITCH_MAP_CLASS);
 		},
 		searchInput({
 			commit
 		}, data) {
-			console.log(types.SEARCH_MAP_INPUT);
+			// console.log(types.SEARCH_MAP_INPUT);
 			commit(types.SEARCH_MAP_INPUT, {
 				txt: data.txt
 			});
@@ -90,7 +90,7 @@ default new Vuex.Store({
 		setUserInfo({
 			commit
 		}, data) {
-			console.log(types.SET_USER_INFO);
+			// console.log(types.SET_USER_INFO);
 			sessionStorage.setItem('UserInfo', JSON.stringify(data.txt));
 			commit(types.SET_USER_INFO, {
 				txt: data.txt
@@ -99,7 +99,7 @@ default new Vuex.Store({
 		setToken({
 			commit
 		}, data) {
-			console.log(types.SET_TOKEN);
+			// console.log(types.SET_TOKEN);
 			//写cookies
 			function setCookie(name, value, time) {
 				var strsec = getsec(time);
@@ -130,7 +130,7 @@ default new Vuex.Store({
 		setCode({
 			commit
 		}, data) {
-			console.log(types.SET_CODE);
+			// console.log(types.SET_CODE);
 			commit(types.SET_CODE, {
 				txt: data.txt
 			});
@@ -138,7 +138,8 @@ default new Vuex.Store({
 		setQuickShop({
 			commit
 		}, data) {
-			console.log(types.SET_QUICK_SHOP);
+			// console.log(types.SET_QUICK_SHOP);
+			localStorage.setItem("QuickShop", JSON.stringify(data.txt));
 			commit(types.SET_QUICK_SHOP, {
 				txt: data.txt
 			});
@@ -146,7 +147,7 @@ default new Vuex.Store({
 		setPointShop({
 			commit
 		}, data) {
-			console.log(types.SET_POINT_SHOP);
+			// console.log(types.SET_POINT_SHOP);
 			sessionStorage.setItem("PointShop", JSON.stringify(data.txt));
 			commit(types.SET_POINT_SHOP, {
 				txt: data.txt
@@ -155,7 +156,7 @@ default new Vuex.Store({
 		setOrderId({
 			commit
 		}, data) {
-			console.log(types.SET_ORDER_ID);
+			// console.log(types.SET_ORDER_ID);
 			sessionStorage.setItem("OrderId", data.txt);
 			commit(types.SET_ORDER_ID, {
 				txt: data.txt
@@ -164,7 +165,7 @@ default new Vuex.Store({
 		setCoupon({
 			commit
 		}, data) {
-			console.log(types.SET_COUPON);
+			// console.log(types.SET_COUPON);
 			sessionStorage.setItem("Coupon", JSON.stringify(data.txt));
 			commit(types.SET_COUPON, {
 				txt: data.txt
@@ -173,7 +174,7 @@ default new Vuex.Store({
 		setObjectInfo({
 			commit
 		}, data) {
-			console.log(types.SET_OBJECT_INFO);
+			// console.log(types.SET_OBJECT_INFO);
 			sessionStorage.setItem("ObjectInfo", JSON.stringify(data.txt));
 			commit(types.SET_OBJECT_INFO, {
 				txt: data.txt
@@ -182,7 +183,7 @@ default new Vuex.Store({
 		setAddrOrigin({
 			commit
 		}, data) {
-			console.log(types.SET_ADDR_ORIGIN);
+			// console.log(types.SET_ADDR_ORIGIN);
 			sessionStorage.setItem("AddrOrigin", data.txt);
 			commit(types.SET_ADDR_ORIGIN, {
 				txt: data.txt
@@ -193,13 +194,13 @@ default new Vuex.Store({
 		[types.CHANGE_MAP_POINT](state, {
 			point
 		}) {
-			console.log(point);
+			// console.log(point);
 			return state.mapPoint = point;
 		},
 		[types.SEARCH_MAP_FAST](state, {
 			txt
 		}) {
-			console.log(txt);
+			// console.log(txt);
 			return state.mapFastType = txt;
 		},
 		[types.SWITCH_MAP_CLASS](state) {
@@ -209,67 +210,67 @@ default new Vuex.Store({
 			} else {
 				state.mapClassType++;
 			}
-			console.log(state.mapClassType);
+			// console.log(state.mapClassType);
 			return state.mapClassType;
 		},
 		[types.SEARCH_MAP_INPUT](state, {
 			txt
 		}) {
-			console.log(txt);
+			// console.log(txt);
 			return state.mapSearchInput = txt;
 		},
 		[types.SET_USER_INFO](state, {
 			txt
 		}) {
-			console.log(txt);
+			// console.log(txt);
 			return state.userInfo = txt;
 		},
 		[types.SET_TOKEN](state, {
 			txt
 		}) {
-			console.log(txt);
+			// console.log(txt);
 			return state.Token = txt;
 		},
 		[types.SET_QUICK_SHOP](state, {
 			txt
 		}) {
-			console.log(txt);
+			// console.log(txt);
 			return state.quickShop = txt;
 		},
 		[types.SET_POINT_SHOP](state, {
 			txt
 		}) {
-			console.log(txt);
+			// console.log(txt);
 			return state.pointShop = txt;
 		},
 		[types.SET_ORDER_ID](state, {
 			txt
 		}) {
-			console.log(txt);
+			// console.log(txt);
 			return state.orderId = txt;
 		},
 		[types.SET_COUPON](state, {
 			txt
 		}) {
-			console.log(txt);
+			// console.log(txt);
 			return state.coupon = txt;
 		},
 		[types.SET_CODE](state, {
 			txt
 		}) {
-			console.log(txt);
+			// console.log(txt);
 			return state.Code = txt;
 		},
 		[types.SET_OBJECT_INFO](state, {
 			txt
 		}) {
-			console.log(txt);
+			// console.log(txt);
 			return state.objectInfo = txt;
 		},
 		[types.SET_ADDR_ORIGIN](state, {
 			txt
 		}) {
-			console.log(txt);
+			// console.log(txt);
 			return state.addrOrigin = txt;
 		}
 	}

@@ -41,7 +41,7 @@ export default {
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
-        console.log("工人的服务类型",res.data);
+        // console.log("工人的服务类型",res.data);
         if(res.data.Meta.ErrorCode === '0'){
     			this.serviceTypeList = res.data.Body.ServiceTypeList;
         }else{
@@ -62,7 +62,7 @@ export default {
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
-        console.log("商户的服务类型",res.data);
+        // console.log("商户的服务类型",res.data);
         if(res.data.Meta.ErrorCode === '0'){
     			this.serviceTypeList = res.data.Body.ServiceTypeList;
         }else{

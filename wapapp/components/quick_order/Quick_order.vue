@@ -300,8 +300,6 @@ export default {
     }
   },
   mounted(){
-    console.log(this);
-    console.log("Token",this.Token);
     // 获取地址详情
     if(this.quickShop.ServiceAddressId){
       axios.post(API.GetAddress,qs.stringify({
@@ -310,7 +308,7 @@ export default {
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
-        console.log("地址详情",res.data);
+        // console.log("地址详情",res.data);
         if(res.data.Meta.ErrorCode === '0'){
           this.addr = res.data.Body[0];
         }else{
@@ -324,7 +322,6 @@ export default {
         this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
       });
     }
-    console.log("quickShop",this.quickShop);
 
     // 获取服务价格
     if(this.quickShop.ServiceTypeId){
@@ -335,7 +332,7 @@ export default {
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
-        console.log("服务价格",res.data);
+        // console.log("服务价格",res.data);
         if(res.data.Meta.ErrorCode === '0'){
           this.sv = res.data.Body;
           if(res.data.Body.IsNegotiable === '0'){
@@ -362,7 +359,7 @@ export default {
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
-        console.log("服务可选数量",res.data);
+        // console.log("服务可选数量",res.data);
         if(res.data.Meta.ErrorCode === '0'){
           this.ct = res.data.Body;
           if(res.data.Body){
@@ -387,7 +384,7 @@ export default {
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
-        console.log("有效服务时间",res.data);
+        // console.log("有效服务时间",res.data);
         if(res.data.Meta.ErrorCode === '0'){
           this.dp = res.data.Body;
         }else{
@@ -410,7 +407,7 @@ export default {
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
-        console.log("当前可参与的活动",res.data);
+        // console.log("当前可参与的活动",res.data);
         if(res.data.Meta.ErrorCode === '0'){
           this.gt = res.data.Body;
         }else{
@@ -433,7 +430,7 @@ export default {
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
-        console.log("服务说明",res.data);
+        // console.log("服务说明",res.data);
         if(res.data.Meta.ErrorCode === '0'){
           if(res.data.Body && res.data.Body.Description){
             this.fw = this.regDec(res.data.Body.Description);
@@ -496,7 +493,7 @@ export default {
           headers: {'Content-Type':'multipart/form-data'}
         }).then((res)=>{
           this.isLoading = false;
-          console.log("提交表单",res.data);
+          // console.log("提交表单",res.data);
           if(res.data.Meta.ErrorCode === '0'){
             let orderId = res.data.Body.OrderId;
             this.setOrderId(orderId);

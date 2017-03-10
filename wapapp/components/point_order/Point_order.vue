@@ -317,7 +317,7 @@ export default {
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
-        console.log("地址详情",res.data);
+        // console.log("地址详情",res.data);
         if(res.data.Meta.ErrorCode === '0'){
           this.addr = res.data.Body[0];
         }else{
@@ -406,7 +406,7 @@ export default {
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
-        console.log("服务可选数量",res.data);
+        // console.log("服务可选数量",res.data);
         if(res.data.Meta.ErrorCode === '0'){
           this.ct = res.data.Body;
           if(res.data.Body){
@@ -431,7 +431,7 @@ export default {
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
-        console.log("有效服务时间",res.data);
+        // console.log("有效服务时间",res.data);
         if(res.data.Meta.ErrorCode === '0'){
           this.dp = res.data.Body;
         }else{
@@ -454,7 +454,7 @@ export default {
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
-        console.log("当前可参与的活动",res.data);
+        // console.log("当前可参与的活动",res.data);
         if(res.data.Meta.ErrorCode === '0'){
           this.gt = res.data.Body;
         }else{
@@ -477,7 +477,7 @@ export default {
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
-        console.log("服务说明",res.data);
+        // console.log("服务说明",res.data);
         if(res.data.Meta.ErrorCode === '0'){
           if(res.data.Body && res.data.Body.Description){
             this.fw = this.regDec(res.data.Body.Description);
@@ -548,7 +548,7 @@ export default {
           headers: {'Content-Type':'multipart/form-data'}
         }).then((res)=>{
           this.isLoading = false;
-          console.log("提交表单",res.data);
+          // console.log("提交表单",res.data);
           if(res.data.Meta.ErrorCode === '0'){
             let orderId = res.data.Body.OrderId;
             this.setOrderId(orderId);

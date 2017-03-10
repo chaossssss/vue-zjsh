@@ -317,7 +317,7 @@ export default {
     }),{
       headers: {'Content-Type':'application/x-www-form-urlencoded'}
     }).then((res)=>{
-      console.log(res.data);
+      // console.log(res.data);
       if(res.data.Meta.ErrorCode === '0'){
         res.data.Body.map((v,i,arry)=> {
         	switch (v.TypeId){

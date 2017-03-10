@@ -41,13 +41,13 @@
 	<!-- 搜索结果 -->
 	<div v-if="isResult.length>0" class="vue-cells searchbar-result" style="transform-origin: 0px 0px; opacity: 1; transform: scale(1, 1); display: block;">
 			<div v-for="item in serviceTypeResult" class="vue-cell">
-          <div class="vue-cell__bd vue-cell_primary" @click="goToMapResult(item.Name)">
+          <div class="vue-cell__bd vue-cell_primary">
               <p class="vue-cell__p">
               	<span>{{item.Name}}</span>
               </p>
           </div>
-          <div>
-          	<button class="vue-btn vue-btn_primary">指定下单</button>
+          <div  @click="routerToQuick(item)">
+          	<button class="vue-btn vue-btn_primary">一键下单</button>
           </div>
       </div>
       <div v-for="item in wholeWorkerResult" class="vue-cell">
@@ -63,7 +63,7 @@
               	<span v-for="i in item.ServiceTypes" class="vue-cell__span mr10">{{i.Name}}</span>
               </p>
           </div>
-          <div>
+          <div @click="routerToPoint(item)">
           	<button class="vue-btn vue-btn_primary">指定下单</button>
           </div>
       </div>
@@ -79,9 +79,9 @@
               	<span v-for="i in item.ServiceTypes" class="vue-cell__span mr10">{{i.Name}}</span>
               </p>
           </div>
-          <div>
+          <!-- <div>
           	<button class="vue-btn vue-btn_primary">指定下单</button>
-          </div>
+          </div> -->
       </div>
       <div v-for="item in workerResult" class="vue-cell">
           <div class="vue-cell__bd vue-cell_primary">
@@ -96,7 +96,7 @@
               	<span v-for="i in item.ServiceTypes" class="vue-cell__span mr10">{{i.Name}}</span>
               </p>
           </div>
-          <div>
+          <div @click="routerToPoint(item)">
           	<button class="vue-btn vue-btn_primary">指定下单</button>
           </div>
       </div>
@@ -109,9 +109,9 @@
               	<span v-for="i in item.ServiceTypes" class="vue-cell__span mr10">{{i.Name}}</span>
               </p>
           </div>
-          <div>
+          <!-- <div>
           	<button class="vue-btn vue-btn_primary">指定下单</button>
-          </div>
+          </div> -->
       </div>
   </div>
 </div>
@@ -152,7 +152,6 @@ export default {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       }).then((res) => {
-        console.log(res.data);
         if (res.data.Body) {
           this.hotTotals = res.data.Body;
         }
@@ -163,6 +162,43 @@ export default {
     }
   },
   methods: {
+    routerToQuick(item){
+      alert(item);
+      // 首页进入重置数据
+      for(var i in this.quickShop){
+        if(this.quickShop[i] === "Total"){
+          this.quickShop[i] = "1";
+        }else{
+          this.quickShop[i] = "";
+        } 
+      }
+      this.quickShop.ServiceTypeId = item.Id;
+      this.quickShop.ServiceTypeName = item.Name;
+      this.$store.dispatch('setQuickShop',{
+        txt:this.quickShop
+      });
+      this.$router.push({path:'/quick_order'});
+    },
+    routerToPoint(item){
+      // 首页进入重置数据
+      for(var i in this.pointShop){
+        if(this.pointShop[i] === "Total"){
+          this.pointShop[i] = "1";
+        }else{
+          this.pointShop[i] = "";
+        } 
+      }
+      this.pointShop.ObjectId = item.Id;
+      this.pointShop.ObjectName = item.Name;
+      this.pointShop.ObjectPhoto = item.Photo;
+      this.pointShop.ObjectGender = item.Gender;
+      this.pointShop.ObjectPhone = item.PhoneNumber;
+      this.pointShop.ObjectType = '2';  //  对工人下单
+      this.$store.dispatch('setPointShop',{
+        txt:this.pointShop
+      });
+      this.$router.push({path:'/point_order'});
+    },
     goToMapResult(name) {
       this.$store.dispatch('searchMap', {
         txt: name
@@ -221,7 +257,7 @@ export default {
       })
     }
   },
-  computed: mapState(['mapPoint', 'mapSearchInput']),
+  computed: mapState(['mapPoint', 'mapSearchInput','pointShop','quickShop']),
   watch: {
     localSearchInput() {
       this.isResult = [1];
@@ -246,7 +282,6 @@ export default {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }).then((res) => {
-          console.log(res.data);
           if (res.data.Body) {
             this.isResult = res.data.Body.Workers.concat(res.data.Body.Business, res.data.Body.WholeWorkers, res.data.Body.WholeBusiness, res.data.Body.ServiceTypes);
           }
