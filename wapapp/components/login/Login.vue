@@ -103,7 +103,7 @@ export default {
 		      let response = await axios.post(API.Login,qs.stringify({
 		        "LoginName": phone,
 		        "Password": password,
-		      }),{
+		      }),{ 
 		        headers: {'Content-Type':'application/x-www-form-urlencoded'}
 		      }).catch(function (error) {
 		        console.log(error);
@@ -140,6 +140,9 @@ export default {
           			this.errorMsg = res.data.Meta.ErrorMsg;
 		          }
 		        });
+
+		        // 跳转到上一级的页面
+		        this.$router.go(-1);
 		      }else{
           	this.isError = true;
           	this.errorMsg = res.data.Meta.ErrorMsg;

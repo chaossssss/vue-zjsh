@@ -103,8 +103,12 @@ export default {
 	        headers: {'Content-Type':'application/x-www-form-urlencoded'}
 	      }).then((res)=>{
 	      	console.log(res.data);
-	      	if(res.data.Body){
-
+	      	if(res.data.Body && res.data.Body.Token){
+	      		// 保存token进cookie 
+		      	this.$store.dispatch('setToken',{
+		      		txt:res.data.Body.Token
+		      	});
+	      		this.$router.push({path:'/menu/service'});
 	      	}else{
 	      		this.isError = true;
           	this.errorMsg = res.data.Meta.ErrorMsg;

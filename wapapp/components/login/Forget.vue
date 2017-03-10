@@ -103,7 +103,7 @@ export default {
 	      }).then((res)=>{
 	      	console.log(res.data);
 	      	if(res.data.Meta.ErrorCode === '0'){
-
+	      		this.$router.push({path:'/login'});
 	      	}else{
 	      		this.isError = true;
           	this.errorMsg = res.data.Meta.ErrorMsg;
