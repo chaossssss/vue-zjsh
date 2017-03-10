@@ -4,19 +4,19 @@
     <div class="weui-cell" style="padding:0;">
       <div class="weui-cell__bd">
         <img v-show="situation == 100" style="width:100%;" src="../../static/images/100.png" alt="">
-        <img v-show="situation == 3100" style="width:100%;" src="../../static/images/3100.png" alt="">
+        <img v-show="situation == 1003" style="width:100%;" src="../../static/images/1003.png" alt="">
         <img v-show="situation == 101" style="width:100%;" src="../../static/images/101.png" alt="">
         <img v-show="situation == 210" style="width:100%;" src="../../static/images/210.png" alt="">
+        <img v-show="situation == 2103" style="width:100%;" src="../../static/images/2103.png" alt="">
         <img v-show="situation == 211" style="width:100%;" src="../../static/images/211.png" alt="">
-        <img v-show="situation == 301" style="width:100%;" src="../../static/images/301.png" alt="">
-        <img v-show="situation == 310" style="width:100%;" src="../../static/images/310.png" alt="">
+        <img v-show="situation == 2113" style="width:100%;" src="../../static/images/2113.png" alt="">
         <img v-show="situation == 311" style="width:100%;" src="../../static/images/311.png" alt="">
         <img v-show="situation == 411" style="width:100%;" src="../../static/images/411.png" alt="">
-        <img v-show="situation == 500" style="width:100%;" src="../../static/images/500.png" alt="">
         <img v-show="situation == 501" style="width:100%;" src="../../static/images/501.png" alt="">
-        <img v-show="situation == 510" style="width:100%;" src="../../static/images/510.png" alt="">
         <img v-show="situation == 511" style="width:100%;" src="../../static/images/511.png" alt="">
+        <img v-show="situation == 600" style="width:100%;" src="../../static/images/600.png" alt="">
         <img v-show="situation == 601" style="width:100%;" src="../../static/images/601.png" alt="">
+        <img v-show="situation == 610" style="width:100%;" src="../../static/images/610.png" alt="">
         <img v-show="situation == 611" style="width:100%;" src="../../static/images/611.png" alt="">
       </div>
     </div>
@@ -37,7 +37,7 @@
     </div>
     <div class="weui-cell">
       <div class="weui-cell__bd">
-        <p>服务类型{{ situation }}</p>
+        <p>服务类型</p>
       </div>
       <div class="weui-cell__ft">
         {{od.Service.ServiceName}}
@@ -510,7 +510,7 @@ export default {
           if (refundStatus == '') {
             //面议单，未付款，工人未接单
             if ((orderStatus == 1 || orderStatus == 10) && isAccept == 0) {
-              return 3100;
+              return 1003;
             }
 
             //面议单，未付款，工人已接单
@@ -556,7 +556,6 @@ export default {
       }
 
       return 'error'
-
     },
     payable() {
       // 订单优惠后价格 应付价格 0 满减 ，1 满返
