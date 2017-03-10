@@ -453,6 +453,7 @@ export default {
               return 211;
             }
 
+            //面议单，已付款，待确认
             if (orderStatus == 30) {
               return 311;
             }

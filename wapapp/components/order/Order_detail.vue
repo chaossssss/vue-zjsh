@@ -54,12 +54,12 @@
     <div class="weui-cell">
       <div class="weui-cell__bd">
         <p>备注</p>
-        <p class="fc9" v-show="od.Service.Content" v-for="elem in od.Service.Content">{{elem}}</p>
-        <p class="fc9" v-show="!od.Service.Content">无任何备注信息</p>
+        <p class="fc9" v-if="od.Service.Content" v-for="elem in od.Service.Content">{{elem}}</p>
+        <p class="fc9" v-else>无任何备注信息</p>
       </div>
     </div>
     <!-- 定价 || 接单后 有价格显示-->
-    <div class="weui-panel" v-show="od.IsNegotiable === '0' || situation !== 10">
+    <div class="weui-panel" v-if="od.TotalPrice != null && od.TotalPrice != ''">
       <div class="weui-panel__bd">
         <div class="weui-media-box weui-media-box_text">
           <span class="f14">服务价格</span>
@@ -96,7 +96,7 @@
       </div>
       <div class="weui-panel__bd">
         <div class="weui-media-box weui-media-box_text">
-          <span class="f14" v-if="situation===50">应付款</span>
+          <span class="f14" v-if="od.IsPayOff==='0'">应付款</span>
           <span class="f14" v-else>实付款</span>
           <span style="float:right;font-size:14px;color:#888">
             <span class="red f16">¥{{payable}}</span>
@@ -106,7 +106,7 @@
     </div>
 
     <!-- 面议 || 未接单后 -->
-    <div class="weui-panel" v-show="od.IsNegotiable === '1' && situation === 10">
+    <div class="weui-panel" v-if="od.IsNegotiable === '1' && !od.TotalPrice">
       <div class="weui-panel__bd">
         <div class="weui-media-box weui-media-box_text">
           <span class="f14">服务价格</span>
@@ -124,8 +124,8 @@
       <div class="weui-media-box weui-media-box_text" v-for="item in od.Refunds">
         <p class="weui-media-box__desc">
           <span>{{item.RefundAt}}</span>
-          <span class="red" v-show="item.Status ==='1'">退款中</span>
-          <span class="red" v-show="item.Status ==='2'">退款完成</span>
+          <span class="red" v-if="item.Status ==='1'">退款中</span>
+          <span class="red" v-if="item.Status ==='2'">退款完成</span>
           <span>{{item.RefundAmountToBePaid}}</span>
         </p>
         <p class="weui-media-box__desc">
@@ -166,15 +166,15 @@
             <span>下单时间:</span>
             <span>{{orderCreateTime}}</span>
           </p>
-          <p class="weui-media-box__desc" v-show="acceptTime">
+          <p class="weui-media-box__desc" v-if="acceptTime">
             <span>接单时间:</span>
             <span>{{acceptTime}}</span>
           </p>
-          <p class="weui-media-box__desc" v-show="payOverTime">
+          <p class="weui-media-box__desc" v-if="payOverTime">
             <span>付款时间:</span>
             <span>{{payOverTime}}</span>
           </p>
-          <p class="weui-media-box__desc" v-show="cancelTime">
+          <p class="weui-media-box__desc" v-if="cancelTime">
             <span>取消时间:</span>
             <span>{{cancelTime}}</span>
           </p>
@@ -182,14 +182,14 @@
     </div>
   </div>
 
-  <div class="weui-cells" v-show="situation === 50 || od.CanCancel === '1' || situation === 100 || situation === 200 || situation === 401">
+  <div class="weui-cells" v-if="od.OrderStatus === '50' || od.CanCancel === '1' || (od.IsPayOff === '0' && od.OrderStatus !== '50' && !!od.ConfirmTime) || situation === 311">
     <div class="weui-cell">
       <div class="weui-cell__bd"></div>
       <div class="weui-cell__ft">
-        <button @click="delOrder" v-show="situation === 50" class="vue-btn vue-btn_plain-default">删除订单</button>
-        <button @click="cancelOrder" v-show="od.CanCancel === '1'" class="vue-btn vue-btn_plain-default">取消订单</button>
-        <button @click="payOrder" v-show="situation === 100 || situation === 200" class="vue-btn vue-btn_plain-primary">支付</button>
-        <button @click="sureOrder" v-show="situation === 401" class="vue-btn vue-btn_plain-success">确认服务完成</button>
+        <button @click="delOrder" v-if="od.OrderStatus === '50'" class="vue-btn vue-btn_plain-default">删除订单</button>
+        <button @click="cancelOrder" v-if="od.CanCancel === '1'" class="vue-btn vue-btn_plain-default">取消订单</button>
+        <button @click="payOrder" v-if="od.IsPayOff === '0' && od.OrderStatus !== '50' && !!od.ConfirmTime" class="vue-btn vue-btn_plain-primary">支付</button>
+        <button @click="sureOrder" v-if="situation === 311" class="vue-btn vue-btn_plain-success">确认服务完成</button>
       </div>
     </div>
   </div>
@@ -203,7 +203,7 @@
               <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" @click="isError = false">朕 知道了!</a>
           </div>
       </div>
-  </div>  
+  </div>
 
 <!-- 正在提交提示 -->
   <div id="loadingToast" v-show="isLoading">
@@ -429,12 +429,12 @@ export default {
           if (orderStatus == 50) {
             //定价，未付款，工人未接，取消中/已取消
             if (isAccept == 0) {
-              return 500;
+              return 600;
             }
 
             //定价，未付款，工人已接，取消中/已取消
             if (isAccept == 1) {
-              return 510;
+              return 610;
             }
           }
 
@@ -503,7 +503,7 @@ export default {
           //取消订单
           //面议单，未付款，取消中/已取消
           if (orderStatus == 50) {
-            return 500;
+            return 600;
           }
 
           //未取消订单
@@ -520,7 +520,7 @@ export default {
 
             //面议单，未付款，工人已接单，待确认
             if (orderStatus == 30 && isAccept == 1) {
-              return 310;
+              return 2103;
             }
           }
         }
@@ -543,6 +543,11 @@ export default {
           //未取消订单
           if (refundStatus == '') {
             //面议单，已付款，待服务
+            if (orderStatus == 20) {
+              return 211;
+            }
+
+            //面议单，已付款，待确认
             if (orderStatus == 30) {
               return 311;
             }
@@ -589,6 +594,8 @@ export default {
         } else {
           return this.od.TotalPrice - this.discountSum;
         }
+      } else {
+        return this.od.TotalPrice;
       }
     },
     serviceTypeRules() {
