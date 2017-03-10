@@ -128,7 +128,6 @@ export default {
     }),{
       headers: {'Content-Type':'application/x-www-form-urlencoded'}
     }).then((res)=>{
-    	console.log(res.data);
     	if(res.data.Meta.ErrorCode === '0'){
     		this.vm = res.data.Body[0];
     	}else{
@@ -148,7 +147,6 @@ export default {
     }),{
       headers: {'Content-Type':'application/x-www-form-urlencoded'}
     }).then((res)=>{
-    	console.log(res.data);
     	if(res.data.Meta.ErrorCode === '0'){
     		this.tagList = res.data.Body
     	}else{

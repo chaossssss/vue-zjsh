@@ -55,6 +55,13 @@ export default {
       };
     }
 
+    // 获取地址进入的来源
+    if(this.getSession('AddrOrigin')){
+      this.$store.dispatch('setAddrOrigin',{
+        txt:this.getSession('AddrOrigin')
+      })
+    }
+
     // 初始化获取 订单id
     if(!this.orderId){
       if(this.getSession('OrderId')){
@@ -151,7 +158,7 @@ export default {
       })
     }
   },
-  computed:mapState(['Token','Code','orderId','userInfo','coupon','pointShop','quickShop','objectInfo'])
+  computed:mapState(['Token','Code','orderId','userInfo','coupon','pointShop','quickShop','objectInfo','addrOrigin'])
 }
 </script>
 

@@ -21,6 +21,7 @@ default new Vuex.Store({
 			Type: "", // 1 工人，2 商户
 			Id: ""
 		},
+		addrOrigin: 0, // 0 从我的-服务地址进入，1 从指定下单 进入，2从一键下单 进入
 		pointShop: {
 			ObjectType: "", // 2 工人，3 商户
 			ObjectId: "", //工人／商户 id
@@ -177,6 +178,15 @@ default new Vuex.Store({
 			commit(types.SET_OBJECT_INFO, {
 				txt: data.txt
 			});
+		},
+		setAddrOrigin({
+			commit
+		}, data) {
+			console.log(types.SET_ADDR_ORIGIN);
+			sessionStorage.setItem("AddrOrigin", data.txt);
+			commit(types.SET_ADDR_ORIGIN, {
+				txt: data.txt
+			});
 		}
 	},
 	mutations: {
@@ -255,40 +265,12 @@ default new Vuex.Store({
 		}) {
 			console.log(txt);
 			return state.objectInfo = txt;
+		},
+		[types.SET_ADDR_ORIGIN](state, {
+			txt
+		}) {
+			console.log(txt);
+			return state.addrOrigin = txt;
 		}
 	}
 })
-
-
-// export
-// default new Vuex.Store({
-// 	state: {
-// 		data: []
-// 	},
-// 	actions: {
-// 		addInfo({
-// 			commit
-// 		}, data) {
-// 			commit(types.ADD_INFO, {
-// 				txt: data.txt
-// 			})
-// 		},
-// 		checkout({
-// 			commit,
-// 			state
-// 		}) {
-// 			commit(types.CHECKOUT_REQUEST)
-// 		}
-// 	},
-// 	mutations: {
-// 		[types.CHECKOUT_REQUEST](state) {
-// 			return state.data;
-// 		},
-// 		[types.ADD_INFO](state, {
-// 			txt
-// 		}) {
-// 			state.data.push(txt);
-// 			console.log(txt);
-// 		}
-// 	}
-// })

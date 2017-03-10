@@ -3,7 +3,7 @@
   <form name="form" novalidate="novalidate" style="overflow-x:hidden;" enctype="multipart/form-data">
   <!-- 个人信息 -->
   <div class="weui-cells zj_border" style="margin-top:0;"> 
-    <router-link :to="{name:'addr_list',params:{origin:'point_order'}}" href="javascript:;" class="weui-cell weui-cell_access">
+    <div @click="routerToAddr" class="weui-cell weui-cell_access">
       <div class="weui-cell__hd">
         <img src="../../static/images/pic-location.png" alt="" style="width:20px;margin-right:10px;display:block">
       </div>
@@ -26,7 +26,7 @@
         <p class="pblue" style="float:right;">请选择服务地址</p>
       </div>
       <div class="weui-cell__ft"></div>
-    </router-link> 
+    </div> 
     <div class="weui-cell" style="padding:10px;">
       <div class="weui-cell__hd"><img :src="pointShop.ObjectPhoto" alt="" style="width:26px;margin-right:15px;display:block;border-radius:50%;"></div>
       <div class="weui-cell__bd weui-cell_primary">
@@ -309,8 +309,6 @@ export default {
     }
   },
   mounted(){
-    console.log(this.pointShop);
-    console.log("Token",this.Token);
     // 获取地址详情
     if(this.pointShop.ServiceAddressId){
       axios.post(API.GetAddress,qs.stringify({
@@ -497,6 +495,12 @@ export default {
     }
   },
   methods:{
+    routerToAddr(){
+      this.$store.dispatch('setAddrOrigin',{
+        txt: 1
+      });
+      this.$router.push({path:'/addr_list'});
+    },
     routeToType(){
       // 选择服务类型
       if(this.pointShop.ServiceAddressId){

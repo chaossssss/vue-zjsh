@@ -14,8 +14,8 @@
 	</div>
 
 	<div class="weui-cells" style="margin:0 0 44px 0;font-size:15px;">
-		<a href="javascript:;" @click="routerTo(item.Id)" class="weui-cell weui-cell_access" v-for="item in addrList">
-			<div class="zj_cell_left">
+		<a href="javascript:;" class="weui-cell weui-cell_access" v-for="item in addrList">
+			<div class="zj_cell_left" @click="routerTo(item.Id)">
 				<div class="weui-cell__bd">
 					<span>{{item.Contact}}</span>
 					<span class="pl10" v-show="item.Gender === '0'">男</span>
@@ -83,7 +83,6 @@ export default {
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
-      	console.log(res.data);
       	if(res.data.Meta.ErrorCode === '0'){
       		this.addrList = res.data.Body
       	}else{
@@ -98,7 +97,7 @@ export default {
       });
 		}
 	},
-	computed: mapState(['Token','quickShop','pointShop']),
+	computed: mapState(['Token','quickShop','pointShop','addrOrigin']),
 	methods:{
 		setQuickShop(){
 			this.$store.dispatch('setQuickShop',{
@@ -111,23 +110,14 @@ export default {
 			})
 		},
 		routerTo(id){
-			if(this.$route.params.hasOwnProperty('origin')){
-				switch (this.$route.params.origin) {
-					case 'user' :					
-						break;
-					case 'quick_order' :
-						this.quickShop.ServiceAddressId = id;
-						this.setQuickShop();
-						this.$router.push({path:'/quick_order'});
-						break;
-					case 'point_order' :
-						this.pointShop.ServiceAddressId = id;
-						this.setPointShop();
-						this.$router.push({path:'/point_order'});
-						break;
-					default :
-						break;
-				}
+			if(this.addrOrigin === 2){
+				this.quickShop.ServiceAddressId = id;
+				this.setQuickShop();
+				this.$router.push({path:'/quick_order'});
+			}else if(this.addrOrigin === 1){
+				this.quickShop.ServiceAddressId = id;
+				this.setPointShop();
+				this.$router.push({path:'/point_order'});
 			}
 		}
 	}

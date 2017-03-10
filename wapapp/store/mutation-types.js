@@ -1,8 +1,3 @@
-// export
-// const ADD_INFO = 'ADD_INFO'
-// export
-// const CHECKOUT_REQUEST = "CHECKOUT_REQUEST";
-
 // 切换地图右侧 工人商户
 export
 const SWITCH_MAP_CLASS = "SWITCH_MAP_CLASS";
@@ -39,3 +34,6 @@ const SET_COUPON = "SET_COUPON";
 // 设置 工人 商户信息
 export
 const SET_OBJECT_INFO = "SET_OBJECT_INFO";
+// 设置 地址来源
+export
+const SET_ADDR_ORIGIN = "SET_ADDR_ORIGIN";

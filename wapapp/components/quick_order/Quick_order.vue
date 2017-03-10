@@ -3,7 +3,7 @@
   <form name="form" novalidate="novalidate" style="overflow-x:hidden;" enctype="multipart/form-data">
   <!-- 服务地址 -->
   <div class="weui-cells" style="margin-top:0;">
-    <router-link :to="{name:'addr_list',params:{origin:'quick_order'}}" href="javascript:;" class="weui-cell weui-cell_access">
+    <div @click="routerToAddr" class="weui-cell weui-cell_access">
       <div class="weui-cell__hd">
         <img src="../../static/images/pic-location.png" alt="" style="width:20px;margin-right:10px;display:block">
       </div>
@@ -26,7 +26,7 @@
         <p class="pblue" style="float:right;">请选择服务地址</p>
       </div>
       <div class="weui-cell__ft"></div>
-    </router-link>
+    </div>
   </div>
   <!-- 服务类型-->
   <div class="weui-cells">
@@ -451,6 +451,12 @@ export default {
     }
   },
   methods:{
+    routerToAddr(){
+      this.$store.dispatch('setAddrOrigin',{
+        txt: 2
+      });
+      this.$router.push({path:'/addr_list'});
+    },
     chooseDate(){
       if(this.quickShop.ServiceTypeId){
         this.isTime = true;
