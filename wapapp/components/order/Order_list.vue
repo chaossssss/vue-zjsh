@@ -1,5 +1,5 @@
 <template>
-<div style="background-color: #fbfbfb;height:100%;">
+<div style="background-color: #fbfbfb">
 	<div class="vue-tab">
 		<div class="vue-navbar">
 			<div :class="{'vue-navbar__item_on':type===0}" @click="type=0" class="vue-navbar__item">全部</div>
@@ -22,25 +22,25 @@
 							<span class="fc0">{{item.Service.ServiceName}}</span>
 						</div>
 						<div class="vue-cell__bd"></div>
-            <div class="vue-cell__ft blue" v-show="item.situation === 101 || item.situation === 1003">
+            <div class="vue-cell__ft blue" v-if="item.situation === 101 || item.situation === 1003">
               <span>待接单</span>
             </div>
-            <div class="vue-cell__ft blue" v-show="item.situation === 100 || item.situation === 210 || item.situation === 2103">
+            <div class="vue-cell__ft blue" v-if="item.situation === 100 || item.situation === 210 || item.situation === 2103">
               <span>待付款</span>
             </div>
-            <div class="vue-cell__ft blue" v-show="item.situation === 211 || item.situation === 2113">
+            <div class="vue-cell__ft blue" v-if="item.situation === 211 || item.situation === 2113">
               <span>待服务</span>
             </div>
-            <div class="vue-cell__ft blue" v-show="item.situation === 311">
+            <div class="vue-cell__ft blue" v-if="item.situation === 311">
               <span>待确认</span>
             </div>
-            <div class="vue-cell__ft blue" v-show="item.situation === 411">
+            <div class="vue-cell__ft blue" v-if="item.situation === 411">
               <span>待评价</span>
             </div>
-            <div class="vue-cell__ft blue" v-show="item.situation === 501 || item.situation === 511">
+            <div class="vue-cell__ft blue" v-if="item.situation === 501 || item.situation === 511">
               <span>退款中</span>
             </div>
-            <div class="vue-cell__ft blue" v-show="item.situation === 600 || item.situation === 601 || item.situation === 610 || item.situation === 611">
+            <div class="vue-cell__ft blue" v-if="item.situation === 600 || item.situation === 601 || item.situation === 610 || item.situation === 611">
               <span>已取消</span>
             </div>
 					</div>
@@ -52,8 +52,8 @@
 							</div>
 							<div class="vue-cell__bd">
 								<span>{{item.Worker.Name}}</span>
-								<span v-show="item.Worker.Gender === '1'">阿姨</span>
-								<span v-show="item.Worker.Gender === '0'">师傅</span>
+								<span v-if="item.Worker.Gender === '1'">阿姨</span>
+								<span v-if="item.Worker.Gender === '0'">师傅</span>
 							</div>
 						</div>
 						<div class="vue-cell" style="padding:3px 15px">
@@ -76,24 +76,24 @@
 							<div class="vue-cell__bd">
 								<p class="fc9">服务价格</p>
 							</div>
-              <div class="vue-cell__ft" v-show="!item.TotalPrice && !item.StartingPrice && !item.Price">
+              <div class="vue-cell__ft" v-if="!item.TotalPrice && !item.StartingPrice && !item.Price">
                 面议
               </div>
-							<div class="vue-cell__ft" v-show="item.Price && item.TotalPrice">
+							<div class="vue-cell__ft" v-if="item.Price && item.TotalPrice">
 								¥{{item.Price}}/{{item.UnitName}} &nbsp;x{{item.Total}}
 							</div>
-							<div class="vue-cell__ft" v-show="!item.Price && item.StartingPrice">
+							<div class="vue-cell__ft" v-if="!item.Price && item.StartingPrice">
 								¥{{item.StartingPrice}}元&nbsp;起
 							</div>
 						</div>
-						<div class="vue-cell" style="padding-top:5px;" v-show="item.IsPayOff == 0">
+						<div class="vue-cell" style="padding-top:5px;" v-if="item.IsPayOff == 0">
 							<div class="vue-cell__bd"></div>
 							<div class="vue-cell__ft">
 								 <span >待支付：</span>
 								<span class="red f16">¥ {{item.payable}}</span>
 							</div>
 						</div>
-						<div class="vue-cell" style="padding-top:5px;" v-show="item.IsPayOff == 1">
+						<div class="vue-cell" style="padding-top:5px;" v-if="item.IsPayOff == 1">
 							<div class="vue-cell__bd"></div>
 							<div class="vue-cell__ft">
 								 <span >实付：</span>
@@ -105,10 +105,10 @@
 					<div class="vue-cell" style="padding:5px 15px;">
 						<div class="vue-cell__bd"></div>
 						<div class="vue-cell_ft">
-							<button @click="delOrder(item.OrderId)" v-show="item.situation === 600 || item.situation === 601 || item.situation === 610 || item.situation === 611" class="vue-btn vue-btn_plain-default">删除订单</button>
-			        <button @click="cancelOrder(item.OrderId)" v-show="item.situation === 501 || item.situation === 511" class="vue-btn vue-btn_plain-default">取消订单</button>
-			        <button @click="payOrder(item.OrderId)" v-show="item.IsPayOff == 0 && item.situation < 300" class="vue-btn vue-btn_plain-primary">支付</button>
-			        <button @click="sureOrder(item.OrderId)" v-show="item.situation === 311" class="vue-btn vue-btn_plain-success">确认服务完成</button>
+							<button @click="delOrder(item.OrderId)" v-if="item.situation === 600 || item.situation === 601 || item.situation === 610 || item.situation === 611" class="vue-btn vue-btn_plain-default">删除订单</button>
+			        <button @click="cancelOrder(item.OrderId)" v-if="item.situation === 501 || item.situation === 511" class="vue-btn vue-btn_plain-default">取消订单</button>
+			        <button @click="payOrder(item.OrderId)" v-if="item.IsPayOff == 0 && item.situation < 300" class="vue-btn vue-btn_plain-primary">支付</button>
+			        <button @click="sureOrder(item.OrderId)" v-if="item.situation === 311" class="vue-btn vue-btn_plain-success">确认服务完成</button>
 						</div>
 					</div>
 				</div>
@@ -196,7 +196,6 @@ export default {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       }).then((res) => {
-        console.log("订单列表", res.data);
         if (res.data.Meta.ErrorCode === '0') {
           if (res.data.Body.OrderList && res.data.Body.OrderList.length > 0) {
             res.data.Body.OrderList.map((v, i, arry) => {
@@ -517,7 +516,7 @@ export default {
     formatTime(times) {
       let time = times + "000";
       //添加时间可能为null的可能
-      if(times == null) {
+      if(times == null || times == '') {
         return '';
       }
       return new Date(parseInt(time, 10)).Format("yyyy-MM-dd hh:mm:ss");
@@ -779,7 +778,7 @@ export default {
 }
 .weui-icon-success {
   color:#27b8f3;
-} 
+}
 .weui-dialog__btn_primary{
   color: #27b8f3
 }
