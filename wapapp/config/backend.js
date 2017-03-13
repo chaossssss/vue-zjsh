@@ -5,6 +5,7 @@ const app = "http://192.168.1.191:3001/api/v3/";
 const api = {
 	// 登录
 	"Login": app + "wap/Login",
+	// "Login": wap + "v1/clientinfo/Login",
 
 	// 注册
 	"Register": wap + "v1/clientinfo/Register",

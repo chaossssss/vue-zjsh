@@ -16,6 +16,7 @@ import InfiniteLoading from 'vue-infinite-loading';
 import image from "../../static/images/activity-02.png";
 import API from '../../config/backend';
 import axios from 'axios';
+import qs from 'qs';
 
 export default {
 	name:'activity',
@@ -26,21 +27,16 @@ export default {
   },
   methods: {
     async onInfinite() {
-      await axios.get(API.GetAds, JSON.stringify({}),{
-        headers: {'Content-Type':'application/json;charset=utf-8'}
+      await axios.post(API.GetAds, qs.stringify({
+
+      }),{
+        headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
         if(res.data.Body && res.data.Body.Ads){
           this.list = this.list.concat(res.data.Body.Ads);
           this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
         }
       });
-      // await axios.get(API.GetAds).then((res) => {
-      //   console.log(res.data.Body);
-      //   if(res.data.Body && res.data.Body.Ads){
-      //     this.list = this.list.concat(res.data.Body.Ads);
-      //     this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
-      //   }
-      // })
     }
   },
   components:{InfiniteLoading}
