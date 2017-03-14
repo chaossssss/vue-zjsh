@@ -148,6 +148,7 @@ import { mapState } from 'vuex';
 import { mapActions } from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
 import API from '../../config/backend';
+import COM from '../../config/common';
 import axios from 'axios';
 import qs from 'qs';
 
@@ -181,8 +182,12 @@ export default {
       list: [],
       isError: false,
       errorMsg: "",
-      isLoading: false
+      isLoading: false,
+      Token:null
     }
+  },
+  mounted(){
+    this.Token = COM.getCookie("Token");
   },
   methods: {
     async onInfinite() {
@@ -538,9 +543,6 @@ export default {
   },
   mounted() {
     this.onInfinite();
-  },
-  computed: {
-    ...mapState(['Token'])
   },
   components: {
     InfiniteLoading

@@ -86,6 +86,7 @@
 <script>
 import mapState from 'vuex';
 import API from '../../config/backend';
+import COM from '../../config/common';
 import axios from 'axios';
 import qs from 'qs';
 
@@ -103,10 +104,12 @@ export default {
 			},
 			tagList:[],
 			isError:false,
-			errorMsg:""
+			errorMsg:"",
+			Token:null
 		}
 	},
 	mounted(){
+		this.Token = COM.getCookie("Token");
 		// 获取标签
     axios.post(API.GetAddressTags,qs.stringify({
 
@@ -126,9 +129,6 @@ export default {
     });
 	},
 	computed:{
-		Token(){
-			return this.$store.state.Token;
-		},
 		isPhone(){		
 			return /^0?1[3|4|5|7|8][0-9]\d{8}$/.test(this.vm.PhoneNumber);
 		},

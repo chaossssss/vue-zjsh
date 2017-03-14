@@ -63,6 +63,7 @@
 <script>
 import {mapState} from 'vuex';
 import API from '../../config/backend';
+import COM from '../../config/common';
 import axios from 'axios';
 import qs from 'qs';
 
@@ -72,10 +73,12 @@ export default {
 		return {
 			addrList:[],
 			isError:false,
-			errorMsg:""
+			errorMsg:"",
+			Token:null
 		}
 	},
 	mounted(){
+		this.Token = COM.getCookie("Token");
 		this.addrList[1];	
 		if(this.Token){
 			axios.post(API.GetAddress,qs.stringify({
@@ -97,7 +100,7 @@ export default {
       });
 		}
 	},
-	computed: mapState(['Token','quickShop','pointShop','addrOrigin']),
+	computed: mapState(['quickShop','pointShop','addrOrigin']),
 	methods:{
 		setQuickShop(){
 			this.$store.dispatch('setQuickShop',{

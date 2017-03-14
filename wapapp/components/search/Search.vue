@@ -163,7 +163,6 @@ export default {
   },
   methods: {
     routerToQuick(item){
-      alert(item);
       // 首页进入重置数据
       for(var i in this.quickShop){
         if(this.quickShop[i] === "Total"){

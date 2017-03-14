@@ -122,9 +122,9 @@ export default {
 		      return response;
 		    }
 		    login(this.phone,this.password).then((res)=>{
-		      // console.log("token",res.data);
 		      this.isLoading = false;
 		      if(res.data.Body && res.data.Body.Token){
+		    
 		      	// 保存token进cookie 
 		      	this.$store.dispatch('setToken',{
 		      		txt:res.data.Body.Token
@@ -134,15 +134,13 @@ export default {
 		          // console.log("获取个人信息",res.data);
 		          if(res.data.Meta.ErrorCode === '0'){
 		            this.setUserInfo(res.data.Body.Info);
-		            this.$router.push({path:'/menu/service'});
+		            // 跳转到上一级的页面
+		        		this.$router.back();
 		          }else{
 		          	this.isError = true;
           			this.errorMsg = res.data.Meta.ErrorMsg;
 		          }
-		        });
-
-		        // 跳转到上一级的页面
-		        this.$router.go(-1);
+		        });		        
 		      }else{
           	this.isError = true;
           	this.errorMsg = res.data.Meta.ErrorMsg;

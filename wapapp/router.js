@@ -66,8 +66,8 @@ import BillDetail from './components/user/Bill_detail.vue';
 export default new VueRouter({
 	// mode: 'history',
 	routes: [{
-		path: '/',
-		redirect: '/menu/service'
+		path: "",
+		redirect: "/menu/service"
 	}, {
 		path: '/menu',
 		component: Menu,

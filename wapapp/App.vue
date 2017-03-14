@@ -36,7 +36,6 @@ export default {
     }
   },
   created(){
-
     // 是否是微信端打开
     if(is_weixn()){
       this.setCode(getvl("code"));
@@ -45,14 +44,12 @@ export default {
     }
 
     // 翻转检测
-
+    
     // 初始化项目获取token
-    if(!this.Token){
-      if(this.getCookie('Token')){
-        this.$store.dispatch('setToken',{
-          txt:this.getCookie('Token')
-        })
-      };
+    if(this.getCookie('Token')){
+      this.$store.dispatch('setToken',{
+        txt:this.getCookie('Token')
+      })
     }
 
     // 获取地址进入的来源

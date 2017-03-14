@@ -285,6 +285,7 @@
 <script>
 import {mapState} from 'vuex';
 import API from '../../config/backend';
+import COM from '../../config/common';
 import axios from 'axios';
 import qs from 'qs';
 
@@ -305,10 +306,12 @@ export default {
       isTime:false,
       isError:false,
       errorMsg:"",
-      isLoading:false
+      isLoading:false,
+      Token:null
     }
   },
   mounted(){
+    this.Token = COM.getCookie("Token");
     // 获取地址详情
     if(this.pointShop.ServiceAddressId){
       axios.post(API.GetAddress,qs.stringify({
@@ -650,9 +653,9 @@ export default {
       }
       return discountList;
     },
-    Token(){
-      return this.$store.state.Token;
-    },
+    // Token(){
+    //   return this.$store.state.Token;
+    // },
     pointShop(){
       return this.$store.state.pointShop;
     },

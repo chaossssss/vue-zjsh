@@ -388,7 +388,7 @@ export default {
 			}
 		}
   },
-  computed:mapState(['Token','quickShop'])
+  computed:mapState(['quickShop'])
 }
 </script>
 <style scoped>

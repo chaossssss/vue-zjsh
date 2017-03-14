@@ -76,7 +76,7 @@
         </router-link>
     </div> -->
     <div class="footer">
-        <p class="tel">客服电话：<a href="tel:4008-026-056" style="color:#26b8f3;">4008-026-056</a></p>
+        <p class="tel">客服电话：<a href="tel:4008-026-056" style="color:#26b8f3;">4008-262-056</a></p>
         <p class="ser-time">服务时间：每天9:00-21:00</p>
     </div>
 </div>
@@ -86,6 +86,7 @@
 import { mapState } from 'vuex';
 import { mapActions } from 'vuex';
 import API from '../../config/backend';
+import COM from '../../config/common';
 import axios from 'axios';
 import qs from 'qs';
 
@@ -97,11 +98,11 @@ export default {
     }
   },
   mounted(){
-    if(JSON.stringify(this.userInfo) === "{}"){
+    if(COM.getCookie("Token")){
       this.$router.push({path:'/login'});
     }
   },
-  computed: mapState(['Token','userInfo']),
+  computed: mapState(['userInfo']),
   methods:{
     setUserInfo(data){
       this.$store.dispatch('setUserInfo',{

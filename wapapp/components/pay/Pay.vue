@@ -84,7 +84,8 @@
       <div class="weui-dialog">
           <div class="weui-dialog__bd">{{errorMsg}}</div>
           <div class="weui-dialog__ft">
-              <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" @click="isError = false">朕 知道了!</a>
+              <!-- <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" @click="isError = false">朕 知道了!</a> -->
+              <a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf88cbf4dba349e56&redirect_uri=http%3a%2f%2fwap.zhujiash.com%2fwap3%2findex.html%23%2fpay&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect" class="weui-dialog__btn weui-dialog__btn_primary">小主 请重新付款!</a>
           </div>
       </div>
   </div>  
@@ -102,20 +103,15 @@
 <script>
 import {mapState} from 'vuex';
 import API from '../../config/backend';
+import COM from '../../config/common';
 import axios from 'axios';
 import qs from 'qs';
-
-//获取url参数
-function getvl(name) {
-	var reg = new RegExp("(^|\\?|&)" + name + "=([^&]*)(\\s|&|$)", "i");
-	if (reg.test(location.href)) return unescape(RegExp.$2.replace(/\+/g, " "));
-	return "";
-}
 
 export default {
 	name:"pay",
 	data(){
 		return {
+			code:"",
 			od:{						// 订单详情
 				Activity:{
 					SpecialRule:[]
@@ -131,14 +127,15 @@ export default {
 		}
 	},
 	mounted(){
-		this.code = getvl("code");
+		this.code = COM.getvl("code");
+		this.Token = COM.getCookie("Token");
 		// 获取账户余额
 		axios.post(API.MySettlement,qs.stringify({
         "Token": this.Token
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
-        console.log("账户余额",res.data);
+        // console.log("账户余额",res.data);
         if(res.data.Meta.ErrorCode === '0'){
           if(res.data.Body){
           	this.account = res.data.Body.SettlementBalance;
@@ -160,7 +157,7 @@ export default {
       }),{
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
-        console.log("订单详情",res.data);
+        // console.log("订单详情",res.data);
         if(res.data.Meta.ErrorCode === '0'){
           if(res.data.Body){
           	this.od = res.data.Body.Order;
@@ -198,10 +195,10 @@ export default {
 			// 余额支付
 			if(!this.isZhiFuBao && !this.isWeiXin){
 				if(this.isCount){
-					console.log("余额支付");
+					// console.log("余额支付");
 					this.payCount(this.singBalancePay);
 				}else{
-					console.log("未选择支付方式");
+					// console.log("未选择支付方式");
 					this.isError = true;
 					this.errorMsg = "亲，您还未选择支付方式!"
 				}
@@ -209,20 +206,20 @@ export default {
 			// 支付宝+余额 or 支付宝
 			if(this.isZhiFuBao){
 				if(this.isCount){
-					console.log("支付宝+余额");
+					// console.log("支付宝+余额");
 					this.payZhiFuBao(this.balancePay,this.thirdPay);
 				}else{
-					console.log("支付宝");
+					// console.log("支付宝");
 					this.payZhiFuBao(0,this.singBalancePay);
 				}
 			}
 			// 微信+余额 or 微信
 			if(this.isWeiXin){
 				if(this.isCount){
-					console.log("微信+余额");
+					// console.log("微信+余额");
 					this.payWeiXin(this.balancePay,this.thirdPay);
 				}else{
-					console.log("微信");
+					// console.log("微信");
 					this.payWeiXin(0,this.singBalancePay);
 				}
 			}
@@ -239,7 +236,7 @@ export default {
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
       	this.isLoading = false;
-        console.log("余额支付",res.data);
+        // console.log("余额支付",res.data);
         if(res.data.Meta.ErrorCode === '0'){
           this.$router.push({path:'/paySuccess'});
         }else{
@@ -265,7 +262,7 @@ export default {
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
       	this.isLoading = false;
-        console.log("支付宝支付",res.data);
+        // console.log("支付宝支付",res.data);
         if(res.data.Meta.ErrorCode === '0'){
           window.location.href = res.data.Body.GATEWAY_NEW + res.data.Body.AlipaySign;
         }else{
@@ -292,7 +289,7 @@ export default {
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
       }).then((res)=>{
       	this.isLoading = false;
-        console.log("微信支付",res.data);
+        // console.log("微信支付",res.data);
         if(res.data.Meta.ErrorCode === '0'){
         	//微信支付
 					function onBridgeReady() {
@@ -307,7 +304,9 @@ export default {
 							},
 							function(res) {
 								if (res.err_msg == "get_brand_wcpay_request：ok") {
-									window.location.href = "www.baidu.com";
+									window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf88cbf4dba349e56&redirect_uri=http://wap.zhujiash.com/wap3/index.html#/paySuccess&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
+								}else{
+									window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf88cbf4dba349e56&redirect_uri=http%3a%2f%2fwap.zhujiash.com%2fwap3%2findex.html%23%2fpay&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
 								} // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
 							}
 						);
@@ -386,9 +385,6 @@ export default {
 			}else{
 				return 0;
 			}
-		},
-		Token(){
-			return this.$store.state.Token;
 		},
 		Code(){
 			return this.$store.state.Code; 

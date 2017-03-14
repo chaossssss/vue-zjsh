@@ -219,6 +219,7 @@
 <script>
 import { mapState } from 'vuex';
 import API from '../../config/backend';
+import COM from '../../config/common';
 import axios from 'axios';
 import qs from 'qs';
 
@@ -266,10 +267,12 @@ export default {
       discountSum: 0,
       isError: false,
       errorMsg: "",
-      isLoading: false
+      isLoading: false,
+      Token:null
     }
   },
   mounted() {
+    this.Token = COM.getCookie("Token");
     // 获取订单详情
     if (this.orderId) {
       axios.post(API.GetOrderInfoEx, qs.stringify({

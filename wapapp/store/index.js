@@ -228,7 +228,7 @@ default new Vuex.Store({
 		[types.SET_TOKEN](state, {
 			txt
 		}) {
-			// console.log(txt);
+			console.log("vuex-token", txt);
 			return state.Token = txt;
 		},
 		[types.SET_QUICK_SHOP](state, {

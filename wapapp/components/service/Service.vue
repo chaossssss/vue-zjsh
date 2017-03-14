@@ -596,7 +596,7 @@ export default {
 
       // 获取热门服务 
       getHot(point_c.lng,point_c.lat).then((res)=>{
-        console.log("热门",res.data);
+        // console.log("热门",res.data);
         this.totals = res.data.Body;
       });   
     })   
@@ -615,7 +615,7 @@ export default {
       return response;
     }  
   },
-  computed: mapState(['mapFastType','mapClassType','mapPoint']),
+  computed: mapState(['mapFastType','mapClassType','mapPoint','Token']),
   watch:{
     mapPoint(){
       this.drawMap();
@@ -642,7 +642,6 @@ export default {
         }),{
           header: {'Content-Type':'application/x-www-form-urlencoded'}
         }).then((res) => {
-          console.log(res.data);
           if(res.data.Meta.ErrorCode === '0'){
             // 工人 0，商户 1，全城工人 3，全城商户 4
             if(res.data.Body && res.data.Body.Workers){
@@ -686,7 +685,6 @@ export default {
         }),{
           header: {'Content-Type':'application/x-www-form-urlencoded'}
         }).then((res) => {
-          console.log(res.data);
           if(res.data.Meta.ErrorCode === '0'){
             // 工人 0，商户 1，全城工人 3，全城商户 4
             if(res.data.Body && res.data.Body.Workers){
@@ -773,7 +771,7 @@ export default {
             bgImage:bossImg,
             bgcolor:"#1daefa",
             touchStart:()=>{
-              console.log("this.isSwiper",this.isSwiper);
+              // console.log("this.isSwiper",this.isSwiper);
               let index = swiper_slide(i,this.swiperList);      
               if(!this.isSwiper){
                 this.isSwiper = true;
