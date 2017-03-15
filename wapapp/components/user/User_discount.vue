@@ -18,7 +18,7 @@
     <!-- 红包列表 -->
     <div class="discount-item" v-else v-for="item in discountNoUseList">
       <div class="discount-top">
-        <div class="item-left">
+        <div class="item-left" v-if="item.CouponDetails[0]">
           <!-- 红包金额 -->
           <span class="money">{{ item.CouponDetails[0].DiscountAmount }}</span>
 
@@ -32,8 +32,8 @@
         <div class="item-right">
           <span class="discount-type">{{ item.Title }}</span>
 
-          <span class="discount-condition" v-if="item.ServiceTypes.length==0">全品类可用</span>
-          <span class="discount-condition" v-if="item.ServiceTypes.length!=0">
+          <span class="discount-condition" v-if="item.ServiceTypes && item.ServiceTypes.length==0">全品类可用</span>
+          <span class="discount-condition" v-if="item.ServiceTypes && item.ServiceTypes.length!=0">
             <span v-for="type in item.ServiceTypes">{{ type.ServiceName }}</span>
           </span>
 
@@ -62,7 +62,7 @@
     <!-- 红包列表 -->
     <div class="discount-item" v-else v-for="item in discountUsedList">
       <div class="discount-top">
-        <div class="item-left">
+        <div class="item-left" v-if="item.CouponDetails[0]">
           <!-- 红包金额 -->
           <span class="money">{{ item.CouponDetails[0].DiscountAmount }}</span>
 
@@ -76,8 +76,8 @@
         <div class="item-right">
           <span class="discount-type">{{ item.Title }}</span>
 
-          <span class="discount-condition" v-if="item.ServiceTypes.length==0">全品类可用</span>
-          <span class="discount-condition" v-if="item.ServiceTypes.length!=0">
+          <span class="discount-condition" v-if="item.ServiceTypes && item.ServiceTypes.length==0">全品类可用</span>
+          <span class="discount-condition" v-if="item.ServiceTypes && item.ServiceTypes.length!=0">
             <span v-for="type in item.ServiceTypes">{{ type.ServiceName }}</span>
           </span>
 
@@ -107,7 +107,7 @@
     <!-- 红包列表 -->
     <div class="discount-item" v-else v-for="item in discountOverdueList">
       <div class="discount-top">
-        <div class="item-left">
+        <div class="item-left" v-if="item.CouponDetails[0]">
           <!-- 红包金额 -->
           <span class="money">{{ item.CouponDetails[0].DiscountAmount }}</span>
 
@@ -121,8 +121,8 @@
         <div class="item-right">
           <span class="discount-type">{{ item.Title }}</span>
 
-          <span class="discount-condition" v-if="item.ServiceTypes.length==0">全品类可用</span>
-          <span class="discount-condition" v-if="item.ServiceTypes.length!=0">
+          <span class="discount-condition" v-if="item.ServiceTypes && item.ServiceTypes.length==0">全品类可用</span>
+          <span class="discount-condition" v-if="item.ServiceTypes && item.ServiceTypes.length!=0">
             <span v-for="type in item.ServiceTypes">{{ type.ServiceName }}</span>
           </span>
 

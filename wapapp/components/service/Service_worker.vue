@@ -18,9 +18,28 @@
 							<span class="unit">{{msg.ServicePrice}}</span>
 							<!-- <span>起</span> -->
             </span>
-          </div> 
+          </div>
           <div class="vue-box__bd_content">
-            <span class="star">🌟🌟🌟🌟🌟</span>
+            <!-- 存在. -->
+            <span class="star" v-if="/\.5/.test(msg.Grade)">
+              <!-- 满星 -->
+              <img class="level-star" v-for="star in new Array(parseInt(msg.Grade.split('.')[0]))" src="../../static/images/xing.png">
+
+              <!-- 半星 -->
+              <img class="level-star" src="../../static/images/xing.png">
+
+              <!-- 空星 -->
+              <img class="level-star" v-for="star in new Array(5 - parseInt(msg.Grade.split('.')[0]))" src="../../static/images/star2@2x.png">
+            </span>
+
+          <!-- 不存在. -->
+            <span class="star" v-else>
+              <!-- 满星 -->
+              <img class="level-star" v-for="star in new Array(parseInt(msg.Grade))" src="../../static/images/xing.png">
+
+              <!-- 空星 -->
+              <img class="level-star" v-for="star in new Array(5 - parseInt(msg.Grade))" src="../../static/images/star2@2x.png">
+            </span>
             <span class="score">{{msg.Grade}}</span>
             <i class="discount" v-show="msg.IsReduction === '1'">减</i>
             <i class="rebate" v-show="msg.IsReturn === '1'">返</i>
