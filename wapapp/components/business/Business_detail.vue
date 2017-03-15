@@ -155,16 +155,16 @@
     <div class="service-info">
       <header class="service-title">服务信息</header>
 
-      <div class="service-time hide-as-point">服务时间：{{ info.ServiceTime }}</div>
+      <div class="service-time hide-as-point" v-if="info.ServiceTime">服务时间：{{ info.ServiceTime }}</div>
 
-      <div class="service-address hide-as-point">商户地址：{{ info.Address }}</div>
+      <div class="service-address hide-as-point" v-if="info.Address">商户地址：{{ info.Address }}</div>
 
-      <div class="service-range hide-as-point">服务范围：{{ info.ServiceScope }}</div>
+      <div class="service-range hide-as-point" v-if="info.ServiceScope">服务范围：{{ info.ServiceScope }}</div>
 
-      <div class="service-tag flex-row">
+      <div class="service-tag flex-row" v-if="info.TagList && info.TagList.Count > 0">
         <span class="tag-title">标签：</span>
 
-        <ul class="tag-list flex-row" v-if="info.TagList && info.TagList.Count > 0">
+        <ul class="tag-list flex-row">
           <li class="list-item hide-as-point" v-for="tag in info.TagList.TagList">{{ tag.TagName }}</li>
         </ul>
       </div>
@@ -184,17 +184,17 @@
 
       <div class="flex-row" style="align-items: stretch;">
         <div class="business-info-left">
-          <div class="business-established-time hide-as-point">成立时间：{{ info.EstablishedTime }}</div>
+          <div class="business-established-time hide-as-point" v-if="info.EstablishedTime">成立时间：{{ info.EstablishedTime }}</div>
 
-          <div class="business-area hide-as-point">营业面积：{{ info.Area }}</div>
+          <div class="business-area hide-as-point" v-if="info.Area">营业面积：{{ info.Area }}</div>
 
-          <div class="business-scale hide-as-point">经营规模：{{ info.Scale }}</div>
+          <div class="business-scale hide-as-point" v-if="info.Scale">经营规模：{{ info.Scale }}</div>
         </div>
 
         <div class="business-info-right">
-          <div class="business-property hide-as-point">商户性质：{{ info.Property }}</div>
+          <div class="business-property hide-as-point" v-if="info.Property">商户性质：{{ info.Property }}</div>
 
-          <div class="business-staff-number hide-as-point">员工人数：{{ info.StaffNumber }}</div>
+          <div class="business-staff-number hide-as-point" v-if="info.StaffNumber">员工人数：{{ info.StaffNumber }}</div>
         </div>
       </div>
 

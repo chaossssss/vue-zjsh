@@ -198,21 +198,21 @@
     <div class="service-info">
       <header class="service-title">服务信息</header>
 
-      <div class="service-time hide-as-point">服务时间：{{ info.ServiceTime }}</div>
+      <div class="service-time hide-as-point" v-if="info.ServiceTime">服务时间：{{ info.ServiceTime }}</div>
 
-      <div class="service-address hide-as-point">工人地址：{{ info.Address }}</div>
+      <div class="service-address hide-as-point" v-if="info.Address">工人地址：{{ info.Address }}</div>
 
-      <div class="service-range hide-as-point">服务范围：{{ info.ServiceScope }}</div>
+      <div class="service-range hide-as-point" v-if="info.ServiceScope">服务范围：{{ info.ServiceScope }}</div>
 
-      <div class="service-tag flex-row">
+      <div class="service-tag flex-row" v-if="info.TagList && parseInt(info.TagList.Count) > 0">
         <span class="tag-title">标签：</span>
 
-        <ul class="tag-list flex-row" v-if="info.TagList && parseInt(info.TagList.Count) > 0">
+        <ul class="tag-list flex-row">
           <li class="list-item hide-as-point" v-for="tag in info.TagList.TagList">{{ tag.TagName }}</li>
         </ul>
       </div>
 
-      <div class="service-certification flex-row">
+      <div class="service-certification flex-row" v-if="info.SystemCertification && info.SystemCertification.length > 0">
         <span class="certification-title">认证：</span>
 
         <div class="certification-list flex-row">
@@ -227,19 +227,19 @@
 
       <div class="flex-row worker-info-wrapper">
         <div class="worker-info-left">
-          <div class="worker-native-place hide-as-point">籍贯：{{ info.NativePlace }}</div>
+          <div class="worker-native-place hide-as-point" v-if="info.NativePlace">籍贯：{{ info.NativePlace }}</div>
 
-          <div class="worker-education hide-as-point">学历：{{ info.Education }}</div>
+          <div class="worker-education hide-as-point" v-if="info.Education">学历：{{ info.Education }}</div>
 
-          <div class="worker-stature hide-as-point">身高：{{ info.Stature }}</div>
+          <div class="worker-stature hide-as-point" v-if="info.Stature">身高：{{ info.Stature }}</div>
 
-          <div class="worker-blood-type hide-as-point">血型：{{ info.BloodType }}</div>
+          <div class="worker-blood-type hide-as-point" v-if="info.BloodType">血型：{{ info.BloodType }}</div>
         </div>
 
         <div class="worker-info-right">
-          <div class="worker-working-years hide-as-point">工作年限：{{ info.WorkingYears }}</div>
+          <div class="worker-working-years hide-as-point" v-if="info.WorkingYears">工作年限：{{ info.WorkingYears }}</div>
 
-          <div class="worker-constellation hide-as-point">星座：{{ info.Constellation }}</div>
+          <div class="worker-constellation hide-as-point" v-if="info.Constellation">星座：{{ info.Constellation }}</div>
         </div>
       </div>
 
