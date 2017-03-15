@@ -98,7 +98,7 @@ export default {
     }
   },
   mounted(){
-    if(COM.getCookie("Token")){
+    if(!COM.getCookie("Token")){
       this.$router.push({path:'/login'});
     }
   },

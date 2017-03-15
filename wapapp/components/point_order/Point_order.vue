@@ -180,7 +180,7 @@
       <div class="weui-cell__bd weui-cell_primary">
         <h4>备注</h4>
         <textarea name="" id="textarea" textarea-size cols="20" rows="4" placeholder="描述您的服务要求，例如服务总时间，对工人的要求等" class="weui-textarea h40" maxlength="200" v-model="pointShop.ServiceContent"></textarea>
-        <div class="weui-textarea-counter">
+        <div class="weui-textarea-counter" v-if="!!pointShop.ServiceContent">
           <span></span>
           {{pointShop.ServiceContent.length}}/200
         </div>

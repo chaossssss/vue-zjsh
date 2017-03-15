@@ -167,6 +167,7 @@
 <script>
 import { mapState } from 'vuex';
 import API from '../../config/backend';
+import COM from '../../config/common';
 import axios from 'axios';
 import qs from 'qs';
 
@@ -183,9 +184,6 @@ export default {
       isLoading: true
     }
   },
-  computed: {
-    ...mapState(['Token'])
-  },
   filters: {
     msToDate(millisecond) {
       //从数据库中取出的日期为毫秒数，需要加三个0才能转换
@@ -200,7 +198,7 @@ export default {
   },
   mounted() {
     axios.post(API.CouponList, qs.stringify({
-      "Token": this.Token
+      "Token": COM.getCookie("Token")
     }), {
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -384,7 +382,7 @@ header .tab-nav > li
   height: 45px;
   line-height: 45px;
 
-  font-size: 50px;
+  font-size: 42px;
   text-align: center;
 }
 
@@ -393,7 +391,7 @@ header .tab-nav > li
   content: '￥';
   position: absolute;
   top: 12px;
-  left: -6px;
+  left: -12px;
 
   font-size: 18px;
 }
@@ -403,6 +401,7 @@ header .tab-nav > li
 {
   display: block;
 
+  font-size: 12px;
   text-align: center;
 }
 

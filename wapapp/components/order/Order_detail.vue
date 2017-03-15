@@ -130,11 +130,12 @@
         </p>
         <p class="weui-media-box__desc">
           <span>应退</span>
-          <span>¥{{item.RefundAmount}}</span>,
+          <span>¥{{item.RefundAmount}}</span>，
           <span>误工费</span>
-          <span>¥{{item.LostIncome}}</span>,
-          <span>优惠券扣除</span>
-          <span>¥{{item.CouponAmount}}</span>
+          <span>¥{{item.LostIncome}}</span>
+          <span>，优惠券扣除</span>
+          <span v-if="item.CouponAmount != null && item.CouponAmount != '0'">¥{{item.CouponAmount}}</span>
+          <span v-else>￥0</span>
         </p>
       </div>
     </div>

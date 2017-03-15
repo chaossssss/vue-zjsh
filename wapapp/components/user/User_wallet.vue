@@ -34,10 +34,10 @@ export default {
       balanceAmount: 0
     }
   },
-  computed: mapState(['userInfo', 'Token']),
+  computed: mapState(['userInfo']),
   mounted() {
     axios.post(API.MySettlement, qs.stringify({
-      "Token": this.Token
+      "Token": COM.getCookie("Token")
     }), {
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'

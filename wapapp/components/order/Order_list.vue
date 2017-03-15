@@ -186,7 +186,7 @@ export default {
       Token:null
     }
   },
-  mounted(){
+  created(){
     this.Token = COM.getCookie("Token");
   },
   methods: {

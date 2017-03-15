@@ -153,6 +153,7 @@
 <script>
 import { mapState } from 'vuex';
 import API from '../../config/backend';
+import COM from '../../config/common';
 import axios from 'axios';
 import qs from 'qs';
 
@@ -170,11 +171,10 @@ export default {
         isLoading: true
     }
   },
-  computed: mapState(['Token']),
   methods: {
     getWorkerCollect() {
       axios.post(API.WorkerList, qs.stringify({
-        "Token": this.Token
+        "Token": COM.getCookie("Token")
         }),{
           header: {'Content-Type':'application/x-www-form-urlencoded'}
         }).then((res) => {
