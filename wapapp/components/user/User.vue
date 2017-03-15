@@ -94,7 +94,6 @@ export default {
   name:"user",
   data(){
     return {
-
     }
   },
   mounted(){

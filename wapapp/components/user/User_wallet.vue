@@ -24,6 +24,7 @@
 <script>
 import { mapState } from 'vuex';
 import API from '../../config/backend';
+import COM from '../../config/common';
 import axios from 'axios';
 import qs from 'qs';
 
@@ -31,11 +32,13 @@ export default {
   name: 'userWallet',
   data() {
     return {
-      balanceAmount: 0
+      balanceAmount: 0,
+      Token: ''
     }
   },
   computed: mapState(['userInfo']),
   mounted() {
+    this.Token = COM.getCookie("Token");
     axios.post(API.MySettlement, qs.stringify({
       "Token": COM.getCookie("Token")
     }), {

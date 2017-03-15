@@ -181,7 +181,8 @@ export default {
       discountOverdueList: [],
       isError: false,
       errorMsg: '',
-      isLoading: true
+      isLoading: true,
+      Token: ''
     }
   },
   filters: {
@@ -197,8 +198,9 @@ export default {
     }
   },
   mounted() {
+    this.Token = COM.getCookie("Token");
     axios.post(API.CouponList, qs.stringify({
-      "Token": COM.getCookie("Token")
+      "Token": this.Token
     }), {
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'

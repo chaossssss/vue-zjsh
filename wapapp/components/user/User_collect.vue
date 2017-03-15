@@ -168,13 +168,14 @@ export default {
         businessCollNum: 0,
         isError: false,
         errorMsg: '',
-        isLoading: true
+        isLoading: true,
+        Token: ''
     }
   },
   methods: {
     getWorkerCollect() {
       axios.post(API.WorkerList, qs.stringify({
-        "Token": COM.getCookie("Token")
+        "Token": this.Token
         }),{
           header: {'Content-Type':'application/x-www-form-urlencoded'}
         }).then((res) => {
@@ -203,6 +204,7 @@ export default {
     }
   },
   mounted() {
+    this.Token = COM.getCookie("Token");
     //获取工人与商户的收藏列表
     this.getWorkerCollect();
     this.getBusinessCollect(()=> {

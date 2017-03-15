@@ -180,7 +180,7 @@
         </li>
       </ul>
         <infinite-loading :on-infinite="onInfinite" ref="infiniteLoading">
-          <span class="vue-loader" slot="no-more">没有更多信息了</span>
+          <span class="vue-loader" slot="no-more">没有更多评论了</span>
         </infinite-loading>
     </div>
 
