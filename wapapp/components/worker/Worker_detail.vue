@@ -37,7 +37,7 @@
       <ul>
         <li class="activity-item" v-for="item in serviceTypeRules">
           <img class="activity-img" v-if="item.ReturnType==='0'" src="../../static/images/pic-orange-cut.png">
-          <img class="activity-img" v-if="item.ReturnType==='1'" src="../../static/images/pic-red-back.png"><span class="activity-help">{{ item.Help }}</span>
+          <img class="activity-img" v-if="item.ReturnType==='1'" src="../../static/images/pic-red-back.png"><span class="activity-help">{{ item.Title }}：{{ item.Help }}</span>
         </li>
       </ul>
 

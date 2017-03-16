@@ -4,7 +4,8 @@
         <router-link to="/user_info">
             <div class="weui-cell">
                 <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
-                    <img :src="userInfo.HqPic" src="../../static/images/pic.png" style="width: 50px;display: block;border-radius: 25px;" class="bor-radius25">
+                    <img :src="userInfo.HqPic" style="width: 50px;display: block;border-radius: 25px;" class="bor-radius25">
+                    <!-- src="../../static/images/pic.png"  -->
                 </div>
                 <div class="weui-cell__bd">
                     <p style="color:#33363b;">{{userInfo.NickName}}</p>
