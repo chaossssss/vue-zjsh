@@ -33,7 +33,7 @@
     </div>
 
     <!-- 商户活动信息 -->
-    <div class="business-activity" v-if="serviceTypeRules.length != 0">
+    <div class="business-activity" :class="{'toggle': activityToggle}" v-if="serviceTypeRules.length != 0">
       <ul>
         <li class="activity-item" v-for="item in serviceTypeRules">
           <img class="activity-img" v-if="item.ReturnType==='0'" src="../../static/images/pic-orange-cut.png">
@@ -41,7 +41,7 @@
         </li>
       </ul>
 
-      <div class="activity-toggle" @click="atyToggle">
+      <div class="activity-toggle" @click="activityToggle = !activityToggle">
         {{serviceTypeRules.length}}个活动
         <img class="activity-toggle-img" :class="{ 'trans90': activityToggle }" v-if="serviceTypeRules.length > 1" src="../../static/images/fillet2@2x.png">
       </div>
@@ -206,13 +206,12 @@
     </div>
 
     <!-- 商户内部照 -->
-    <!-- 暂无 -->
 
     <!-- 营业执照 -->
-    <div class="business-licence flex-row">
+    <!-- <div class="business-licence flex-row">
       <span class="licence-title">营业执照</span>
       <img class="right-arrow" src="../../static/images/right_gray.png">
-    </div>
+    </div> -->
   </section>
 </div>
 
@@ -298,16 +297,6 @@ export default {
         txt: this.pointShop
       });
       this.$router.push({path:'/point_order'});
-    },
-    atyToggle(event) {
-      this.activityToggle = !this.activityToggle;
-      let aty = document.querySelector('.business-activity');
-      let atyCount = parseInt(this.serviceTypeRules.length)
-      if(this.activityToggle) {
-        aty.style.height = atyCount * 18 + (atyCount - 1) * 12 + 'px';
-      } else {
-        aty.style.height = '18px';
-      }
     },
     dateAddZero(value) {
       return value >= 10 ? value : '0' + value;

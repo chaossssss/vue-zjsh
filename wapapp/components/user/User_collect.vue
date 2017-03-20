@@ -176,16 +176,18 @@ export default {
     getWorkerCollect() {
       axios.post(API.WorkerList, qs.stringify({
         "Token": this.Token
-        }),{
-          header: {'Content-Type':'application/x-www-form-urlencoded'}
-        }).then((res) => {
-          this.workerCollNum = res.data.Body.WorkerFavoritesList.length;
-          this.workerCollList = res.data.Body.WorkerFavoritesList;
-        }).catch(function (error) {
-          console.log(error);
-          this.isError = true;
-          this.errorMsg = "获取工人收藏失败，请检查网络是否正常!";
-        })
+      }), {
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).then((res) => {
+        this.workerCollNum = res.data.Body.WorkerFavoritesList.length;
+        this.workerCollList = res.data.Body.WorkerFavoritesList;
+      }).catch(function(error) {
+        console.log(error);
+        this.isError = true;
+        this.errorMsg = "获取工人收藏失败，请检查网络是否正常!";
+      })
     },
     getBusinessCollect(callback) {
       axios.post(API.BusinessList, qs.stringify({

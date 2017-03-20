@@ -44,7 +44,7 @@ export default {
     }
 
     // 翻转检测
-    
+
     // 初始化项目获取token
     if(this.getCookie('Token')){
       this.$store.dispatch('setToken',{

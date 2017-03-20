@@ -2,16 +2,8 @@
 <div class="bg">
   <!-- 充值金额 -->
 	<div class="price-list">
-		<div class="row">
-      <span :class="{ 'active': rechargeAmount==10 }" class="recharge-amount" @click="getReAmount">10元</span>
-      <span :class="{ 'active': rechargeAmount==20 }" class="recharge-amount" @click="getReAmount">20元</span>
-      <span :class="{ 'active': rechargeAmount==30 }" class="recharge-amount" @click="getReAmount">30元</span>
-    </div>
-
-    <div class="row">
-      <span :class="{ 'active': rechargeAmount==50 }" class="recharge-amount" @click="getReAmount">50元</span>
-      <span :class="{ 'active': rechargeAmount==100 }" class="recharge-amount given" @click="getReAmount">100元<span class="given-title">赠送10元</span></span>
-      <span :class="{ 'active': rechargeAmount==500 }" class="recharge-amount given" @click="getReAmount">500元<span class="given-title">赠送80元</span></span>
+    <div v-for="list in rechargeList" class="row">
+      <span v-for="item in list" :class="{ 'given': item.ReturnType == undefined ? false : true }" class="recharge-amount">{{ item.RechargeMoney }}元<span v-if="item.ReturnType" class="given-title">赠送{{ item.ReturnMoney }}元</span></span>
     </div>
 	</div>
 
@@ -57,11 +49,16 @@
   </div>
 
   <!-- 支付按钮 -->
-  <router-link to="/Bill_detail" class="weui-btn btn-recharge">立即支付{{ rechargeAmount }}元</router-link>
+  <a @click="recharge" class="weui-btn btn-recharge">立即支付{{ rechargeAmount }}元</a>
 </div>
 </template>
 
 <script>
+import API from '../../config/backend';
+import COM from '../../config/common';
+import axios from 'axios';
+import qs from 'qs';
+
 export default {
   name: "recharge",
   data() {
@@ -70,25 +67,35 @@ export default {
       givenAmount: 0,
       // 支付方式：0->支付宝，1->微信
       payWay: 0,
+      rechargeList: []
     }
   },
+  mounted() {
+    axios.post(API.GetRechargeListEx, qs.stringify({}), {
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }).then((res) => {
+      let list = res.data.Body.List;
+      for(let i = 0, j = 0; i < list.length; i++) {
+        if(i % 3 == 0) {
+          let arr = [];
+          arr.push(list[i]);
+          arr.push(list[i + 1]);
+          arr.push(list[i + 2]);
+          this.rechargeList[j] = arr;
+          j++;
+        }
+      }
+    }).catch(function(error) {
+      console.log(error);
+      this.isError = true;
+      this.errorMsg = "获取工人收藏失败，请检查网络是否正常!";
+    })
+  },
   methods: {
-    getReAmount(evt) {
-      let txt = 0;
-      if (evt.target.classList.contains('recharge-amount')) {
-        //如果点击的是价格标签，获取这个标签对应的价格
-        this.rechargeAmount = parseInt(/[0-9]+/.exec(evt.target.innerText)[0]);
-      } else if(evt.target.classList.contains('given-title')) {
-        //如果点击的是优惠标签，获取其父标签对应的价格
-        this.rechargeAmount = parseInt(/[0-9]+/.exec(evt.target.parentNode.innerText)[0]);
-      }
-      if(this.rechargeAmount == 100) {
-        this.givenAmount = 10;
-      } else if(this.rechargeAmount == 500) {
-        this.givenAmount = 80;
-      } else {
-        this.givenAmount = 0;
-      }
+    recharge() {
+
     }
   }
 }
@@ -103,7 +110,7 @@ export default {
   box-sizing: border-box;
 
   min-height: 100%;
-  padding: 15px 0;
+  padding-top: 15px;
 
   background: #eee;
 }
@@ -115,10 +122,11 @@ export default {
 .row
 {
   display: flex;
-  flex-wrap: nowrap;
   justify-content: space-between;
+  flex-wrap: wrap;
 
-  padding: 0 15px;
+   padding: 0 15px;
+  /*overflow: hidden; */
 }
 
 .row:not(:first-child)
@@ -128,9 +136,14 @@ export default {
 
 .row .recharge-amount
 {
+  /*float: left;
+  box-sizing: border-box;
+  display: block;*/
   width: 30%;
   height: 80px;
+  /*margin: 0 auto;*/
   line-height: 80px;
+  margin-bottom: 16px;
   border: 1px solid #ccc;
   border-radius: 8px;
 

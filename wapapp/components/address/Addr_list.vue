@@ -15,7 +15,7 @@
 
 	<div class="weui-cells" style="margin:0 0 44px 0;font-size:15px;">
 		<a href="javascript:;" class="weui-cell weui-cell_access" v-for="item in addrList">
-			<div class="zj_cell_left" @click="routerTo(item.Id)">
+			<div class="zj_cell_left" style="max-width: 100%; flex: 10" @click="routerTo(item.Id)">
 				<div class="weui-cell__bd">
 					<span>{{item.Contact}}</span>
 					<span class="pl10" v-show="item.Gender === '0'">男</span>
@@ -118,7 +118,7 @@ export default {
 				this.setQuickShop();
 				this.$router.push({path:'/quick_order'});
 			}else if(this.addrOrigin === 1){
-				this.quickShop.ServiceAddressId = id;
+				this.pointShop.ServiceAddressId = id;
 				this.setPointShop();
 				this.$router.push({path:'/point_order'});
 			}

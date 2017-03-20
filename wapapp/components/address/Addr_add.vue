@@ -3,7 +3,7 @@
 	<div class="zj_toptips weui_warn">
 		<span></span>
 	</div>
-	
+
 	<div class="weui-cells" style="margin-top:0;">
 		<div class="weui_cell_two">
 			<div class="weui-cell__hd">
@@ -11,20 +11,20 @@
 			</div>
 			<div class="weui-cell__bd weui-cell_primary weui-cells_checkbox">
 				<div class="weui-cell weui-cell_primary weui_vmar weui_vpad">
-					<input type="text" v-model="vm.Contact" placeholder="您的姓名" class="weui-input" maxlength="15">
+					<input type="text" @blur="saveToSession('contact', vm.Contact)" v-model="vm.Contact" placeholder="您的姓名" class="weui-input" maxlength="15">
 				</div>
 				<div class="weui-cell" style="padding-left:0;">
 					<label class="mr30 webkit_box">
-						<input v-model="vm.Gender" value="0" type="radio" name="radio" class="weui-check" id="s10">
+						<input @click="saveToSession('gender', vm.Gender)" v-model="vm.Gender" type="radio" name="radio" class="weui-check" id="s10" value="0">
 						<i class="weui-icon-checked mr10"></i>
 						先生
 					</label>
 					<label class="weui_cell_hd webkit_box" for="s11">
-						<input v-model="vm.Gender"  type="radio" name="radio" class="weui-check"  id="s11" value="1">
+						<input @click="saveToSession('gender', vm.Gender)" v-model="vm.Gender" type="radio" name="radio" class="weui-check"  id="s11" value="1">
 						<i class="weui-icon-checked mr10"></i>
 						女士
 					</label>
-				</div>		
+				</div>
 			</div>
 		</div>
 		<div class="weui-cell">
@@ -32,7 +32,7 @@
 				<label class="weui-label">联系电话</label>
 			</div>
 			<div class="weui-cell__bd webkit_box">
-				<input type="tel" v-model="vm.PhoneNumber" class="weui-input" placeholder="您的联系电话" minlength="11"  maxlength="11">
+				<input type="tel" @blur="saveToSession('phone', vm.PhoneNumber)" v-model="vm.PhoneNumber" class="weui-input" placeholder="您的联系电话" minlength="11"  maxlength="11">
 			</div>
 		</div>
 		<div class="weui_cell_two weui_cell_bord">
@@ -42,27 +42,37 @@
 			<div class="w100">
 				<a href="javascript:;" class="zj_clearA">
 					<div class="weui-cell__bd pb10">
-						<input type="text" v-model="vm.Address1" class="weui-input" placeholder="小区/写字楼/大厦/学校等">
+            <router-link to="/addr_map" v-if="vm.Address1 == ''" style="color: #ddd;">小区/写字楼/大厦/学校等</router-link>
+						<router-link to="/addr_map" v-else style="color: #333;">{{ vm.Address1 }}</router-link>
 					</div>
 					<div class="weui-cell__bd weui_cell_bord pt10 pb10">
-						<input type="text" v-model="vm.Address2"  class="weui-input" placeholder="详细地址（如1单元203室...）">
+						<input type="text" @blur="saveToSession('address2', vm.Address2)" v-model="vm.Address2"  class="weui-input" placeholder="详细地址（如1单元203室...）">
 					</div>
 				</a>
 			</div>
 		</div>
 	</div>
-	<div class="weui-cells mt10 plt5">
-		<div class="weui-cell weui-cell_select weui-cell_select-after">
+	<div class="weui-cells weui-cells_checkbox mt10 plt5">
+		<div class="weui-cell">
 			<div class="weui-cell__hd">
 				<label for="" class="weui-label">
 					标签
 				</label>
 			</div>
-			<div class="weui-cell__bd weui-cell_primary">
-				<select id="select" class="weui-select" v-model="vm.Tag">
-					<option v-for="item in tagList">{{item.Name}}</option>
-				</select>
-			</div>
+
+      <div class="weui-cell__bd">
+        <label for="no_tag" @click="saveToSession('tag', vm.Tag)">
+          <input v-model="vm.Tag" type="radio" name="radio1" class="weui-check" id="no_tag" value="无">
+          <i class="weui-icon-checked"></i>
+          无
+        </label>
+
+        <label :for="tag.Id" @click="saveToSession('tag', tag.Id)" v-for="tag in tagList">
+          <input v-model="vm.Tag" type="radio" name="radio1" class="weui-check" :id="tag.Id" :value="tag.Id">
+          <i class="weui-icon-checked"></i>
+          {{ tag.Name }}
+        </label>
+      </div>
 		</div>
 	</div>
 
@@ -81,7 +91,7 @@
       </div>
   </div>
 
-</div>	
+</div>
 </template>
 <script>
 import mapState from 'vuex';
@@ -91,24 +101,41 @@ import axios from 'axios';
 import qs from 'qs';
 
 export default {
-	name:'addrEdit',
+	name:'addrAdd',
 	data(){
 		return {
-			vm:{
-				PhoneNumber:"",
-				Contact:"",
-				Gender:"",
-				Address1:"",
-				Address2:"",
-				Tag:""
-			},
-			tagList:[],
-			isError:false,
-			errorMsg:"",
-			Token:null
-		}
+      vm: {
+        PhoneNumber: '',
+        Contact: '',
+        Gender: '',
+        Address1: '',
+        Address1Lat: -1,
+        Address1Lng: -1,
+        Address2: '',
+        Tag: ''
+      },
+      tagList: [],
+      isError: false,
+      errorMsg: "",
+      Token: null
+    }
 	},
 	mounted(){
+    //从sessionStorage中读取选择制定地点的位置信息
+    if(sessionStorage.getItem('mapAddr')) {
+      this.vm.Address1 = sessionStorage.getItem('mapAddr');
+      this.vm.Address1Lat = sessionStorage.getItem('mapAddrLng');
+      this.vm.Address1Lng = sessionStorage.getItem('mapAddrLat');
+    }
+
+    //从sessionStorage中读取已填写数据
+    this.vm.Contact = sessionStorage.getItem('contact');
+    this.vm.PhoneNumber = sessionStorage.getItem('phone');
+    this.vm.Address2 = sessionStorage.getItem('address2');
+    this.vm.Gender = sessionStorage.getItem('gender');
+    this.vm.Tag = sessionStorage.getItem('tag');
+
+    //从cookie读取Token
 		this.Token = COM.getCookie("Token");
 		// 获取标签
     axios.post(API.GetAddressTags,qs.stringify({
@@ -117,7 +144,7 @@ export default {
       headers: {'Content-Type':'application/x-www-form-urlencoded'}
     }).then((res)=>{
     	if(res.data.Meta.ErrorCode === '0'){
-    		this.tagList = res.data.Body
+    		this.tagList = res.data.Body;
     	}else{
     		this.isError = true;
     		this.errorMsg = res.data.Meta.ErrorMsg;
@@ -128,19 +155,22 @@ export default {
   		this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
     });
 	},
-	computed:{
-		isPhone(){		
-			return /^0?1[3|4|5|7|8][0-9]\d{8}$/.test(this.vm.PhoneNumber);
-		},
-		isRequired(){
-			if(this.isPhone && this.vm.Contact && this.vm.Gender && this.vm.Address1 && this.vm.Address2){
-				return true;
-			}else{
-				return false;
-			}
-		}
-	},
+  computed: {
+    isPhone() {
+      return /^0?1[3|4|5|7|8][0-9]\d{8}$/.test(this.vm.PhoneNumber);
+    },
+    isRequired() {
+      if (this.isPhone && this.vm.Contact && this.vm.Gender && this.vm.Address1 && this.vm.Address1Lat && this.vm.Address1Lng && this.vm.Address2 && this.vm.Tag) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
 	methods:{
+    saveToSession(key, val) {
+      sessionStorage.setItem(key, val);
+    },
 		saveAddr(){
 			if(this.isRequired){
 				axios.post(API.AddAddress,qs.stringify({
@@ -163,14 +193,14 @@ export default {
 			}
 		}
 	}
-}	
+}
 </script>
 <style scoped>
 /*文本 左 中 右*/
 .tl{ text-align:left;}
 .tc{ text-align:center;}
 .tr{ text-align:right;}
-/*布局相关 flexbox 
+/*布局相关 flexbox
 ＊“display:box;”或者“box-{*}”属性，那么你看的正是2009年版本的Flexbox。
 ＊“display:flexbox;”或者“flex()”函数，那么你看的正是2011年版本的Flexbox。（在IE10中将运行Flexbox的中间版本（2011年版本）：display: flexbox;）
 ＊“display:flex;”和“flex-{*}”属性，那么你查看的是当前的规范。

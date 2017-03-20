@@ -260,7 +260,7 @@
     </div> 
   </div>
 
-<!-- 错误提示 -->
+  <!-- 错误提示 -->
   <div class="js_dialog" id="iosDialog2" v-show="isError">
       <div class="weui-mask"></div>
       <div class="weui-dialog">
@@ -322,7 +322,13 @@ export default {
       }).then((res)=>{
         // console.log("地址详情",res.data);
         if(res.data.Meta.ErrorCode === '0'){
-          this.addr = res.data.Body[0];
+          for(let item of res.data.Body) {
+            if(item.Id == this.pointShop.ServiceAddressId) {
+              this.addr = item;
+              console.log('addr', this.addr)
+            }
+          }
+          //this.addr = res.data.Body[0];
         }else{
           this.isDelete = false;
           this.isError = true;

@@ -1,4 +1,4 @@
-<template>
+addrId<template>
 <div style="position:relative;height:100%;background-color:rgb(238,238,238);">
 	<div class="zj_toptips weui_warn">
 		<span></span>
@@ -24,7 +24,7 @@
 						<i class="weui-icon-checked mr10"></i>
 						女士
 					</label>
-				</div>		
+				</div>
 			</div>
 		</div>
 		<div class="weui-cell">
@@ -42,7 +42,8 @@
 			<div class="w100">
 				<a href="javascript:;" class="zj_clearA">
 					<div class="weui-cell__bd pb10">
-						<input type="text" v-model="vm.Address1" class="weui-input" placeholder="小区/写字楼/大厦/学校等">
+            <router-link to="/addr_map" v-if="vm.Address1 == ''" style="color: #ddd;">小区/写字楼/大厦/学校等</router-link>
+            <router-link to="/addr_map" v-else style="color: #333;">{{ vm.Address1 }}</router-link>
 					</div>
 					<div class="weui-cell__bd weui_cell_bord pt10 pb10">
 						<input type="text" v-model="vm.Address2"  class="weui-input" placeholder="详细地址（如1单元203室...）">
@@ -51,18 +52,28 @@
 			</div>
 		</div>
 	</div>
-	<div class="weui-cells mt10 plt5">
+	<div class="weui-cells weui-cells_checkbox mt10 plt5">
 		<div class="weui-cell weui-cell_select weui-cell_select-after">
-			<div class="weui-cell__hd">
-				<label for="" class="weui-label">
-					标签
-				</label>
-			</div>
-			<div class="weui-cell__bd weui-cell_primary">
-				<select id="select" class="weui-select" v-model="vm.Tag">
-					<option v-for="item in tagList">{{item.Name}}</option>
-				</select>
-			</div>
+      <div class="weui-cell">
+        <div class="weui-cell__hd">
+          <label for="" class="weui-label">
+            标签
+          </label>
+        </div>
+        <div class="weui-cell__bd">
+          <label for="no_tag">
+            <input v-model="vm.Tag" type="radio" name="radio1" class="weui-check" id="no_tag" value="无">
+            <i class="weui-icon-checked"></i>
+            无
+          </label>
+
+          <label :for="tag.Id" v-for="tag in tagList">
+            <input v-model="vm.Tag" type="radio" name="radio1" class="weui-check" :id="tag.Id" :value="tag.Id">
+            <i class="weui-icon-checked"></i>
+            {{ tag.Name }}
+          </label>
+        </div>
+      </div>
 		</div>
 	</div>
 
@@ -75,7 +86,7 @@
 		<a href="javascript:;" :class="{'weui-btn_disabled':!isRequired}" @click="saveAddr" class="weui-btn weui-btn_primary">保存</a>
 	</div>
 
-	<div class="js_dialog" v-show="isDelete"> 
+	<div class="js_dialog" v-show="isDelete">
 		<div class="weui-mask"></div>
 		<div class="weui-dialog">
 			<div class="weui-dialog__hd">
@@ -101,7 +112,7 @@
           </div>
       </div>
   </div>
-</div>	
+</div>
 </template>
 <script>
 import mapState from 'vuex';
@@ -123,6 +134,13 @@ export default {
 		}
 	},
 	mounted(){
+    //从sessionStorage中读取选择制定地点的位置信息
+    if(sessionStorage.getItem('mapAddr')) {
+      this.vm.Address1 = sessionStorage.getItem('mapAddr');
+      this.vm.Address1Lat = sessionStorage.getItem('mapAddrLng');
+      this.vm.Address1Lng = sessionStorage.getItem('mapAddrLat');
+    }
+
 		this.Token = COM.getCookie("Token");
 		// 获取地址详情
 		axios.post(API.GetAddress,qs.stringify({
@@ -132,7 +150,11 @@ export default {
       headers: {'Content-Type':'application/x-www-form-urlencoded'}
     }).then((res)=>{
     	if(res.data.Meta.ErrorCode === '0'){
-    		this.vm = res.data.Body[0];
+        for(let addr of res.data.Body) {
+          if(this.$route.params.addrId == addr.Id) {
+            this.vm = addr;
+          }
+        }
     	}else{
     		this.isDelete = false;
     		this.isError = true;
@@ -162,7 +184,6 @@ export default {
       this.isError = true;
   		this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
     });
-		
 	},
 	computed:{
 		isPhone(){
@@ -187,7 +208,7 @@ export default {
 		    }).then((res)=>{
 		    	console.log(res.data);
 		    	if(res.data.Meta.ErrorCode === '0'){
-		    		this.$router.push({path:'addr_list'});
+		    		this.$router.go(-1);
 		    	}else{
 		    		this.isDelete = false;
 		    		this.isError = true;
@@ -198,7 +219,7 @@ export default {
 		      this.isError = true;
   				this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
 		    });
-			}	
+			}
 		},
 		saveAddr(){
 			if(this.isRequired){

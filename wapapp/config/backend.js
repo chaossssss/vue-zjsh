@@ -13,6 +13,15 @@ const api = {
 	// 忘记密码
 	"ResetPwd": wap + "v1/clientinfo/ResetPwd",
 
+	// 修改密码
+	"SetPwd": app + "ClientInfo/SetPwd",
+
+	// 修改昵称
+	"SetNickName": app + "clientinfo/SetNickName",
+
+	// 修改头像
+	"SetPhoto": app + "clientinfo/SetPhoto",
+
 	// 发送验证码
 	"SendCaptcha": wap + "v1/helper/SendCaptcha",
 
@@ -30,6 +39,15 @@ const api = {
 
 	// 获取我的账户
 	"MySettlement": app + "ClientInfo/MySettlement",
+
+	//获取充值列表
+	"GetRechargeListEx": app + "Recharge/GetRechargeListEx",
+
+	//通过支付宝充值
+	"GetAlipaySignEx": app + "Recharge/GetAlipaySignEx",
+
+	//通过微信充值
+	"GetWxpaySignEx": app + "Recharge/GetWxpaySignEx",
 
 	// 获取地址
 	"GetAddress": app + "ClientInfo/GetAddress",

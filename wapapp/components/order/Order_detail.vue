@@ -195,7 +195,7 @@
     </div>
   </div>
 
-<!-- 错误提示 -->
+  <!-- 错误提示 -->
   <div class="js_dialog" id="iosDialog2" v-show="isError">
       <div class="weui-mask"></div>
       <div class="weui-dialog">
@@ -206,12 +206,21 @@
       </div>
   </div>
 
-<!-- 正在提交提示 -->
+  <!-- 正在提交提示 -->
   <div id="loadingToast" v-show="isLoading">
       <div class="weui-mask_transparent"></div>
       <div class="weui-toast">
           <i class="weui-loading weui-icon_toast"></i>
           <p class="weui-toast__content">正在提交...</p>
+      </div>
+  </div>
+
+  <!-- 删除订单提示 -->
+  <div id="Toast" v-show="isDeleted">
+      <div class="weui-mask_transparent"></div>
+      <div class="weui-toast">
+          <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+          <p class="weui-toast__content">删除成功</p>
       </div>
   </div>
 
@@ -269,6 +278,7 @@ export default {
       isError: false,
       errorMsg: "",
       isLoading: false,
+      isDeleted: false,
       Token:null
     }
   },
@@ -314,9 +324,14 @@ export default {
           this.isLoading = false;
           console.log("删除订单", res.data);
           if (res.data.Meta.ErrorCode === '0') {
-            this.$router.push({
-              path: '/order_list'
-            });
+            let that = this;
+            this.isDeleted = true;
+            setTimeout(function() {
+              that.isDeleted = false;
+              that.$router.push({
+                path: '/menu/order_list'
+              });
+            }, 500)
           } else {
             this.isDelete = false;
             this.isError = true;
@@ -666,7 +681,7 @@ export default {
         return "tel:" + this.od.Worker.PhoneNumber;
       }
     },
-    ...mapState(['Token', 'orderId'])
+    ...mapState(['orderId'])
   }
 }
 </script>

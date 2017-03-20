@@ -369,6 +369,7 @@ export default {
       });
     },
     async onInfinite() {
+      let that = this;
       if(!!this.objectInfo) {
         await axios.post(API.GetWorkerEvaluationList, qs.stringify({
           "ID": this.objectInfo.Id,
@@ -381,19 +382,19 @@ export default {
         }).then((res) => {
           if (res.data.Meta.ErrorCode === '0') {
             if(res.data.Body.EvaluationList && res.data.Body.EvaluationList.length > 0) {
-              this.evaluateList = this.evaluateList.concat(res.data.Body.EvaluationList);
-              this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded');
+              that.evaluateList = that.evaluateList.concat(res.data.Body.EvaluationList);
+              that.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded');
             } else {
-              this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
+              that.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
             }
           } else {
-            this.isError = true;
-            this.errorMsg = res.data.Meta.ErrorMsg;
+            that.isError = true;
+            that.errorMsg = res.data.Meta.ErrorMsg;
           }
         }).catch(function(error) {
           console.log(error);
-          this.isError = true;
-          this.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
+          that.isError = true;
+          that.errorMsg = "小主，请在WIFI，4g环境下享用本服务 么么哒!";
         });
       }
     },

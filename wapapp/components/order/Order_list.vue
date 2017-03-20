@@ -115,7 +115,7 @@
 			</div>
 
 			<infinite-loading :on-infinite="onInfinite" ref="infiniteLoading">
-		    <span class="vue-loader" slot="no-results">没有更多信息了</span>
+		    <span class="vue-loader" slot="no-results">没有更多订单了</span>
 		  </infinite-loading>
 		</div>
 

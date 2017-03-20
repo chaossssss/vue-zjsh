@@ -32,6 +32,7 @@ import PayError from './components/pay/Pay_error.vue';
 import AddrList from './components/address/Addr_list.vue';
 import AddrEdit from './components/address/Addr_edit.vue';
 import AddrAdd from './components/address/Addr_add.vue';
+import AddrMap from './components/address/Addr_map.vue';
 
 // 搜索
 import SearchAll from './components/search/Search_all.vue';
@@ -67,7 +68,7 @@ export default new VueRouter({
 	// mode: 'history',
 	routes: [{
 		path: "",
-		redirect: "/menu/service"
+		redirect: "/menu/activity"
 	}, {
 		path: '/menu',
 		component: Menu,
@@ -107,6 +108,7 @@ export default new VueRouter({
 		component: AddrList
 	}, {
 		// 增加服务地址
+		name: 'addr_add',
 		path: '/addr_add',
 		component: AddrAdd
 	}, {
@@ -114,6 +116,11 @@ export default new VueRouter({
 		name: 'addr_edit',
 		path: '/addr_edit',
 		component: AddrEdit
+	}, {
+		// 编辑服务地址地图
+		name: 'addr_map',
+		path: '/addr_map',
+		component: AddrMap
 	}, {
 		// 个人信息
 		path: '/user_info',

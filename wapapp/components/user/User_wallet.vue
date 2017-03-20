@@ -32,7 +32,7 @@ export default {
   name: 'userWallet',
   data() {
     return {
-      balanceAmount: 0,
+      balanceAmount: 0.00,
       Token: ''
     }
   },

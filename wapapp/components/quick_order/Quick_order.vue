@@ -7,7 +7,7 @@
       <div class="weui-cell__hd">
         <img src="../../static/images/pic-location.png" alt="" style="width:20px;margin-right:10px;display:block">
       </div>
-      <span>服务地址</span>    
+      <span>服务地址</span>
       <div class="weui-cell__bd weui-cell_primary" style="padding-left:10px;" v-show="addr">
         <div class="zj_cell_hd">
           <span class="f12">{{addr.Contact}}</span>
@@ -193,7 +193,8 @@
               </li>
             </ul>
             <div class="weui-uploader__input-box">
-              <input id="file" type="file" accept="image/*multiple" class="weui-uploader__input">
+              <input id="
+              " type="file" accept="image/*multiple" class="weui-uploader__input">
             </div>
           </div>
         </div>
@@ -313,7 +314,12 @@ export default {
       }).then((res)=>{
         // console.log("地址详情",res.data);
         if(res.data.Meta.ErrorCode === '0'){
-          this.addr = res.data.Body[0];
+          for(let item of res.data.Body) {
+            if(item.Id == this.quickShop.ServiceAddressId) {
+              this.addr = item;
+            }
+          }
+          //this.addr = res.data.Body[0];
         }else{
           this.isDelete = false;
           this.isError = true;

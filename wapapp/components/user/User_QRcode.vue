@@ -2,7 +2,7 @@
 	<div style="background:rgba(0, 0, 0, 0.6);width:100%;height:100%;position:absolute;">
     <div class="QRcode-container">
       <div class="container">
-        <img :src="userInfo.SmallPic" src="../../static/images/pic.png" class="user-avatar">
+        <img :src="userInfo.SmallPic" class="user-avatar">
         <p class="user-info">
           {{userInfo.NickName}}
         </p>
@@ -11,7 +11,7 @@
         </p>
       </div>    
       <div class="qr-code">
-        <img :src="userInfo.QrCode" src="../../static/images/pic.png" style="width:100%;"  alt="">
+        <img :src="userInfo.QrCode" style="width:100%;"  alt="">
       </div>
       <div class="code-msg">扫一扫上面的二维码图案，加我</div>
     </div>
