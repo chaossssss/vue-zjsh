@@ -265,7 +265,7 @@ export default {
         // console.log("支付宝支付",res.data);
         if(res.data.Meta.ErrorCode === '0'){
           window.location.href = res.data.Body.GATEWAY_NEW + res.data.Body.AlipaySign;
-        }else{
+        } else {
           this.isError = true;
           this.errorMsg = res.data.Meta.ErrorMsg;
         }

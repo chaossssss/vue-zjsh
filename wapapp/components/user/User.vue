@@ -98,11 +98,11 @@ export default {
     }
   },
   mounted(){
-    if(!COM.getCookie("Token")){
+    if(!COM.getCookie("Token") || !this.Token || this.userInfo.account == ''){
       this.$router.push({path:'/login'});
     }
   },
-  computed: mapState(['userInfo']),
+  computed: mapState(['userInfo', 'Token']),
   methods:{
     setUserInfo(data){
       this.$store.dispatch('setUserInfo',{

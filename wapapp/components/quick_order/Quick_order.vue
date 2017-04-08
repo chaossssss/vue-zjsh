@@ -66,7 +66,7 @@
         <p>服务价格</p>
       </div>
       <div class="weui-cell_primary" style="text-align:right;">
-        <select class=" weui-select rtl fc8" name="" id="" v-model="quickShop.ServicePrice">
+        <select class="weui-select rtl fc8" name="" id="" v-model="quickShop.ServicePrice">
           <!-- <option value="">--请选择服务价格--</option> -->
           <option :value="item" v-for="item in sv.PriceList">{{item}}</option>
         </select>
@@ -237,7 +237,7 @@
     <div class="weui-mask" :class="[isTime ? 'weui-animate-fade-in':' weui-animate-fade-out none']"></div> 
     <div class="weui-picker" :class="[isTime ? 'weui-animate-slide-up':'weui-animate-slide-down']"> 
       <div class="weui-picker__bd">
-        <div class="weui-picker__group" style="overflow:auto"> 
+        <div class="weui-picker__group" style="overflow:auto">
             <div class="weui-picker__item" v-for="item in dp" :class="{'blue':item.Date === dpDate}" @click="checkDate(item)">{{item.Date}} </div>
         </div>
         <div class="weui-picker__group" style="display: block;overflow:auto"> 

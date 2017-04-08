@@ -42,7 +42,7 @@ addrId<template>
 			<div class="w100">
 				<a href="javascript:;" class="zj_clearA">
 					<div class="weui-cell__bd pb10">
-            <router-link to="/addr_map" v-if="vm.Address1 == ''" style="color: #ddd;">小区/写字楼/大厦/学校等</router-link>
+            <router-link to="/addr_map" v-if="vm.Address1 == undefined || vm.Address1 == ''" style="color: #ddd;">小区/写字楼/大厦/学校等</router-link>
             <router-link to="/addr_map" v-else style="color: #333;">{{ vm.Address1 }}</router-link>
 					</div>
 					<div class="weui-cell__bd weui_cell_bord pt10 pb10">
@@ -60,7 +60,7 @@ addrId<template>
             标签
           </label>
         </div>
-        <div class="weui-cell__bd">
+        <div class="weui-cell__hd">
           <label for="no_tag">
             <input v-model="vm.Tag" type="radio" name="radio1" class="weui-check" id="no_tag" value="无">
             <i class="weui-icon-checked"></i>
@@ -134,6 +134,23 @@ export default {
 		}
 	},
 	mounted(){
+    //保存当前信息到缓存
+    if(this.vm.PhoneNumber) {
+      sessionStorage.setItem('phone', this.vm.PhoneNumber);
+    }
+    if(this.vm.Gender) {
+      sessionStorage.setItem('gender', this.vm.Gender);
+    }
+    if(this.vm.Tag) {
+      sessionStorage.setItem('tag', this.vm.tag);
+    }
+    if(this.vm.Address1) {
+      sessionStorage.setItem('address1', this.vm.Address1);
+    }
+    if(this.vm.Address2) {
+      sessionStorage.setItem('address2', this.vm.Address2);
+    }
+
     //从sessionStorage中读取选择制定地点的位置信息
     if(sessionStorage.getItem('mapAddr')) {
       this.vm.Address1 = sessionStorage.getItem('mapAddr');

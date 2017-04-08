@@ -9432,10 +9432,10 @@ module.exports = __webpack_require__(135);
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-var wap = "http://192.168.1.191:3003/api/";
-var app = "http://192.168.1.191:3001/api/v3/";
-// const wap = "http://wapapi.zhujiash.com/api/";
-// const app = "http://copen.zhujiash.com/api/v3/";
+//const wap = "http://192.168.1.191:3003/api/";
+//const app = "http://192.168.1.191:3001/api/v3/";
+var wap = "http://wapapi.zhujiash.com/api/";
+var app = "http://copen.zhujiash.com/api/v3/";
 var api = {
 	// 登录
 	"Login": app + "wap/Login",
@@ -9649,7 +9649,7 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADg
 /***/ function(module, exports, __webpack_require__) {
 
 var store      = __webpack_require__(51)('wks')
-  , uid        = __webpack_require__(36)
+  , uid        = __webpack_require__(37)
   , Symbol     = __webpack_require__(10).Symbol
   , USE_SYMBOL = typeof Symbol == 'function';
 
@@ -10326,7 +10326,7 @@ module.exports = function(it, key){
 /***/ function(module, exports, __webpack_require__) {
 
 var dP         = __webpack_require__(17)
-  , createDesc = __webpack_require__(34);
+  , createDesc = __webpack_require__(35);
 module.exports = __webpack_require__(16) ? function(object, key, value){
   return dP.f(object, key, createDesc(1, value));
 } : function(object, key, value){
@@ -10441,7 +10441,7 @@ module.exports = function(it){
 
 var global    = __webpack_require__(10)
   , core      = __webpack_require__(11)
-  , ctx       = __webpack_require__(31)
+  , ctx       = __webpack_require__(32)
   , hide      = __webpack_require__(20)
   , PROTOTYPE = 'prototype';
 
@@ -10541,6 +10541,12 @@ module.exports = Object.keys || function keys(O){
 
 /***/ },
 /* 31 */
+/***/ function(module, exports) {
+
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NEU0MUM1MDJBODgwMTFFNkI3NkQ4NTZBNTEzNkJFMUIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NEU0MUM1MDNBODgwMTFFNkI3NkQ4NTZBNTEzNkJFMUIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo0RTQxQzUwMEE4ODAxMUU2Qjc2RDg1NkE1MTM2QkUxQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo0RTQxQzUwMUE4ODAxMUU2Qjc2RDg1NkE1MTM2QkUxQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PprosykAAAH6SURBVHjaxJc/SMNAGMUTdbTYwa51tEhn94IoCDpYqLXuOoqDImLVDloFRXBWwcHBwQpSh6qIY0f/FSwOReniVsUKIjW+g6/SIcl3l8T64EfTu9zLS++S+6obhqEJhXLvWrP0MND+e9yi/bPaFM8PggSIgB4QAF+gDJ7AFTgEJVlDXXIKxIXXQAy0Mp7fFGIOPHsxBcPgHoxJXLzuKc4t0Cd7sp2mwDHwOZhecZsHYNppgFGw5XKh6mCTvJQCiDnfIQO30skrqBIgTT+hVxJe67IBukD8Dx75GHmzAeIS8/4IoqCDiFIbt97iMgEijFER9IIMeCMy1FZkxkZkAoQZk3lQMWmvUJ+dwjIBOhmTC5u+M2ZsQPVF5LU+ZQIUGJM+m75+icXLBsgxJivAb9Lupz475WQC7APDxiQE8mCE9ggfHeepz0oGebP1gHiUsmDIxqwbHCnOf9bsMbVahAug5uHiE15Jlb3gFmx7GEB43ahux0mV0spGJau75wJUwSSzIDkZ5FF1WhGdg1UXAdLk4bgkE1oClw4uLsYsuq0J6ys4QaW3rMo0puZFAKEXei98SJz7CgZpjOZVAKFrKrNrzK81Du5kTVV3wxMwYfFk1Ff8qYqhk+14D8yYtM+CXVUzp/WAqPWXG76L441m/DltVKqh7k85NfkRYABZsWdaJyE8WAAAAABJRU5ErkJggg=="
+
+/***/ },
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 // optional / simple context binding
@@ -10565,19 +10571,19 @@ module.exports = function(fn, that, length){
 };
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports) {
 
 module.exports = true;
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports) {
 
 exports.f = {}.propertyIsEnumerable;
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports) {
 
 module.exports = function(bitmap, value){
@@ -10590,7 +10596,7 @@ module.exports = function(bitmap, value){
 };
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 var def = __webpack_require__(17).f
@@ -10602,7 +10608,7 @@ module.exports = function(it, tag, stat){
 };
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports) {
 
 var id = 0
@@ -10612,7 +10618,7 @@ module.exports = function(key){
 };
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports) {
 
 // shim for using process in browser
@@ -10796,12 +10802,6 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-
-/***/ },
-/* 38 */
-/***/ function(module, exports) {
-
-module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NEU0MUM1MDJBODgwMTFFNkI3NkQ4NTZBNTEzNkJFMUIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NEU0MUM1MDNBODgwMTFFNkI3NkQ4NTZBNTEzNkJFMUIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo0RTQxQzUwMEE4ODAxMUU2Qjc2RDg1NkE1MTM2QkUxQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo0RTQxQzUwMUE4ODAxMUU2Qjc2RDg1NkE1MTM2QkUxQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PprosykAAAH6SURBVHjaxJc/SMNAGMUTdbTYwa51tEhn94IoCDpYqLXuOoqDImLVDloFRXBWwcHBwQpSh6qIY0f/FSwOReniVsUKIjW+g6/SIcl3l8T64EfTu9zLS++S+6obhqEJhXLvWrP0MND+e9yi/bPaFM8PggSIgB4QAF+gDJ7AFTgEJVlDXXIKxIXXQAy0Mp7fFGIOPHsxBcPgHoxJXLzuKc4t0Cd7sp2mwDHwOZhecZsHYNppgFGw5XKh6mCTvJQCiDnfIQO30skrqBIgTT+hVxJe67IBukD8Dx75GHmzAeIS8/4IoqCDiFIbt97iMgEijFER9IIMeCMy1FZkxkZkAoQZk3lQMWmvUJ+dwjIBOhmTC5u+M2ZsQPVF5LU+ZQIUGJM+m75+icXLBsgxJivAb9Lupz475WQC7APDxiQE8mCE9ggfHeepz0oGebP1gHiUsmDIxqwbHCnOf9bsMbVahAug5uHiE15Jlb3gFmx7GEB43ahux0mV0spGJau75wJUwSSzIDkZ5FF1WhGdg1UXAdLk4bgkE1oClw4uLsYsuq0J6ys4QaW3rMo0puZFAKEXei98SJz7CgZpjOZVAKFrKrNrzK81Du5kTVV3wxMwYfFk1Ff8qYqhk+14D8yYtM+CXVUzp/WAqPWXG76L441m/DltVKqh7k85NfkRYABZsWdaJyE8WAAAAABJRU5ErkJggg=="
 
 /***/ },
 /* 39 */
@@ -16253,7 +16253,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(37)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(38)))
 
 /***/ },
 /* 43 */
@@ -16342,7 +16342,7 @@ exports.f = Object.getOwnPropertySymbols;
 /***/ function(module, exports, __webpack_require__) {
 
 var shared = __webpack_require__(51)('keys')
-  , uid    = __webpack_require__(36);
+  , uid    = __webpack_require__(37);
 module.exports = function(key){
   return shared[key] || (shared[key] = uid(key));
 };
@@ -16392,7 +16392,7 @@ module.exports = function(it, S){
 
 var global         = __webpack_require__(10)
   , core           = __webpack_require__(11)
-  , LIBRARY        = __webpack_require__(32)
+  , LIBRARY        = __webpack_require__(33)
   , wksExt         = __webpack_require__(55)
   , defineProperty = __webpack_require__(17).f;
 module.exports = function(name){
@@ -16831,7 +16831,7 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(37)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(38)))
 
 /***/ },
 /* 76 */
@@ -18540,14 +18540,14 @@ module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
 
 "use strict";
 'use strict';
-var LIBRARY        = __webpack_require__(32)
+var LIBRARY        = __webpack_require__(33)
   , $export        = __webpack_require__(26)
   , redefine       = __webpack_require__(90)
   , hide           = __webpack_require__(20)
   , has            = __webpack_require__(19)
   , Iterators      = __webpack_require__(29)
   , $iterCreate    = __webpack_require__(223)
-  , setToStringTag = __webpack_require__(35)
+  , setToStringTag = __webpack_require__(36)
   , getPrototypeOf = __webpack_require__(233)
   , ITERATOR       = __webpack_require__(8)('iterator')
   , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
@@ -18701,7 +18701,7 @@ module.exports = __webpack_require__(20);
 /* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
-var ctx                = __webpack_require__(31)
+var ctx                = __webpack_require__(32)
   , invoke             = __webpack_require__(219)
   , html               = __webpack_require__(83)
   , cel                = __webpack_require__(47)
@@ -23047,59 +23047,110 @@ var _qs = __webpack_require__(5);
 
 var _qs2 = _interopRequireDefault(_qs);
 
+var _picLocation = __webpack_require__(31);
+
+var _picLocation2 = _interopRequireDefault(_picLocation);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
   name: 'addrMap',
   data: function data() {
     return {
-      arroundList: [],
+      inputFocus: false,
+      inputAddr: '',
+      result: [],
+      inputResult: [],
       point: {
-        lng: 116.404,
-        lat: 39.915
-      }
+        lng: 0,
+        lat: 0
+      },
+      map: null,
+      marker: null
     };
   },
   mounted: function mounted() {
     var that = this;
 
-    //地图初始化
-    var map = new BMap.Map('map');
-    var pit = new BMap.Point(116.404, 39.915);
-    map.centerAndZoom(pit, 15);
-
-    //移动点point sessionStorage 做本地缓存
     //从缓存中读取经纬度
     if (sessionStorage.getItem("Point")) {
       var storePoint = JSON.parse(sessionStorage.getItem("Point"));
       this.point = storePoint;
-      this.getAroundLocation(storePoint);
-
-      var store = new BMap.Point(storePoint.lng, storePoint.lat);
-      map.panTo(store); //地图中心移动到定位点
+      that.init();
+      this.getSurroundingLocation(this.point);
     } else {
       //自动获取当前经纬度
-      this.getPosition();
-      this.getAroundLocation(this.point);
+      this.getPosition(function () {
+        that.init();
+        that.getSurroundingLocation(that.point);
+      });
     }
-
-    //监听拖动地图事件
-    map.addEventListener('dragend', function () {
-      //设置坐标为拖动后地图的中心坐标
-      that.point = map.getCenter();
-      //获取新坐标附近的位置信息
-      that.getAroundLocation(that.point);
-    });
   },
 
   methods: {
+    //地图初始化
+    init: function init() {
+      var that = this;
+      //地图初始化
+      this.map = new BMap.Map('map');
+      //根据经纬度坐标绘制地图
+      var pit = new BMap.Point(this.point.lng, this.point.lat);
+      this.map.centerAndZoom(pit, 15);
+
+      //添加标注
+      this.refreshMarker(this.point, 0, this.map);
+
+      //监听地图拖动事件
+      this.map.addEventListener('dragend', function (evt) {
+        //获取拖动后的中点
+        that.point = that.map.getCenter();
+        //获取新坐标附近的位置信息
+        that.getSurroundingLocation(that.point);
+        //更新标注
+        that.refreshMarker(that.point, 0, this.map);
+      });
+    },
+
     //获取当前坐标（经纬度）
-    getPosition: function getPosition() {
+    getPosition: function getPosition(callback) {
       var that = this;
       var geolocation = new BMap.Geolocation();
       geolocation.getCurrentPosition(function (result) {
         if (this.getStatus() == BMAP_STATUS_SUCCESS) {
           that.point = result.point;
+          if (callback) {
+            callback();
+          }
+        } else {
+          console.log('cannot get point');
         }
       }, {
         enableHighAccuracy: true
@@ -23107,37 +23158,67 @@ exports.default = {
     },
 
     //获取当前坐标附近位置信息
-    getAroundLocation: function getAroundLocation(point) {
+    getSurroundingLocation: function getSurroundingLocation(point) {
       var that = this;
-      var geo = new BMap.Geocoder();
-      geo.getLocation(new BMap.Point(point.lng, point.lat), function (result) {
-        that.arroundList = result.surroundingPois;
+      var local = new BMap.LocalSearch(new BMap.Point(point.lng, point.lat), {
+        onSearchComplete: function onSearchComplete(results) {
+          that.result.splice(0);
+          if (local.getStatus() == BMAP_STATUS_SUCCESS) {
+            for (var i = 0; i < results.getCurrentNumPois(); i++) {
+              that.result.push(results.getPoi(i));
+            }
+          }
+        }
       });
+      local.search('小区');
     },
 
-    //选择好位置后将数据保存在sessionStorage
+    //根据point修改marker的位置
+    refreshMarker: function refreshMarker(point, index, map) {
+      //定义图片位置
+      var myIcon = new BMap.Icon(_picLocation2.default, new BMap.Size(32, 32), {
+        offset: new BMap.Size(32, 32),
+        imageOffset: new BMap.Size(0, 0)
+      });
+      //清除上个marker
+      this.map.removeOverlay(this.marker);
+      //声明新的marker
+      this.marker = new BMap.Marker(point, {
+        icon: myIcon
+      });
+      //添加到地图上
+      this.map.addOverlay(this.marker);
+      //返回当前marker（如果需要）
+      return this.marker;
+    },
+
+    //将选择的位置信息（地址，经度，维度）保存在sessionStorage，并后退到上一页
     backWithParam: function backWithParam(val) {
-      sessionStorage.setItem('mapAddr', val.address);
+      sessionStorage.setItem('mapAddr', val.address + val.title);
       sessionStorage.setItem('mapAddrLng', val.point.lng);
       sessionStorage.setItem('mapAddrLat', val.point.lat);
       //返回上一页
       this.$router.go(-1);
     }
   },
-  computed: (0, _vuex.mapState)(['Token'])
-}; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+  computed: (0, _vuex.mapState)(['Token']),
+  watch: {
+    inputAddr: function inputAddr() {
+      var that = this;
+      var local = new BMap.LocalSearch(that.map, {
+        onSearchComplete: function onSearchComplete(results) {
+          that.inputResult.splice(0);
+          if (local.getStatus() == BMAP_STATUS_SUCCESS) {
+            for (var i = 0; i < results.getCurrentNumPois(); i++) {
+              that.inputResult.push(results.getPoi(i));
+            }
+          }
+        }
+      });
+      local.search(that.inputAddr);
+    }
+  }
+};
 
 /***/ },
 /* 158 */
@@ -31221,12 +31302,12 @@ exports.default = {
     return {};
   },
   mounted: function mounted() {
-    if (!_common2.default.getCookie("Token")) {
+    if (!_common2.default.getCookie("Token") || !this.Token || this.userInfo.account == '') {
       this.$router.push({ path: '/login' });
     }
   },
 
-  computed: (0, _vuex.mapState)(['userInfo']),
+  computed: (0, _vuex.mapState)(['userInfo', 'Token']),
   methods: {
     setUserInfo: function setUserInfo(data) {
       this.$store.dispatch('setUserInfo', {
@@ -31986,7 +32067,7 @@ exports.default = {
       formdata.append('JSON_Data', (0, _stringify2.default)(Json_data));
       _axios2.default.post(_backend2.default.SetPhoto, formdata, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'multipart/form-data'
         }
       }).then(function (res) {
         if (res.data.Meta.ErrorCode === '0') {
@@ -33103,7 +33184,7 @@ module.exports = function(IS_INCLUDES){
 // all enumerable object keys, includes symbols
 var getKeys = __webpack_require__(30)
   , gOPS    = __webpack_require__(49)
-  , pIE     = __webpack_require__(33);
+  , pIE     = __webpack_require__(34);
 module.exports = function(it){
   var result     = getKeys(it)
     , getSymbols = gOPS.f;
@@ -33120,7 +33201,7 @@ module.exports = function(it){
 /* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
-var ctx         = __webpack_require__(31)
+var ctx         = __webpack_require__(32)
   , call        = __webpack_require__(222)
   , isArrayIter = __webpack_require__(220)
   , anObject    = __webpack_require__(15)
@@ -33214,8 +33295,8 @@ module.exports = function(iterator, fn, value, entries){
 "use strict";
 'use strict';
 var create         = __webpack_require__(87)
-  , descriptor     = __webpack_require__(34)
-  , setToStringTag = __webpack_require__(35)
+  , descriptor     = __webpack_require__(35)
+  , setToStringTag = __webpack_require__(36)
   , IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
@@ -33279,7 +33360,7 @@ module.exports = function(object, el){
 /* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
-var META     = __webpack_require__(36)('meta')
+var META     = __webpack_require__(37)('meta')
   , isObject = __webpack_require__(28)
   , has      = __webpack_require__(19)
   , setDesc  = __webpack_require__(17).f
@@ -33415,7 +33496,7 @@ module.exports = function(){
 // 19.1.2.1 Object.assign(target, source, ...)
 var getKeys  = __webpack_require__(30)
   , gOPS     = __webpack_require__(49)
-  , pIE      = __webpack_require__(33)
+  , pIE      = __webpack_require__(34)
   , toObject = __webpack_require__(93)
   , IObject  = __webpack_require__(85)
   , $assign  = Object.assign;
@@ -33467,8 +33548,8 @@ module.exports = __webpack_require__(16) ? Object.defineProperties : function de
 /* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
-var pIE            = __webpack_require__(33)
-  , createDesc     = __webpack_require__(34)
+var pIE            = __webpack_require__(34)
+  , createDesc     = __webpack_require__(35)
   , toIObject      = __webpack_require__(21)
   , toPrimitive    = __webpack_require__(53)
   , has            = __webpack_require__(19)
@@ -33681,9 +33762,9 @@ $export($export.S + $export.F * !__webpack_require__(16), 'Object', {definePrope
 
 "use strict";
 'use strict';
-var LIBRARY            = __webpack_require__(32)
+var LIBRARY            = __webpack_require__(33)
   , global             = __webpack_require__(10)
-  , ctx                = __webpack_require__(31)
+  , ctx                = __webpack_require__(32)
   , classof            = __webpack_require__(82)
   , $export            = __webpack_require__(26)
   , isObject           = __webpack_require__(28)
@@ -33910,7 +33991,7 @@ if(!USE_NATIVE){
 }
 
 $export($export.G + $export.W + $export.F * !USE_NATIVE, {Promise: $Promise});
-__webpack_require__(35)($Promise, PROMISE);
+__webpack_require__(36)($Promise, PROMISE);
 __webpack_require__(235)(PROMISE);
 Wrapper = __webpack_require__(11)[PROMISE];
 
@@ -33995,8 +34076,8 @@ var global         = __webpack_require__(10)
   , META           = __webpack_require__(227).KEY
   , $fails         = __webpack_require__(27)
   , shared         = __webpack_require__(51)
-  , setToStringTag = __webpack_require__(35)
-  , uid            = __webpack_require__(36)
+  , setToStringTag = __webpack_require__(36)
+  , uid            = __webpack_require__(37)
   , wks            = __webpack_require__(8)
   , wksExt         = __webpack_require__(55)
   , wksDefine      = __webpack_require__(54)
@@ -34006,7 +34087,7 @@ var global         = __webpack_require__(10)
   , anObject       = __webpack_require__(15)
   , toIObject      = __webpack_require__(21)
   , toPrimitive    = __webpack_require__(53)
-  , createDesc     = __webpack_require__(34)
+  , createDesc     = __webpack_require__(35)
   , _create        = __webpack_require__(87)
   , gOPNExt        = __webpack_require__(232)
   , $GOPD          = __webpack_require__(231)
@@ -34135,10 +34216,10 @@ if(!USE_NATIVE){
   $GOPD.f = $getOwnPropertyDescriptor;
   $DP.f   = $defineProperty;
   __webpack_require__(88).f = gOPNExt.f = $getOwnPropertyNames;
-  __webpack_require__(33).f  = $propertyIsEnumerable;
+  __webpack_require__(34).f  = $propertyIsEnumerable;
   __webpack_require__(49).f = $getOwnPropertySymbols;
 
-  if(DESCRIPTORS && !__webpack_require__(32)){
+  if(DESCRIPTORS && !__webpack_require__(33)){
     redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
   }
 
@@ -45798,7 +45879,7 @@ if (hadRuntime) {
   typeof self === "object" ? self : this
 );
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(74), __webpack_require__(37)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(74), __webpack_require__(38)))
 
 /***/ },
 /* 293 */
@@ -48843,7 +48924,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "display": "block"
     },
     attrs: {
-      "src": __webpack_require__(38),
+      "src": __webpack_require__(31),
       "alt": ""
     }
   })])
@@ -49897,7 +49978,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('img', {
     staticClass: "location",
     attrs: {
-      "src": __webpack_require__(38),
+      "src": __webpack_require__(31),
       "alt": ""
     }
   }), _vm._v(" "), _c('p', {
@@ -50548,7 +50629,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('div', {
     staticClass: "weui-cell__bd pb10"
-  }, [(_vm.vm.Address1 == '') ? _c('router-link', {
+  }, [(_vm.vm.Address1 == undefined || _vm.vm.Address1 == '') ? _c('router-link', {
     staticStyle: {
       "color": "#ddd"
     },
@@ -51494,7 +51575,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "display": "block"
     },
     attrs: {
-      "src": __webpack_require__(38),
+      "src": __webpack_require__(31),
       "alt": ""
     }
   })])
@@ -53479,7 +53560,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('img', {
     staticClass: "location",
     attrs: {
-      "src": __webpack_require__(38),
+      "src": __webpack_require__(31),
       "alt": ""
     }
   }), _vm._v(" "), _c('p', {
@@ -53729,14 +53810,56 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('header', {
     staticClass: "header-search"
-  }), _vm._v(" "), _c('div', {
-    staticClass: "map",
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.inputAddr),
+      expression: "inputAddr"
+    }],
+    staticClass: "search-text",
+    class: {
+      active: _vm.inputFocus
+    },
     attrs: {
-      "id": "map"
+      "type": "text",
+      "placeholder": "小区/写字楼/大厦等"
+    },
+    domProps: {
+      "value": _vm._s(_vm.inputAddr)
+    },
+    on: {
+      "click": function($event) {
+        _vm.inputFocus = true
+      },
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.inputAddr = $event.target.value
+      }
     }
-  }), _vm._v(" "), _c('ul', {
-    staticClass: "arround-list"
-  }, _vm._l((_vm.arroundList), function(item) {
+  }), _vm._v(" "), _c('span', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.inputFocus == true),
+      expression: "inputFocus == true"
+    }],
+    staticClass: "search-cancel",
+    on: {
+      "click": function($event) {
+        _vm.inputFocus = false;
+        _vm.inputAddr = ''
+      }
+    }
+  }, [_vm._v("取消")])]), _vm._v(" "), _c('div', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.inputFocus == true),
+      expression: "inputFocus == true"
+    }],
+    staticClass: "input-wrapper"
+  }, [_c('ul', _vm._l((_vm.inputResult), function(item) {
     return _c('li', {
       staticClass: "list-item",
       on: {
@@ -53744,7 +53867,46 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           _vm.backWithParam(item)
         }
       }
-    }, [_vm._v(_vm._s(item.address))])
+    }, [_c('span', {
+      staticClass: "item-title"
+    }, [_vm._v(_vm._s(item.title))]), _vm._v(" "), _c('span', {
+      staticClass: "item-address"
+    }, [_vm._v(_vm._s(item.address))])])
+  }))]), _vm._v(" "), _c('div', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.inputFocus == false),
+      expression: "inputFocus == false"
+    }],
+    staticClass: "map",
+    attrs: {
+      "id": "map"
+    }
+  }), _vm._v(" "), _c('ul', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.inputFocus == false),
+      expression: "inputFocus == false"
+    }],
+    staticClass: "arround-list",
+    attrs: {
+      "id": "result"
+    }
+  }, _vm._l((_vm.result), function(item) {
+    return _c('li', {
+      staticClass: "list-item",
+      on: {
+        "click": function($event) {
+          _vm.backWithParam(item)
+        }
+      }
+    }, [_c('span', {
+      staticClass: "item-title"
+    }, [_vm._v(_vm._s(item.title))]), _vm._v(" "), _c('span', {
+      staticClass: "item-address"
+    }, [_vm._v(_vm._s(item.address))])])
   }))])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
@@ -59399,7 +59561,7 @@ if (inBrowser && window.Vue) {
 }
 
 module.exports = VueRouter;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(37)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(38)))
 
 /***/ },
 /* 438 */

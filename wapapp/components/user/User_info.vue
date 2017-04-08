@@ -101,7 +101,7 @@ export default {
       formdata.append('JSON_Data', JSON.stringify(Json_data));
       axios.post(API.SetPhoto, formdata, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'multipart/form-data'
         }
       }).then((res) => {
         if (res.data.Meta.ErrorCode === '0') {

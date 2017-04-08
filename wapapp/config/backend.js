@@ -1,7 +1,7 @@
-//const wap = "http://192.168.1.191:3003/api/";
-//const app = "http://192.168.1.191:3001/api/v3/";
-const wap = "http://wapapi.zhujiash.com/api/";
-const app = "http://copen.zhujiash.com/api/v3/";
+const wap = "http://192.168.1.191:3003/api/";
+const app = "http://192.168.1.191:3001/api/v3/";
+//const wap = "http://wapapi.zhujiash.com/api/";
+//const app = "http://copen.zhujiash.com/api/v3/";
 const api = {
 	// 登录
 	"Login": app + "wap/Login",
